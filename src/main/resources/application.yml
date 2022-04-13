@@ -1,0 +1,24 @@
+spring:
+    profiles:
+        active: local
+
+
+---
+spring:
+    config:
+        activate:
+            on-profile: local
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        username: demi
+        password: password
+        url: jdbc:mysql://localhost:3306/community
+    jpa:
+        hibernate:
+            ddl-auto: create
+        show-sql: true
+        open-in-view: false
+
+server:
+    port: 8080
+
