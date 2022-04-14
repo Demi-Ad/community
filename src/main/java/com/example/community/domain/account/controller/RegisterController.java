@@ -39,6 +39,6 @@ public class RegisterController {
         if (bindingResult.hasErrors()) {
             return "account/register";
         }
-        return accountRegisterService.accountRegister(registerDto).toUrl();
+        return accountRegisterService.accountRegister(registerDto);
     }
 }

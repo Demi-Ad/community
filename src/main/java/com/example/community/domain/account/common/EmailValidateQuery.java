@@ -11,12 +11,15 @@ public class EmailValidateQuery {
     private Long id;
     private String sha256;
 
-
-    public String toUrl() {
-        return "?id=" + id + "&" + "sha256=" + sha256;
-    }
-
     public static EmailValidateQuery of(Long id, String sha256) {
         return new EmailValidateQuery(id,sha256);
+    }
+
+    public boolean validate(String sha256) {
+        return this.sha256.equals(sha256);
+    }
+
+    public String toUrl() {
+        return "/sign?id=" + id + "&" + "sha256=" + sha256;
     }
 }
