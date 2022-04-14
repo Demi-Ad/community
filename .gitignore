@@ -38,3 +38,4 @@ out/
 
 ### MAIL ###
 /src/main/resources/mail-properties.yml
+/src/main/resources/salt.yml

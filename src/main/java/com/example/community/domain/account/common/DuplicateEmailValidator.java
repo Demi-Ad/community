@@ -1,4 +1,4 @@
-package com.example.community.domain.account.controller;
+package com.example.community.domain.account.common;
 
 import com.example.community.domain.account.dto.RegisterDto;
 import com.example.community.domain.account.repo.AccountRepository;

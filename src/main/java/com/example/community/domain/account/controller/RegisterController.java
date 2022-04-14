@@ -1,5 +1,6 @@
 package com.example.community.domain.account.controller;
 
+import com.example.community.domain.account.common.DuplicateEmailValidator;
 import com.example.community.domain.account.dto.RegisterDto;
 import com.example.community.domain.account.service.AccountRegisterService;
 import lombok.RequiredArgsConstructor;
@@ -8,9 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.security.MessageDigest;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,17 +30,15 @@ public class RegisterController {
     }
 
     @PostMapping
+    @ResponseBody
     public String register(@ModelAttribute @Valid RegisterDto registerDto, BindingResult bindingResult) {
         //TODO : profileImg 이미지 저장 서비스 구현
-
 
         validator.validate(registerDto, bindingResult);
 
         if (bindingResult.hasErrors()) {
             return "account/register";
         }
-
-        accountRegisterService.accountRegister(registerDto);
-        return "redirect:/";
+        return accountRegisterService.accountRegister(registerDto).toUrl();
     }
 }
