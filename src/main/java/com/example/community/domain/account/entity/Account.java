@@ -32,15 +32,18 @@ public class Account {
 
     private String profileImg;
 
+    private String nickname;
+
     @CreatedDate
     private LocalDateTime registeredAt;
 
     @Builder
-    public Account(String email, String password, String profileImg) {
+    public Account(String email, String password, String profileImg,String nickname) {
         this.email = email;
         this.password = password;
         this.lock = true;
         this.role = Role.ROLE_USER;
+        this.nickname = nickname;
         this.profileImg = profileImg;
     }
 

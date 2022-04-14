@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### MAIL ###
+/src/main/resources/mail-properties.yml
