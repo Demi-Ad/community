@@ -17,10 +17,16 @@ public class SignController {
 
     @GetMapping
     @ResponseBody
-    public String sign(@ModelAttribute EmailValidateQuery emailValidateQuery)  {
-        if (accountRegisterService.emailRegisterValidate(emailValidateQuery)) {
-            return "OK";
-        } else
-            return "BAD";
+    public String sign(@ModelAttribute EmailValidateQuery emailValidateQuery) {
+
+        switch (accountRegisterService.emailRegisterValidate(emailValidateQuery)) {
+            case SUCCESS:
+                return "success";
+            case ALREADY_CONFIRM:
+                return "ALREADY";
+            case FAIL:
+                return "FAIL";
+        }
+        return "FAIL";
     }
 }

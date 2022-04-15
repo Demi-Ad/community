@@ -16,6 +16,10 @@ public class AccountDetail implements UserDetails {
         this.account = account;
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(account.getRole().toString());

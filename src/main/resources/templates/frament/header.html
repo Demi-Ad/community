@@ -18,9 +18,15 @@
         <li><a href="#" class="nav-link px-2 link-dark">About</a></li>
     </ul>
 
-    <div class="col-md-3 text-end">
+
+    <div class="col-md-3 text-end" sec:authorize="isAnonymous()">
         <a th:href="@{/login}" class="btn btn-outline-primary me-2">Login</a>
         <a th:href="@{/register}" class="btn btn-primary">Sign-up</a>
+    </div>
+
+    <div class="col-md-3 text-end" sec:authorize="isAuthenticated()">
+        <a th:href="@{/logout}" th:method="post" class="btn btn-outline-primary me-2">Logout</a>
+        <a th:href="@{/info}" class="btn btn-primary" th:text="${#session.getAttribute('nickname')}"></a>
     </div>
 </header>
 </body>

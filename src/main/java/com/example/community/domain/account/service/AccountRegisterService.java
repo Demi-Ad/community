@@ -4,6 +4,7 @@ import com.example.community.common.mailing.dto.MailDto;
 import com.example.community.common.mailing.service.MailService;
 import com.example.community.domain.account.common.EmailToSha256Converter;
 import com.example.community.domain.account.common.EmailValidateQuery;
+import com.example.community.domain.account.common.RegisterState;
 import com.example.community.domain.account.dto.RegisterDto;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
@@ -12,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.NoSuchElementException;
 
 
 @Service
@@ -38,21 +41,35 @@ public class AccountRegisterService {
         String sha256 = converter.emailToSha256(account.getEmail());
         String validationUri = EmailValidateQuery.of(account.getId(), sha256).toUri();
 
-        MailDto mailDto = new MailDto(account.getEmail(),"회원 가입 완료 링크",validationUri);
-        mailService.sendMail(mailDto);
-        return EmailValidateQuery.of(account.getId(), sha256).toUri();
+        MailDto mailDto = MailDto.builder()
+                .mailAddress(account.getEmail())
+                .title("회원가입 완료링크")
+                .message(validationUri)
+                .build();
+
+        //mailService.sendMail(mailDto);
+        return validationUri;
     }
 
 
-    public boolean emailRegisterValidate(EmailValidateQuery query) {
-        Account account = accountRepository.findById(query.getId()).orElseThrow();
-        String sha256 = converter.emailToSha256(account.getEmail());
-        log.info("sha256 = {}", sha256);
-        log.info("query = {}",query.getSha256());
-        if (query.validate(sha256)) {
-            account.unLockUser();
-            return true;
+    public RegisterState emailRegisterValidate(EmailValidateQuery query) {
+        // TODO: 중복 클릭 확인 로직 추가 State SUCCESS, ALREADY_CONFIRM, FAIL
+        Account account;
+        try {
+            account = accountRepository.findById(query.getId()).orElseThrow();
+        } catch (NoSuchElementException e) {
+            return RegisterState.FAIL;
         }
-        return false;
+
+        if (account.getLock()) {
+            String sha256 = converter.emailToSha256(account.getEmail());
+            if (query.validate(sha256)) {
+                account.unLock();
+                return RegisterState.SUCCESS;
+            }
+        } else {
+            return RegisterState.ALREADY_CONFIRM;
+        }
+        return RegisterState.FAIL;
     }
 }

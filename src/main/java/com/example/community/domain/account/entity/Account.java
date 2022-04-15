@@ -55,7 +55,7 @@ public class Account {
         return lock;
     }
 
-    public void unLockUser() {
+    public void unLock() {
         this.lock = false;
     }
 }
