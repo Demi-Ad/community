@@ -28,8 +28,10 @@ public class AccountRegisterService {
 
     private final MailService mailService;
 
-    public String accountRegister(RegisterDto registerDto) {
+    public void accountRegister(RegisterDto registerDto) {
         String encodedPassword = passwordEncoder.encode(registerDto.getPassword());
+        log.info(registerDto.toString());
+
         registerDto.setPassword(encodedPassword);
         Account account = Account.builder()
                 .email(registerDto.getEmail())
@@ -38,22 +40,26 @@ public class AccountRegisterService {
                 .build();
 
         accountRepository.save(account);
-        String sha256 = converter.emailToSha256(account.getEmail());
-        String validationUri = EmailValidateQuery.of(account.getId(), sha256).toUri();
+
+        registerMailing(account.getId(), account.getEmail());
+    }
+
+    private void registerMailing(long id, String email) {
+        String sha256 = converter.emailToSha256(email);
+        String validationUri = EmailValidateQuery.of(id, sha256).toUri();
 
         MailDto mailDto = MailDto.builder()
-                .mailAddress(account.getEmail())
+                .mailAddress(email)
                 .title("회원가입 완료링크")
                 .message(validationUri)
                 .build();
-
+        log.info("validation url = {}",validationUri);
         //mailService.sendMail(mailDto);
-        return validationUri;
+
     }
 
 
     public RegisterState emailRegisterValidate(EmailValidateQuery query) {
-        // TODO: 중복 클릭 확인 로직 추가 State SUCCESS, ALREADY_CONFIRM, FAIL
         Account account;
         try {
             account = accountRepository.findById(query.getId()).orElseThrow();

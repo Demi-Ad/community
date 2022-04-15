@@ -10,8 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.security.MessageDigest;
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -30,8 +32,7 @@ public class RegisterController {
     }
 
     @PostMapping
-    @ResponseBody
-    public String register(@ModelAttribute @Valid RegisterDto registerDto, BindingResult bindingResult) {
+    public String register(@ModelAttribute @Valid RegisterDto registerDto, BindingResult bindingResult, HttpSession session) {
         //TODO : profileImg 이미지 저장 서비스 구현
 
         validator.validate(registerDto, bindingResult);
@@ -39,6 +40,21 @@ public class RegisterController {
         if (bindingResult.hasErrors()) {
             return "account/register";
         }
-        return accountRegisterService.accountRegister(registerDto);
+        accountRegisterService.accountRegister(registerDto);
+        session.setAttribute("confirm",registerDto);
+
+        return "redirect:/register/guide";
+    }
+
+    @GetMapping("/guide")
+    public String guideForm(HttpSession session, Model model, HttpServletResponse response) throws IOException {
+        RegisterDto dto = (RegisterDto) session.getAttribute("confirm");
+
+        if (dto == null) {
+            return "error/4xx";
+        }
+
+        model.addAttribute("confirm",dto);
+        return "account/registered";
     }
 }

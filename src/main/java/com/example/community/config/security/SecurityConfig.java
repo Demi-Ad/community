@@ -6,7 +6,10 @@ import com.example.community.domain.account.entity.Account;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -34,8 +37,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final AccountDetailService accountDetailService;
     private final PasswordEncoder passwordEncoder;
 
-
-
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(accountDetailService).passwordEncoder(passwordEncoder);
@@ -49,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/sign", "/register","/logout")
+                .antMatchers("/", "/sign", "/register/**","/logout","/login/**")
                 .permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -58,6 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("id")
                 .passwordParameter("password")
                 .successHandler(SecurityConfig::onAuthenticationSuccess)
+                .failureHandler(SecurityConfig::onAuthenticationFailure)
                 .permitAll();
     }
 
@@ -66,5 +68,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         HttpSession session = request.getSession();
         session.setAttribute("nickname", principal.getAccount().getNickname());
         response.sendRedirect("/");
+    }
+
+    private static void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
+        String errormsg = "";
+        if (exception instanceof BadCredentialsException || exception instanceof InternalAuthenticationServiceException) {
+            errormsg = "BadCredentialsException";
+        } else if (exception instanceof DisabledException) {
+            errormsg = "DisabledException";
+        }
+        response.sendRedirect("/login?error=" + errormsg);
     }
 }

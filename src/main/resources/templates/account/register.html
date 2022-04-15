@@ -18,7 +18,7 @@
             <div class="form-floating mb-3">
                 <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" th:field="*{email}">
                 <label for="floatingInput">Email address</label>
-                <p class="text-danger">aaa</p> <!-- ERROR BINDING -->
+                <p th:errors="*{email}" class="text-danger">aaa</p> <!-- ERROR BINDING -->
             </div>
 
             <div class="form-floating mb-3">
@@ -29,6 +29,8 @@
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="nickname" placeholder="nickname" th:field="*{nickname}">
                 <label for="nickname">nickname</label>
+                <p th:errors="*{nickname}" class="text-danger">aaa</p> <!-- ERROR BINDING -->
+
             </div>
 
             <div class="mb-5">
