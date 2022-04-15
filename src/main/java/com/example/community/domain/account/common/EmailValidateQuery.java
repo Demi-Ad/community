@@ -19,7 +19,7 @@ public class EmailValidateQuery {
         return this.sha256.equals(sha256);
     }
 
-    public String toUrl() {
+    public String toUri() {
         return "/sign?id=" + id + "&" + "sha256=" + sha256;
     }
 }

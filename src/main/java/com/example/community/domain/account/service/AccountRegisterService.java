@@ -1,5 +1,7 @@
 package com.example.community.domain.account.service;
 
+import com.example.community.common.mailing.dto.MailDto;
+import com.example.community.common.mailing.service.MailService;
 import com.example.community.domain.account.common.EmailToSha256Converter;
 import com.example.community.domain.account.common.EmailValidateQuery;
 import com.example.community.domain.account.dto.RegisterDto;
@@ -7,8 +9,6 @@ import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +23,8 @@ public class AccountRegisterService {
     private final PasswordEncoder passwordEncoder;
     private final EmailToSha256Converter converter;
 
+    private final MailService mailService;
+
     public String accountRegister(RegisterDto registerDto) {
         String encodedPassword = passwordEncoder.encode(registerDto.getPassword());
         registerDto.setPassword(encodedPassword);
@@ -34,7 +36,11 @@ public class AccountRegisterService {
 
         accountRepository.save(account);
         String sha256 = converter.emailToSha256(account.getEmail());
-        return EmailValidateQuery.of(account.getId(), sha256).toUrl();
+        String validationUri = EmailValidateQuery.of(account.getId(), sha256).toUri();
+
+        MailDto mailDto = new MailDto(account.getEmail(),"회원 가입 완료 링크",validationUri);
+        mailService.sendMail(mailDto);
+        return EmailValidateQuery.of(account.getId(), sha256).toUri();
     }
 
 
