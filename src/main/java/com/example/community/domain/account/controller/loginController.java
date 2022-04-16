@@ -29,4 +29,10 @@ public class loginController {
         }
         return "redirect:/";
     }
+
+    @ResponseBody
+    @GetMapping("/awer")
+    public String aa() {
+        return "AA";
+    }
 }

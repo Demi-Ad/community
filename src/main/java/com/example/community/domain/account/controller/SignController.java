@@ -18,7 +18,7 @@ public class SignController {
     @GetMapping
     @ResponseBody
     public String sign(@ModelAttribute EmailValidateQuery emailValidateQuery) {
-
+        //TODO : 템플릿 으로 전달
         switch (accountRegisterService.emailRegisterValidate(emailValidateQuery)) {
             case SUCCESS:
                 return "success";

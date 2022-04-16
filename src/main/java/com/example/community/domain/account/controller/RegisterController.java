@@ -32,7 +32,7 @@ public class RegisterController {
     }
 
     @PostMapping
-    public String register(@ModelAttribute @Valid RegisterDto registerDto, BindingResult bindingResult, HttpSession session) {
+    public String register(@ModelAttribute("account") @Valid RegisterDto registerDto, BindingResult bindingResult, HttpSession session) {
         //TODO : profileImg 이미지 저장 서비스 구현
 
         validator.validate(registerDto, bindingResult);

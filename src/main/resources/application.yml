@@ -19,6 +19,11 @@ spring:
             ddl-auto: create
         show-sql: true
         open-in-view: false
+static:
+    path:
+        resource-location: file:///D:/test/
+        save-path: D:\\test\\
+
 
 server:
     port: 8081
@@ -39,6 +44,7 @@ spring:
     jpa:
         hibernate:
             ddl-auto: create
+
         show-sql: true
         open-in-view: false
 server:

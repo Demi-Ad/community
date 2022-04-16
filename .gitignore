@@ -36,6 +36,7 @@ out/
 ### VS Code ###
 .vscode/
 
-### MAIL ###
+### setting ###
 /src/main/resources/mail-properties.yml
 /src/main/resources/salt.yml
+/src/main/resources/static/favicon.ico

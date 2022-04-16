@@ -3,7 +3,7 @@
 
 <head>
     <title>Title</title>
-    <th:block th:replace="frament/bootstrap :: css"/>
+    <th:block th:replace="frament/head :: head"/>
 </head>
 <body>
 <div class="container-fluid p-5">
@@ -18,18 +18,19 @@
             <div class="form-floating mb-3">
                 <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" th:field="*{email}">
                 <label for="floatingInput">Email address</label>
-                <p th:errors="*{email}" class="text-danger">aaa</p> <!-- ERROR BINDING -->
+                <p th:errors="*{email}" class="text-danger"></p>
             </div>
 
             <div class="form-floating mb-3">
                 <input type="password" class="form-control" id="floatingPassword" placeholder="Password" th:field="*{password}">
                 <label for="floatingPassword">Password</label>
+                <p th:errors="*{password}" class="text-danger"></p>
             </div>
 
             <div class="form-floating mb-3">
                 <input type="text" class="form-control" id="nickname" placeholder="nickname" th:field="*{nickname}">
                 <label for="nickname">nickname</label>
-                <p th:errors="*{nickname}" class="text-danger">aaa</p> <!-- ERROR BINDING -->
+                <p th:errors="*{nickname}" class="text-danger">aaa</p>
 
             </div>
 

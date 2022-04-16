@@ -28,15 +28,20 @@ public class AccountRegisterService {
 
     private final MailService mailService;
 
+    private final AccountProfileImageService accountProfileImageService;
+
     public void accountRegister(RegisterDto registerDto) {
         String encodedPassword = passwordEncoder.encode(registerDto.getPassword());
         log.info(registerDto.toString());
 
         registerDto.setPassword(encodedPassword);
+        String profilePath = accountProfileImageService.profileImageSave(registerDto.getProfileImg());
+
         Account account = Account.builder()
                 .email(registerDto.getEmail())
                 .password(registerDto.getPassword())
                 .nickname(registerDto.getNickname())
+                .profileImg(profilePath)
                 .build();
 
         accountRepository.save(account);

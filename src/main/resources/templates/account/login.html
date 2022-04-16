@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <th:block th:replace="frament/bootstrap::css"/>
+    <th:block th:replace="frament/head::head"/>
 </head>
 <body>
 <div class="container-fluid p-3">
@@ -16,6 +16,16 @@
                     <div class="col-md-7 pe-0">
                         <div class="form-left h-100 py-5 px-5">
                             <form th:action="@{/login}" method="post" class="row g-4">
+
+                                <th:block th:if="${#request.getParameter('error')}">
+                                    <div class="d-flex justify-content-center p-3">
+                                        <th:block th:switch="${#request.getParameter('error')}">
+                                            <p class="align-content-center text-danger rounded" th:case="BadCredentialsException">아이디 또는 비밀번호 오류입니다</p>
+                                            <p class="align-content-center text-danger rounded" th:case="DisabledException">이메일 인증을 완료해주세요</p>
+                                        </th:block>
+                                    </div>
+                                </th:block>
+
                                 <div class="col-12">
                                     <label>Email<span class="text-danger">*</span></label>
                                     <div class="input-group">
