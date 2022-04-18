@@ -9,6 +9,7 @@ import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.security.web.server.savedrequest.ServerRequestCache;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -26,14 +27,26 @@ public class SuccessUrlHandlerCustom implements AuthenticationSuccessHandler {
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
-
-        AccountDetail principal = (AccountDetail) authentication.getPrincipal();
+        AccountDetail accountDetail = (AccountDetail) authentication.getPrincipal();
         HttpSession session = request.getSession();
-        session.setAttribute("nickname", principal.getAccount().getNickname());
+        sessionSetProfileAndNickname(accountDetail,session);
+
         if(savedRequest != null) {
             response.sendRedirect(savedRequest.getRedirectUrl());
         } else {
             response.sendRedirect("/");
         }
+    }
+
+    private void sessionSetProfileAndNickname(AccountDetail accountDetail, HttpSession session) {
+        String profileImg = accountDetail.getAccount().getProfileImg();
+
+        if (StringUtils.hasText(profileImg)) {
+            session.setAttribute("profile",profileImg);
+        } else {
+            session.setAttribute("profile","nobody.png");
+        }
+        session.setAttribute("nickname", accountDetail.getAccount().getNickname());
+
     }
 }

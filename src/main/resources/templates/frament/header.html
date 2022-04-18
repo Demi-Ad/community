@@ -27,6 +27,7 @@
     <div class="col-md-3 text-end" sec:authorize="isAuthenticated()">
         <a th:href="@{/logout}" th:method="post" class="btn btn-outline-primary me-2">Logout</a>
         <a th:href="@{/info}" class="btn btn-primary" th:text="${#session.getAttribute('nickname')}"></a>
+        <img th:src="@{/profile/{img}(img=${#session.getAttribute('profile')})}" alt="profile" class="rounded-circle profile ms-3">
     </div>
 </header>
 </body>

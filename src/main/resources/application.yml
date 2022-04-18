@@ -49,3 +49,7 @@ spring:
         open-in-view: false
 server:
     port: 8081
+static:
+    path:
+        resource-location: file:///D:/test/
+        save-path: D:\\test\\

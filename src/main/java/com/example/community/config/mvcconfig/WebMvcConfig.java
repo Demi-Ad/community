@@ -15,6 +15,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     private final String resourceLocation;
 
 
+    @Autowired
     public WebMvcConfig(@Value("${static.path.resource-location}") String resourceLocation) {
         this.resourceLocation = resourceLocation;
     }
