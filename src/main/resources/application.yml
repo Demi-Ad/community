@@ -3,8 +3,13 @@ spring:
         active: local
 
 
+
 ---
 spring:
+    properties:
+        hibernate:
+            default_batch_fetch_size: 100
+
     config:
         activate:
             on-profile: local
@@ -19,6 +24,9 @@ spring:
             ddl-auto: create
         show-sql: true
         open-in-view: false
+        properties:
+            hibernate:
+                format_sql: true
 static:
     path:
         resource-location: file:///D:/test/
@@ -30,6 +38,10 @@ server:
 
 ---
 spring:
+    properties:
+        hibernate:
+            default_batch_fetch_size: 100
+
     h2:
         console:
             enabled: true
@@ -47,6 +59,9 @@ spring:
 
         show-sql: true
         open-in-view: false
+        properties:
+            hibernate:
+                format_sql: true
 server:
     port: 8081
 static:

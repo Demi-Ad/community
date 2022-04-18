@@ -1,5 +1,6 @@
 package com.example.community.domain.account.service;
 
+
 import com.example.community.common.mailing.dto.MailDto;
 import com.example.community.common.mailing.service.MailService;
 import com.example.community.domain.account.common.EmailToSha256Converter;
