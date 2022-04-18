@@ -8,7 +8,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "post_tag")
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostTag {
@@ -29,4 +28,12 @@ public class PostTag {
     @JoinColumn(name = "post_id")
     private Post post;
 
+
+    public void setTag(Tag tag) {
+        this.tag = tag;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
 }

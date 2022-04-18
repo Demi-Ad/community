@@ -12,5 +12,5 @@ import java.util.List;
 public class PostRequestDto {
     private String title;
     private String content;
-    private List<TagRequestDto> tagRequestDtoList;
+    private List<TagDto> tagDtoList;
 }

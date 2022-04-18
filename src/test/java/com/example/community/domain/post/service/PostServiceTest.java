@@ -2,9 +2,8 @@ package com.example.community.domain.post.service;
 
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
-import com.example.community.domain.account.service.AccountRegisterService;
 import com.example.community.domain.post.dto.PostRequestDto;
-import com.example.community.domain.post.dto.TagRequestDto;
+import com.example.community.domain.post.dto.TagDto;
 import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.post.repo.PostRepository;
 import org.assertj.core.api.Assertions;
@@ -15,8 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -36,7 +33,7 @@ class PostServiceTest {
 
     @Test
     void postServiceTest() {
-        PostRequestDto postRequestDto = new PostRequestDto("A", "A", List.of(new TagRequestDto("A"), new TagRequestDto("B")));
+        PostRequestDto postRequestDto = new PostRequestDto("A", "A", List.of(new TagDto("A"), new TagDto("B")));
 
         Account account = new Account("test@test.com","AAA",null,"AAA");
         Long id = accountRepository.save(account).getId();

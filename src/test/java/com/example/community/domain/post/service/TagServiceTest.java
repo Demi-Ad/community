@@ -1,6 +1,6 @@
 package com.example.community.domain.post.service;
 
-import com.example.community.domain.post.dto.TagRequestDto;
+import com.example.community.domain.post.dto.TagDto;
 import com.example.community.domain.post.entity.Tag;
 import com.example.community.domain.post.repo.TagRepository;
 import org.assertj.core.api.Assertions;
@@ -26,16 +26,16 @@ class TagServiceTest {
 
     @Test
     void tagServiceTest() {
-        TagRequestDto tagRequestDto1 = new TagRequestDto("A");
-        TagRequestDto tagRequestDto2 = new TagRequestDto("B");
-        TagRequestDto tagRequestDto3 = new TagRequestDto("A");
-        List<Tag> tagList = tagService.saveElseSkip(List.of(tagRequestDto1, tagRequestDto2));
+        TagDto tagDto1 = new TagDto("A");
+        TagDto tagDto2 = new TagDto("B");
+        TagDto tagDto3 = new TagDto("A");
+        List<Tag> tagList = tagService.saveElseFind(List.of(tagDto1, tagDto2));
         tagRepository.saveAll(tagList);
 
         em.flush();
         em.clear();
 
-        tagRepository.saveAll(tagService.saveElseSkip(List.of(tagRequestDto3)));
+        tagRepository.saveAll(tagService.saveElseFind(List.of(tagDto3)));
 
         em.flush();
         em.clear();

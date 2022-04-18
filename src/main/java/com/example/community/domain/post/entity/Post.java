@@ -33,7 +33,7 @@ public class Post {
     @Embedded
     private BaseTimeEntity baseTimeEntity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "account_fk"))
     private Account account;
 
