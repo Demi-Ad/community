@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <th:block th:replace="frament/head :: head"/>
+
+</head>
+<body>
+<div class="container">
+    <div class="px-4 py-5 my-5 text-center">
+        <h1 class="display-5 fw-bold mb-5">회원가입 이메일 인증 안내</h1>
+        <div class="col-lg-6 mx-auto">
+
+            <th:block th:if="${signDto.registerState.toString().equals('SUCCESS')}">
+                <p class="lead mb-4"><span th:text="${signDto.nickName}"></span>님 회원가입이 완료 되었습니다</p>
+            </th:block>
+
+            <th:block th:if="${signDto.registerState.toString().equals('ALREADY_CONFIRM')}">
+                <p class="lead mb-4"><span th:text="${signDto.nickName}"></span>님은 이미 이메일 인증 된 회원입니다</p>
+            </th:block>
+
+            <th:block th:if="${signDto.registerState.toString().equals('FAIL')}">
+                <p class="lead mb-4 text-danger">잘못된 접근입니다</p>
+            </th:block>
+
+            <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                <a class="btn btn-primary btn-lg px-4 gap-3" th:href="@{/}">홈으로</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

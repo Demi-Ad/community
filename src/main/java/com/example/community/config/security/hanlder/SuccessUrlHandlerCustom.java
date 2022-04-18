@@ -44,7 +44,7 @@ public class SuccessUrlHandlerCustom implements AuthenticationSuccessHandler {
         if (StringUtils.hasText(profileImg)) {
             session.setAttribute("profile",profileImg);
         } else {
-            session.setAttribute("profile","nobody.png");
+            session.setAttribute("profile","person.png");
         }
         session.setAttribute("nickname", accountDetail.getAccount().getNickname());
 

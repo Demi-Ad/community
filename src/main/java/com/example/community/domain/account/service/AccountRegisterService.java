@@ -6,10 +6,12 @@ import com.example.community.domain.account.common.EmailToSha256Converter;
 import com.example.community.domain.account.common.EmailValidateQuery;
 import com.example.community.domain.account.common.RegisterState;
 import com.example.community.domain.account.dto.RegisterDto;
+import com.example.community.domain.account.dto.RegisterSignDto;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -64,23 +66,31 @@ public class AccountRegisterService {
     }
 
 
-    public RegisterState emailRegisterValidate(EmailValidateQuery query) {
+    public RegisterSignDto emailRegisterValidate(EmailValidateQuery query) {
         Account account;
+        RegisterSignDto signDto = new RegisterSignDto();
+
         try {
             account = accountRepository.findById(query.getId()).orElseThrow();
         } catch (NoSuchElementException e) {
-            return RegisterState.FAIL;
+            signDto.setRegisterState(RegisterState.FAIL);
+            return signDto;
         }
 
         if (account.getLock()) {
             String sha256 = converter.emailToSha256(account.getEmail());
             if (query.validate(sha256)) {
                 account.unLock();
-                return RegisterState.SUCCESS;
+                signDto.setEmail(account.getEmail());
+                signDto.setNickName(account.getNickname());
+                signDto.setRegisterState(RegisterState.SUCCESS);
+            } else {
+                signDto.setRegisterState(RegisterState.FAIL);
             }
         } else {
-            return RegisterState.ALREADY_CONFIRM;
+            signDto.setNickName(account.getNickname());
+            signDto.setRegisterState(RegisterState.ALREADY_CONFIRM);
         }
-        return RegisterState.FAIL;
+        return signDto;
     }
 }
