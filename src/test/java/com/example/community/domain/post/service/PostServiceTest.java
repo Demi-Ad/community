@@ -33,7 +33,7 @@ class PostServiceTest {
 
     @Test
     void postServiceTest() {
-        PostRequestDto postRequestDto = new PostRequestDto("A", "A", List.of(new TagDto("A"), new TagDto("B")));
+        PostRequestDto postRequestDto = new PostRequestDto("A", "A", "#A,#B,#C");
 
         Account account = new Account("test@test.com","AAA",null,"AAA");
         Long id = accountRepository.save(account).getId();

@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Post {
+public class Post extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +31,6 @@ public class Post {
     @Lob
     private String content;
 
-    @Embedded
-    private BaseTimeEntity baseTimeEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "account_fk"))

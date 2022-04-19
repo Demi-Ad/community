@@ -6,6 +6,7 @@ import com.example.community.config.security.hanlder.FailureHandlerCustom;
 import com.example.community.config.security.hanlder.SuccessUrlHandlerCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
@@ -42,7 +43,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/", "/sign", "/register/**", "/logout", "/login/**","/post/**")
+                .regexMatchers(HttpMethod.GET, "/post/\\d+$")
+                .permitAll()
+                .antMatchers("/", "/sign", "/register/**", "/logout", "/login/**")
                 .permitAll()
                 .antMatchers(WHITE_LIST).permitAll()
                 .anyRequest().authenticated()

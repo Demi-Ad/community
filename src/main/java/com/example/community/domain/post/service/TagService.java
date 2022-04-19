@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -18,12 +19,14 @@ import java.util.List;
 public class TagService {
     private final TagRepository tagRepository;
 
-    public List<Tag> saveElseFind(List<TagDto> tagDtoList) {
+    public List<Tag> saveElseFind(List<String> tagDtoList) {
+        if (tagDtoList == null || tagDtoList.isEmpty()){
+            return Collections.emptyList();
+        }
         List<Tag> tagList = new ArrayList<>();
 
-        for (TagDto tagDto : tagDtoList) {
-            String item = tagDto.getItem();
-            Tag tag = tagRepository.findByItem(item).orElseGet(() -> new Tag(item));
+        for (String tagStr : tagDtoList) {
+            Tag tag = tagRepository.findByItem(tagStr).orElseGet(() -> new Tag(tagStr));
             if (tag.getId() == null)
                 tagList.add(tag);
         }

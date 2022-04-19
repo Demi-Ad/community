@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <th:block th:replace="frament/head::head"/>
+    <th:block th:replace="frament/postCreateCdn::cdn"/>
+
+</head>
+<body>
+<div class="container-fluid p-3">
+    <th:block th:replace="frament/header::header"/>
+    <div class="row">
+        <div class="col-8 offset-2">
+            <form method="post" th:action th:object="${post}" id="form" enctype="multipart/form-data">
+                <div class="form-floating mb-3">
+                    <input class="form-control" id="floatingInput" name="title" placeholder="title" th:field="*{title}"
+                           type="text">
+                    <label for="floatingInput">제목</label>
+                </div>
+                <textarea id="editor" name="content" th:field="*{content}"></textarea>
+                <div class="d-flex mt-5 justify-content-end">
+                    <button class="btn btn-outline-danger me-4" type="button">작성취소</button>
+                    <button class="btn btn-outline-primary" type="submit">작성완료</button>
+                </div>
+                <input th:name="${_csrf.headerName}" th:value="${_csrf.token}" type="hidden">
+                <input type="hidden" name="tagList">
+            </form>
+            <div class="mt-5">
+                <input class="form-control" id="tagInput" placeholder="addTag" type="text">
+                <div class="d-flex justify-content-start mt-3" id="tagShow">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+
+
+    window.addEventListener("load",function () {
+        document.getElementById("form").addEventListener("submit",function (e) {
+            e.preventDefault()
+            const form = document.getElementById("form")
+            const formData = new FormData(form)
+            const tagList = []
+
+            document.querySelectorAll(".tag").forEach(elem => {
+                tagList.push(elem.innerText)
+            })
+
+            const tagStr = tagList.join(",")
+
+            formData.append("tagDtoList",tagStr)
+            fetch("",{
+                method: "POST",
+                body: formData
+            }).then(res => {
+                if (res.ok) {
+                    window.location.href = res.url
+                } else {
+                    alert("작성중에 오류가 발생했습니다")
+                }
+            }).catch(reason => {
+                console.log(reason)
+            })
+        })
+    })
+
+
+    document.getElementById("tagInput").addEventListener("keypress", function (key) {
+        if (key.key === "Enter") {
+            const tagInput = document.getElementById("tagInput")
+
+            if (tagInput.value === "")
+                return
+
+            const tagList = document.getElementById("tagShow")
+
+            if (tagList.childNodes.length >= 6) {
+                alert("태그는 5개까지 가능합니다")
+                return;
+            }
+
+            const tagItem = tagInput.value;
+
+            const spanOuter = document.createElement("span")
+            const spanInner = document.createElement("span")
+
+            spanInner.innerText = "#" + tagItem;
+            spanInner.className = "fs-5 tag"
+            const spanInnerDeleteBtn = document.createElement("span")
+            spanInnerDeleteBtn.innerHTML = "<i class=\"bi bi-x\"></i>"
+            spanInnerDeleteBtn.className = "ms-2 text-black fs-5"
+
+            spanInnerDeleteBtn.addEventListener("click",function () {
+                tagList.removeChild(spanOuter)
+            })
+            spanOuter.appendChild(spanInner)
+            spanOuter.appendChild(spanInnerDeleteBtn)
+            spanOuter.className = "me-2 bg-info rounded-3 text-white bg-opacity-50 me-1 ps-2 pe-2"
+            tagList.appendChild(spanOuter)
+
+            tagInput.value = ""
+
+            tagInput.focus()
+        }
+    })
+</script>
+<script th:src="@{/js/ckeditorInit.js}"></script>
+</body>
+</html>

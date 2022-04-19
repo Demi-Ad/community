@@ -29,13 +29,13 @@ class TagServiceTest {
         TagDto tagDto1 = new TagDto("A");
         TagDto tagDto2 = new TagDto("B");
         TagDto tagDto3 = new TagDto("A");
-        List<Tag> tagList = tagService.saveElseFind(List.of(tagDto1, tagDto2));
+        List<Tag> tagList = tagService.saveElseFind(List.of("#D", "#B"));
         tagRepository.saveAll(tagList);
 
         em.flush();
         em.clear();
 
-        tagRepository.saveAll(tagService.saveElseFind(List.of(tagDto3)));
+        tagRepository.saveAll(tagService.saveElseFind(List.of("#A")));
 
         em.flush();
         em.clear();
