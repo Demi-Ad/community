@@ -20,6 +20,7 @@ public class ApplicationStartListener implements ApplicationListener<ContextRefr
         Account account = Account.builder().email("votm777@naver.com")
                 .password(passwordEncoder.encode("aaaa"))
                 .nickname("aaaa")
+                .profileImg("person.png")
                 .build();
 
         account.unLock();

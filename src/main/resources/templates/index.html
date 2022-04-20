@@ -50,7 +50,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="d-flex">
-                                    <img alt="profile" class="rounded-circle profile-list " src="" th:src="@{/profile/person.png}">
+                                    <img alt="profile" class="rounded-circle profile-list " src="" th:src="@{/profile/{img}(img=${post.getProfilePath()})}">
                                     <p class="p-normal ms-3" th:text="${post.author}">USERNAME</p>
                                 </div>
                             </div>

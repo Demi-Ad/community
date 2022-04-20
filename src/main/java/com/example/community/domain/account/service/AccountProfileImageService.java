@@ -26,7 +26,7 @@ public class AccountProfileImageService {
     public String profileImageSave(MultipartFile multipartFile) {
 
         if (multipartFile.isEmpty() || !multipartFile.getContentType().startsWith("image"))
-            return "";
+            return "person.png";
 
         String saveFileName = generateSaveFileName(multipartFile);
         File file = new File(savePath + "\\" + saveFileName);
@@ -34,7 +34,7 @@ public class AccountProfileImageService {
             multipartFile.transferTo(file);
         } catch (IOException e) {
             e.printStackTrace();
-            return "";
+            return "person.png";
         }
         return saveFileName;
     }

@@ -33,7 +33,7 @@ public class PostService {
     private final TagService tagService;
 
     public Long save(PostRequestDto postRequestDto,Long accountId) {
-        List<String> tagStrList = List.of(postRequestDto.getTagDtoList().split(","));
+        List<String> tagStrList = List.of(postRequestDto.getTagListStr().split(","));
         List<Tag> tagList = tagService.saveElseFind(tagStrList);
         Post post = new Post(postRequestDto.getTitle(), postRequestDto.getContent());
         Account account = accountRepository.findById(accountId).orElseThrow();

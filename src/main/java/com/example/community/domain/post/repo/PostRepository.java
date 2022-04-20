@@ -13,7 +13,7 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findByTitle(String title);
 
-    @EntityGraph(attributePaths = "account")
+    @EntityGraph(attributePaths = {"account"})
     @Query(value = "select p from Post p where p.id=:id")
     Optional<Post> findByIdJoinAccount(@Param(value = "id") Long id);
 

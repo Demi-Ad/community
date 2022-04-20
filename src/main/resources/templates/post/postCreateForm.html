@@ -50,7 +50,7 @@
 
             const tagStr = tagList.join(",")
 
-            formData.append("tagDtoList",tagStr)
+            formData.append("tagListStr",tagStr)
             fetch("",{
                 method: "POST",
                 body: formData
