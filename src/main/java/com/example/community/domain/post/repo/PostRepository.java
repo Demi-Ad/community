@@ -21,4 +21,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query(value = "select p from Post p")
     Page<Post> pagingJoinAccount(Pageable pageable);
 
+    @Query("select (count(p) > 0) from Post p where p.account.id = :accountId and p.id = :postId")
+    boolean checkCreateUser(@Param("accountId") Long postId, @Param("postId") Long accountId);
+
+
+
 }

@@ -48,17 +48,17 @@ public class PostController {
     }
 
     @GetMapping("/post/{id}/edite")
-    @PreAuthorize("@authorizeCheckUtil.check(#postId,#accountDetail)")
+    @PreAuthorize("@authorizeCheckUtil.check(#postId,#accountDetail.account.id)")
     public String editePostForm(@PathVariable("id") Long postId, Model model, @AuthenticationPrincipal AccountDetail accountDetail) {
-        PostRequestDto postRequestDto = postService.editFormData(postId);
+        PostRequestDto postRequestDto = postService.getEditPostForm(postId);
         model.addAttribute("post",postRequestDto);
         return "post/postEditForm";
     }
 
     @PostMapping("/post/{id}/edite")
-    @PreAuthorize("@authorizeCheckUtil.check(#postId,#accountDetail)")
+    @PreAuthorize("@authorizeCheckUtil.check(#postId,#accountDetail.account.id)")
     public String editPost(@PathVariable("id") Long postId, @ModelAttribute("post") PostRequestDto postRequestDto, @AuthenticationPrincipal AccountDetail accountDetail) {
-        postService.editePost(postRequestDto,postId);
+        postService.editPost(postRequestDto,postId);
         return "redirect:/post/{id}";
     }
 }
