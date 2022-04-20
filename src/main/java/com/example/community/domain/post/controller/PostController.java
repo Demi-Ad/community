@@ -6,6 +6,7 @@ import com.example.community.domain.post.dto.PostResponseDto;
 import com.example.community.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +20,10 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/post/{postId}")
-    @ResponseBody
-    public PostResponseDto postSingleView(@PathVariable Long postId, Model model) {
-        PostResponseDto post = postService.findPost(postId);
+    public String postSingleView(@PathVariable Long postId, Model model, @AuthenticationPrincipal AccountDetail accountDetail) {
+        PostResponseDto post = postService.findPostSingleView(postId);
         model.addAttribute("post",post);
-        return post;
+        return "post/postSingleView";
     }
 
     @GetMapping("/post/create")
@@ -38,6 +38,27 @@ public class PostController {
                              RedirectAttributes redirectAttributes) {
         Long postId = postService.save(postRequestDto, accountDetail.getAccount().getId());
         redirectAttributes.addAttribute("id",postId);
+        return "redirect:/post/{id}";
+    }
+
+    @PostMapping("/post/{id}/delete")
+    public String deletePost(@PathVariable("id") Long postId) {
+        postService.deletePost(postId);
+        return "redirect:/";
+    }
+
+    @GetMapping("/post/{id}/edite")
+    @PreAuthorize("@authorizeCheckUtil.check(#postId,#accountDetail)")
+    public String editePostForm(@PathVariable("id") Long postId, Model model, @AuthenticationPrincipal AccountDetail accountDetail) {
+        PostRequestDto postRequestDto = postService.editFormData(postId);
+        model.addAttribute("post",postRequestDto);
+        return "post/postEditForm";
+    }
+
+    @PostMapping("/post/{id}/edite")
+    @PreAuthorize("@authorizeCheckUtil.check(#postId,#accountDetail)")
+    public String editPost(@PathVariable("id") Long postId, @ModelAttribute("post") PostRequestDto postRequestDto, @AuthenticationPrincipal AccountDetail accountDetail) {
+        postService.editePost(postRequestDto,postId);
         return "redirect:/post/{id}";
     }
 }

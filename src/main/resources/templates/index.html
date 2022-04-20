@@ -64,9 +64,9 @@
                         </div>
 
                     </div>
-                    <div class="card-body">
+                    <div class="card-body row">
                         <h5 th:text="${post.postTitle}">title</h5>
-                        <p class="card-text">content...</p>
+                        <a class="card-text text-truncate d-inline-block" th:text="${post.postContent}" th:href="@{/post/{id}(id=${post.postId})}">content...</a>
                     </div>
 
                     <div class="card-footer">

@@ -26,9 +26,6 @@ class TagServiceTest {
 
     @Test
     void tagServiceTest() {
-        TagDto tagDto1 = new TagDto("A");
-        TagDto tagDto2 = new TagDto("B");
-        TagDto tagDto3 = new TagDto("A");
         List<Tag> tagList = tagService.saveElseFind(List.of("#D", "#B"));
         tagRepository.saveAll(tagList);
 
@@ -39,7 +36,7 @@ class TagServiceTest {
 
         em.flush();
         em.clear();
+        Assertions.assertThat(tagRepository.findAll().size()).isEqualTo(4); // ApplicationStartListener 에서 1개 삽입
 
-        Assertions.assertThat(tagRepository.findAll().size()).isEqualTo(2);
     }
 }

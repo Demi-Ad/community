@@ -14,11 +14,12 @@ import java.util.List;
 @Builder
 public class PostResponseDto {
 
+    private Long postId;
     private String postTitle;
     private String postContent;
     private String author;
     private String profilePath;
     private LocalDateTime createdBy;
     private List<TagDto> tagList;
-
+    private Boolean isCreated;
 }

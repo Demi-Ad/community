@@ -36,7 +36,7 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "account_fk"))
     private Account account;
 
-    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL,orphanRemoval = true)
     private final List<PostTag> postTagList = new ArrayList<>();
 
     public Post(String title, String content) {
@@ -51,6 +51,15 @@ public class Post extends BaseTimeEntity {
     public void addPostTag(PostTag tag) {
         this.postTagList.add(tag);
         tag.setPost(this);
+    }
+
+    public boolean isCreatedUser(Account account) {
+        return this.account.equals(account);
+    }
+
+    public void edit(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 
     @Override

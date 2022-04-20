@@ -45,7 +45,7 @@ class PostServiceTest {
 
         Post post = postRepository.findById(postId).orElseThrow();
 
-        Assertions.assertThat(post.getPostTagList().size()).isEqualTo(2);
+        Assertions.assertThat(post.getPostTagList().size()).isEqualTo(3);
         Assertions.assertThat(post.getAccount()).isEqualTo(account);
 
 

@@ -1,10 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <th:block th:replace="frament/head::head"/>
 </head>
 <body>
+<div class="container-fluid p-3">
+    <th:block th:replace="frament/header::header"/>
+    <div class="row">
+        <div class="col-10 offset-1">
+            <!-- Post content-->
+            <article>
+                <!-- Post header-->
+                <header class="mb-4">
+                    <!-- Post title-->
+                    <h1 class="fw-bolder mb-1" th:text="${post.postTitle}">Welcome to Blog Post!</h1>
+                    <!-- Post meta content-->
+                    <div class="text-muted fst-italic mb-2">Posted on <span th:text="${#temporals.format(post.createdBy)}"/> by <span th:text="${post.author}"/> </div>
+                    <!-- Post categories-->
+                    <th:block th:each="tag:${post.tagList}">
+                        <a class="badge bg-secondary text-decoration-none link-light" th:text="${tag.item}" href="#">Web Design</a>
+                    </th:block>
+                </header>
 
+                <!-- Post content-->
+                <section class="mb-5">
+                    <th:block th:utext="${post.postContent}"/>
+                </section>
+            </article>
+
+            <div class="d-flex justify-content-end mb-3" th:if="${post.isCreated}" th:with="id=${post.postId}">
+
+                <form th:action="@{/post/{id}/edite(id=${id})}" method="get" class="me-3">
+                    <button class="btn text-info" type="submit">수정</button>
+                </form>
+
+                <form th:action="@{/post/{id}/delete(id=${id})}" method="post">
+                    <button class="btn text-danger" type="submit">삭제</button>
+                    <input type="hidden" th:name="${_csrf.headerName}" th:value="${_csrf.token}">
+                </form>
+
+            </div>
+
+            <!-- Comments section-->
+            <section class="mb-5">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        <!-- Comment form-->
+                        <form class="mb-4"><textarea class="form-control" rows="3" placeholder="Join the discussion and leave a comment!"></textarea></form>
+                        <!-- Comment with nested comments-->
+                        <div class="d-flex mb-4">
+                            <!-- Parent comment-->
+                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."></div>
+                            <div class="ms-3">
+                                <div class="fw-bold">Commenter Name</div>
+                                If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
+                                <!-- Child comment 1-->
+                                <div class="d-flex mt-4">
+                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."></div>
+                                    <div class="ms-3">
+                                        <div class="fw-bold">Commenter Name</div>
+                                        And under those conditions, you cannot establish a capital-market evaluation of that enterprise. You can't get investors.
+                                    </div>
+                                </div>
+                                <!-- Child comment 2-->
+                                <div class="d-flex mt-4">
+                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."></div>
+                                    <div class="ms-3">
+                                        <div class="fw-bold">Commenter Name</div>
+                                        When you put money directly to a problem, it makes a good headline.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Single comment-->
+                        <div class="d-flex">
+                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..."></div>
+                            <div class="ms-3">
+                                <div class="fw-bold">Commenter Name</div>
+                                When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+
+</div>
+<script th:inline="javascript" th:if="${post.isCreated}">
+
+</script>
 </body>
 </html>

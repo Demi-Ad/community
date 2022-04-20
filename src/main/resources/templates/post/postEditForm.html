@@ -35,7 +35,6 @@
 </div>
 <script th:inline="javascript">
 
-
     window.addEventListener("load",function () {
         document.getElementById("form").addEventListener("submit",function (e) {
             e.preventDefault()
@@ -65,6 +64,37 @@
         })
     })
 
+    window.addEventListener("load",function () {
+        if ([[${post.tagListStr}]] === undefined || [[${post.tagListStr}]] === null || [[${post.tagListStr}]] === "")
+            return;
+
+        const tagList = [[${post.tagListStr}]].split(",")
+        console.log(tagList)
+        if (tagList.length === 0)
+            return;
+        tagList.forEach(function (item) {
+            const tagList = document.getElementById("tagShow")
+
+            const tagItem = item;
+
+            const spanOuter = document.createElement("span")
+            const spanInner = document.createElement("span")
+
+            spanInner.innerText = tagItem;
+            spanInner.className = "fs-5 tag"
+            const spanInnerDeleteBtn = document.createElement("span")
+            spanInnerDeleteBtn.innerHTML = "<i class=\"bi bi-x\"></i>"
+            spanInnerDeleteBtn.className = "ms-2 text-black fs-5"
+
+            spanInnerDeleteBtn.addEventListener("click",function () {
+                tagList.removeChild(spanOuter)
+            })
+            spanOuter.appendChild(spanInner)
+            spanOuter.appendChild(spanInnerDeleteBtn)
+            spanOuter.className = "me-2 bg-info rounded-3 text-white bg-opacity-50 me-1 ps-2 pe-2"
+            tagList.appendChild(spanOuter)
+        })
+    })
 
     document.getElementById("tagInput").addEventListener("keypress", function (key) {
         if (key.key === "Enter") {

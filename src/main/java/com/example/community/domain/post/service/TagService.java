@@ -32,7 +32,8 @@ public class TagService {
 
             Tag tag = tagRepository.findByItem(tagStr).orElseGet(() -> new Tag(tagStr));
             if (tag.getId() == null)
-                tagList.add(tag);
+                tagRepository.save(tag);
+            tagList.add(tag);
         }
         return tagList;
     }
