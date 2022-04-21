@@ -2,8 +2,10 @@ package com.example.community.domain.post.entity;
 
 import com.example.community.domain.baseentity.BaseTimeEntity;
 import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "post_tag")
@@ -31,5 +33,18 @@ public class PostTag extends BaseTimeEntity {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        PostTag postTag = (PostTag) o;
+        return id != null && Objects.equals(id, postTag.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

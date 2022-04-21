@@ -48,7 +48,7 @@
 
             const tagStr = tagList.join(",")
 
-            formData.append("tagListStr",tagStr)
+            formData.append("tagJoiningStr",tagStr)
             fetch("",{
                 method: "POST",
                 body: formData
@@ -65,10 +65,10 @@
     })
 
     window.addEventListener("load",function () {
-        if ([[${post.tagListStr}]] === undefined || [[${post.tagListStr}]] === null || [[${post.tagListStr}]] === "")
+        if ([[${post.tagJoiningStr}]] === undefined || [[${post.tagJoiningStr}]] === null || [[${post.tagJoiningStr}]] === "")
             return;
 
-        const tagList = [[${post.tagListStr}]].split(",")
+        const tagList = [[${post.tagJoiningStr}]].split(",")
         console.log(tagList)
         if (tagList.length === 0)
             return;

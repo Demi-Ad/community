@@ -35,8 +35,10 @@ public class PostService {
 
     private final AuthorizeCheckUtil authorizeCheckUtil;
 
+    private final PostLikeService postLikeService;
+
     public Long save(PostRequestDto postRequestDto,Long accountId) {
-        List<String> tagStrList = List.of(postRequestDto.getTagListStr().split(","));
+        List<String> tagStrList = List.of(postRequestDto.getTagJoiningStr().split(","));
         List<Tag> tagList = tagService.saveElseFind(tagStrList);
         Post post = new Post(postRequestDto.getTitle(), postRequestDto.getContent());
         Account account = accountRepository.findById(accountId).orElseThrow();
@@ -53,7 +55,7 @@ public class PostService {
     public void editPost(PostRequestDto postRequestDto, Long postId) {
         Post post = postRepository.findById(postId).orElseThrow();
         post.getPostTagList().clear();
-        List<Tag> tagList = tagService.saveElseFind(List.of(postRequestDto.getTagListStr().split(",")));
+        List<Tag> tagList = tagService.saveElseFind(List.of(postRequestDto.getTagJoiningStr().split(",")));
         postSetTag(tagList,post);
         post.edit(postRequestDto.getTitle(), postRequestDto.getTitle());
     }
@@ -136,6 +138,7 @@ public class PostService {
                         .profilePath(post.getAccount().getProfileImg())
                         .createdBy(post.getCreatedAt())
                         .tagList(tagList)
+                        .likeCount(postLikeService.postLikeCount(post))
                         .build();
 
             case FIND_ONE:
@@ -148,6 +151,7 @@ public class PostService {
                         .createdBy(post.getCreatedAt())
                         .tagList(tagList)
                         .isCreated(authorizeCheckUtil.check(post))
+                        .likeCount(postLikeService.postLikeCount(post))
                         .build();
             default:
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"잘못된 요청입니다");

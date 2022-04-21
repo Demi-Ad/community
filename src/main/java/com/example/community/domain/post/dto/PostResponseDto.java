@@ -22,4 +22,5 @@ public class PostResponseDto {
     private LocalDateTime createdBy;
     private List<TagDto> tagList;
     private Boolean isCreated;
+    private Long likeCount;
 }
