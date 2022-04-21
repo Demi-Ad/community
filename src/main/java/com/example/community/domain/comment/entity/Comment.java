@@ -5,23 +5,29 @@ import com.example.community.domain.post.entity.Post;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners(AuditingEntityListener.class)
 public class Comment {
 
-    @OneToMany(mappedBy = "parentComment",orphanRemoval = true,cascade = CascadeType.ALL)
-    private final Set<Comment> childrenComment = new HashSet<>();
+
+
     @Id
     @GeneratedValue
     @Column(name = "comment_id")
     private Long id;
     private String content;
+    @OneToMany(mappedBy = "parentComment", orphanRemoval = true, cascade = CascadeType.ALL)
+    private final Set<Comment> childrenComment = new HashSet<>();
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "account_id")
     private Account account;
@@ -31,6 +37,8 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id")
     private Comment parentComment;
+    @CreatedDate
+    private LocalDateTime createdAt;
 
     public Comment(String content, Account account, Post post) {
         this.content = content;
