@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -17,7 +17,7 @@
                     <!-- Post title-->
                     <h1 class="fw-bolder mb-1" th:text="${post.postTitle}">Welcome to Blog Post!</h1>
                     <!-- Post meta content-->
-                    <div class="text-muted fst-italic mb-2">Posted on <span th:text="${#temporals.format(post.createdBy)}"/> by <span th:text="${post.author}"/> </div>
+                    <div class="text-muted fst-italic mb-2">Posted on <span th:text="${#temporals.format(post.createdBy,'yyyy-MM-dd HH:mm')}"/> by <span th:text="${post.author}"/> </div>
                     <!-- Post categories-->
                     <th:block th:each="tag:${post.tagList}">
                         <a class="badge bg-secondary text-decoration-none link-light" th:text="${tag.item}" href="#">Web Design</a>

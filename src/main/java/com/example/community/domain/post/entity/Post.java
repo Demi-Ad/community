@@ -3,11 +3,9 @@ package com.example.community.domain.post.entity;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.baseentity.BaseTimeEntity;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.ArrayList;

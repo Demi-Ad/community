@@ -14,11 +14,9 @@
 
     <div class="row mt-5">
         <form method="post" enctype="multipart/form-data" th:action class="col-4 offset-4" th:object="${account}">
-
             <div class="form-floating mb-3">
                 <input type="email" class="form-control" id="floatingInput" placeholder="name@example.com" th:field="*{email}">
                 <label for="floatingInput">Email address</label>
-                <p th:errors="*{email}" class="text-danger"></p>
             </div>
 
             <div class="form-floating mb-3">

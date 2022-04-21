@@ -8,7 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -33,7 +36,6 @@ public class RegisterController {
 
     @PostMapping
     public String register(@ModelAttribute("account") @Valid RegisterDto registerDto, BindingResult bindingResult, HttpSession session) {
-        //TODO : profileImg 이미지 저장 서비스 구현
 
         validator.validate(registerDto, bindingResult);
 

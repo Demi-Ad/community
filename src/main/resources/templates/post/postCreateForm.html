@@ -10,13 +10,13 @@
 <body>
 <div class="container-fluid p-3">
     <th:block th:replace="frament/header::header"/>
-    <div class="row">
+    <div class ="row">
         <div class="col-8 offset-2">
             <form method="post" th:action th:object="${post}" id="form" enctype="multipart/form-data">
                 <div class="form-floating mb-3">
-                    <input class="form-control" id="floatingInput" name="title" placeholder="title" th:field="*{title}"
+                    <input class="form-control" id="title" name="title" placeholder="title" th:field="*{title}"
                            type="text">
-                    <label for="floatingInput">제목</label>
+                    <label for="title">제목</label>
                 </div>
                 <textarea id="editor" name="content" th:field="*{content}"></textarea>
                 <div class="d-flex mt-5 justify-content-end">

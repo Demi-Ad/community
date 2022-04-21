@@ -57,7 +57,7 @@ public class PostService {
         post.getPostTagList().clear();
         List<Tag> tagList = tagService.saveElseFind(List.of(postRequestDto.getTagJoiningStr().split(",")));
         postSetTag(tagList,post);
-        post.edit(postRequestDto.getTitle(), postRequestDto.getTitle());
+        post.edit(postRequestDto.getTitle(), postRequestDto.getContent());
     }
 
     @Transactional(readOnly = true)
