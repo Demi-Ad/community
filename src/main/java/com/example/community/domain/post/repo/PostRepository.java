@@ -13,12 +13,12 @@ import java.util.Optional;
 public interface PostRepository extends JpaRepository<Post, Long> {
     Optional<Post> findByTitle(String title);
 
-    @EntityGraph(attributePaths = {"account"})
-    @Query(value = "select p from Post p where p.id=:id")
+    @EntityGraph(attributePaths = {"account","postTagList"})
+    @Query(value = "select distinct p from Post p where p.id=:id")
     Optional<Post> findByIdJoinAccount(@Param(value = "id") Long id);
 
-    @EntityGraph(attributePaths = "account")
-    @Query(value = "select p from Post p")
+    @EntityGraph(attributePaths = {"account","postTagList"})
+    @Query(value = "select distinct p from Post p")
     Page<Post> pagingJoinAccount(Pageable pageable);
 
     @Query("select (count(p) > 0) from Post p where p.account.id = :accountId and p.id = :postId")

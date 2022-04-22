@@ -10,7 +10,7 @@ import java.util.Set;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    @Query("select distinct c from Comment c where c.parentComment.id is null and c.post.id= :postId")
+    @Query("select distinct c from Comment c where c.parentComment.id is null and c.post.id= :postId order by c.createdAt asc")
     @EntityGraph(attributePaths = "childrenComment")
     Set<Comment> notHaveParentCommentSet(@Param("postId") Long postId);
 }

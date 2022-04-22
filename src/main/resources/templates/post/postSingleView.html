@@ -33,9 +33,9 @@
                 </section>
             </article>
 
-            <div class="d-flex justify-content-center mb-5">
+            <div class="d-flex justify-content-center mb-3">
                 <form method="post" th:action="@{/post/{id}/like(id=${post.postId})}">
-                    <button class="btn btn-outline-primary" type="submit">
+                    <button class="btn btn-outline-danger" type="submit">
                         <span class="me-3" th:text="${post.likeCount}"/>
                         <i class="bi bi-heart" th:if="${post.likeCount} == 0"></i>
                         <i class="bi bi-heart-fill" th:if="${post.likeCount} > 0"></i>
@@ -58,11 +58,11 @@
             </div>
 
             <!-- Comments section-->
-            <section class="mb-5">
+            <section class="mb-5" th:if="${post.commentResponseDtoList.size() != 0} or !${#authentication.name.equals('anonymousUser')}">
                 <div class="card bg-light">
                     <div class="card-body">
                         <!-- Comment form-->
-                        <form class="mb-4" method="post" sec:authorize="isAuthenticated()" th:action="@{/comment}">
+                        <form class="mb-4" id="commentForm" method="post" sec:authorize="isAuthenticated()" th:action="@{/comment}">
                             <textarea class="form-control" name="commentContent" placeholder="Join the discussion and leave a comment!" rows="2"></textarea>
                             <div class="d-flex justify-content-end mt-3">
                                 <button class="btn btn-outline-primary" type="submit">댓글작성</button>
@@ -71,46 +71,30 @@
                             <input name="postId" th:name="postId" th:value="${post.postId}" type="hidden">
                         </form>
 
-
                         <!--comment-->
-                        <div class="d-flex">
-                            <div class="flex-shrink-0">
-                                <img alt="..." class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg">
-                            </div>
-                            <div class="ms-3">
-                                <div class="fw-bold mb-1">Commenter Name</div>
-                                <div>
-                                    <p>When I look at the universe and all the ways the universe wants to kill us, I
-                                        find it hard to reconcile that with statements of beneficence.</p>
+                        <div class="mb-3" th:each="comment : ${post.commentResponseDtoList}">
+                            <div class="d-flex mb-5">
+                                <div class="flex-shrink-0">
+                                    <img alt="..." class="rounded-circle profile-comment" th:src="@{/profile/{imgPath}(imgPath=${comment.authorProfile})}">
                                 </div>
-                                <a class="text-info fs-6">댓글달기</a>
-                                <a class="text-danger fs-6 ms-2">댓글삭제</a>
+                                <div class="ms-3">
+                                    <div class="fw-bold mb-1" th:text="${comment.author}">Commenter Name</div>
+                                    <p th:text="${comment.content}"></p>
+                                    <a class="text-info fs-6 addChildComment" th:value="${comment.commentId}">댓글달기</a>
+                                    <a class="text-danger fs-6 ms-2">댓글삭제</a>
+                                </div>
                             </div>
-                        </div>
-
-                        <!-- Child comment1-->
-                        <div class="d-flex mt-4 ms-3">
-                            <div class="flex-shrink-0">
-                                <i class="bi bi-arrow-return-right me-3"></i>
-                                <img alt="..." class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg">
-                            </div>
-                            <div class="ms-3">
-                                <div class="fw-bold mb-1">Commenter Name</div>
-                                <p>And under those conditions, you cannot establish a capital-market evaluation of that
-                                    enterprise. You can't get investors.</p>
-                            </div>
-                        </div>
-
-                        <!-- Child comment2-->
-                        <div class="d-flex mt-4 ms-3">
-                            <div class="flex-shrink-0">
-                                <i class="bi bi-arrow-return-right me-3"></i>
-                                <img alt="..." class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg">
-                            </div>
-                            <div class="ms-3">
-                                <div class="fw-bold mb-1">Commenter Name</div>
-                                <p>And under those conditions, you cannot establish a capital-market evaluation of that
-                                    enterprise. You can't get investors.</p>
+                            <!-- Child comment-->
+                            <div class="d-flex mt-4 ms-3" th:each="childComment : ${comment.childrenCommentList}">
+                                <div class="flex-shrink-0">
+                                    <i class="bi bi-arrow-return-right me-3"></i>
+                                    <img alt="..." class="rounded-circle profile-comment" th:src="@{/profile/{imgPath}(imgPath=${childComment.authorProfile})}">
+                                </div>
+                                <div class="ms-3">
+                                    <div class="fw-bold mb-1" th:text="${childComment.author}">Commenter Name</div>
+                                    <p th:text="${childComment.content}"></p>
+                                    <a class="text-danger fs-6 ms-2">댓글삭제</a>
+                                </div>
                             </div>
                         </div>
 
@@ -119,8 +103,76 @@
             </section>
         </div>
     </div>
-
 </div>
+<script defer sec:authorize="isAuthenticated()" th:inline="javascript">
 
+    const csrfName = [[${_csrf.headerName}]]
+    const csrfToken = [[${_csrf.token}]]
+    const postId = [[${post.postId}]]
+    const _csrf = document.querySelector("#commentForm > input[name = '_csrf']").value
+
+    document.querySelectorAll(".addChildComment").forEach(elem => {
+        elem.addEventListener("click",e => {
+
+            if (elem.parentElement.parentElement.parentElement.lastElementChild.nodeName === "FORM")
+                return;
+
+            const form = document.createElement("form")
+            form.setAttribute("charset", "UTF-8")
+            form.setAttribute("method","post")
+            form.setAttribute("action","/comment")
+
+
+            const csrfHiddenInput = document.createElement("input")
+            csrfHiddenInput.setAttribute("type","hidden")
+            csrfHiddenInput.setAttribute("name",csrfName)
+            csrfHiddenInput.setAttribute("value",csrfToken)
+
+            const postIdHiddenInput = document.createElement("input")
+            postIdHiddenInput.setAttribute("type","hidden")
+            postIdHiddenInput.setAttribute("name","postId")
+            postIdHiddenInput.setAttribute("value",postId)
+
+            const parentCommentId = elem.getAttribute("value")
+
+            const parentCommentHiddenInput = document.createElement("input")
+            parentCommentHiddenInput.setAttribute("type","hidden")
+            parentCommentHiddenInput.setAttribute("name","parentCommentId")
+            parentCommentHiddenInput.setAttribute("value",parentCommentId)
+
+
+            const childCommentInput = document.createElement("input")
+            childCommentInput.setAttribute("name","commentContent")
+            childCommentInput.className = "form-control mb-4"
+            childCommentInput.setAttribute("placeholder","Join the discussion and leave a comment!")
+
+            const div = document.createElement("div");
+            div.className = "row mt-3 ms-5"
+
+            const submitBtn = document.createElement("button");
+            submitBtn.setAttribute("type","submit")
+            submitBtn.innerHTML = "댓글 작성"
+            submitBtn.className = "btn btn-outline-primary btn-sm col-1 offset-11 me-3"
+
+            const _csrfHiddenInput = document.createElement("input")
+            _csrfHiddenInput.setAttribute("name","_csrf")
+            _csrfHiddenInput.setAttribute("value",_csrf)
+            _csrfHiddenInput.setAttribute("type","hidden")
+
+            //TODO : 댓글 취소 버튼 추가
+            div.appendChild(childCommentInput)
+            div.appendChild(submitBtn)
+
+            form.appendChild(csrfHiddenInput)
+            form.appendChild(postIdHiddenInput)
+            form.appendChild(parentCommentHiddenInput)
+            form.append(_csrfHiddenInput)
+            form.append(div)
+
+            elem.parentElement.parentElement.parentElement.appendChild(form)
+            childCommentInput.focus()
+        })
+    })
+</script>
 </body>
 </html>
