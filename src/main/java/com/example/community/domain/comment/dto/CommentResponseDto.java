@@ -15,6 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CommentResponseDto {
     private String author;
+    private String authorProfile;
     private String content;
     private LocalDateTime createAt;
     private List<CommentResponseDto> childrenCommentList = new ArrayList<>();
@@ -23,18 +24,21 @@ public class CommentResponseDto {
         this.author = comment.getAccount().getNickname();
         this.content = comment.getContent();
         this.createAt = comment.getCreatedAt();
+        this.authorProfile = comment.getAccount().getProfileImg();
         comment.getChildrenComment().stream()
                 .map(childComment -> CommentResponseDto.builder()
                         .author(childComment.getAccount().getNickname())
                         .content(childComment.getContent())
+                        .authorProfile(childComment.getAccount().getProfileImg())
                         .createAt(childComment.getCreatedAt())
                         .build())
                 .forEach(this.childrenCommentList::add);
     }
 
     @Builder
-    public CommentResponseDto(String author, String content, LocalDateTime createAt) {
+    public CommentResponseDto(String author, String content,String authorProfile, LocalDateTime createAt) {
         this.author = author;
+        this.authorProfile = authorProfile;
         this.content = content;
         this.createAt = createAt;
     }

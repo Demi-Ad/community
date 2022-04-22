@@ -2,6 +2,7 @@ package com.example.community.domain.post.service;
 
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
+import com.example.community.domain.comment.service.CommentService;
 import com.example.community.domain.post.dto.PostRequestDto;
 import com.example.community.domain.post.dto.PostResponseDto;
 import com.example.community.domain.post.dto.TagDto;
@@ -36,6 +37,8 @@ public class PostService {
     private final AuthorizeCheckUtil authorizeCheckUtil;
 
     private final PostLikeService postLikeService;
+
+    private final CommentService commentService;
 
     public Long save(PostRequestDto postRequestDto,Long accountId) {
         List<String> tagStrList = List.of(postRequestDto.getTagJoiningStr().split(","));
@@ -152,6 +155,7 @@ public class PostService {
                         .tagList(tagList)
                         .isCreated(authorizeCheckUtil.check(post))
                         .likeCount(postLikeService.postLikeCount(post))
+                        .commentResponseDtoList(commentService.getCommentResponse(post.getId()))
                         .build();
             default:
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"잘못된 요청입니다");

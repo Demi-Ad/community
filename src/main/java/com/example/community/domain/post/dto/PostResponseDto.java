@@ -1,5 +1,6 @@
 package com.example.community.domain.post.dto;
 
+import com.example.community.domain.comment.dto.CommentResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,4 +24,5 @@ public class PostResponseDto {
     private List<TagDto> tagList;
     private Boolean isCreated;
     private Long likeCount;
+    private List<CommentResponseDto> commentResponseDtoList;
 }
