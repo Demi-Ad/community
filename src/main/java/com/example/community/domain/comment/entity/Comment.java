@@ -56,5 +56,12 @@ public class Comment {
         this.parentComment = parentComment;
     }
 
-
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "(" +
+                "id = " + id + ", " +
+                "content = " + content + ", " +
+                "account = " + account.getId() + account.getNickname() +
+                " createdAt = " + createdAt + ")";
+    }
 }

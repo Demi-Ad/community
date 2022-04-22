@@ -80,8 +80,8 @@
                                 <div class="ms-3">
                                     <div class="fw-bold mb-1" th:text="${comment.author}">Commenter Name</div>
                                     <p th:text="${comment.content}"></p>
-                                    <a class="text-info fs-6 addChildComment" th:value="${comment.commentId}">댓글달기</a>
-                                    <a class="text-danger fs-6 ms-2">댓글삭제</a>
+                                    <a class="text-info fs-6 addChildComment" sec:authorize="isAuthenticated()" th:value="${comment.commentId}">댓글달기</a>
+                                    <a class="text-danger fs-6 ms-2 delCommentBtn" th:if="${comment.createAuthor}" th:value="${comment.commentId}">댓글삭제</a>
                                 </div>
                             </div>
                             <!-- Child comment-->
@@ -93,7 +93,7 @@
                                 <div class="ms-3">
                                     <div class="fw-bold mb-1" th:text="${childComment.author}">Commenter Name</div>
                                     <p th:text="${childComment.content}"></p>
-                                    <a class="text-danger fs-6 ms-2">댓글삭제</a>
+                                    <a class="text-danger fs-6 ms-2 delCommentBtn" th:if="${childComment.createAuthor}" th:value="${childComment.commentId}">댓글삭제</a>
                                 </div>
                             </div>
                         </div>
@@ -171,6 +171,40 @@
 
             elem.parentElement.parentElement.parentElement.appendChild(form)
             childCommentInput.focus()
+        })
+    })
+
+    document.querySelectorAll(".delCommentBtn").forEach(elem => {
+        elem.addEventListener("click",function (e) {
+
+            const commentId = elem.getAttribute("value");
+            const form = document.createElement("form");
+
+            form.setAttribute("charset", "UTF-8")
+            form.setAttribute("method","post")
+            form.setAttribute("action","/comment/delete")
+            form.setAttribute("type","hidden")
+
+            const csrfHiddenInput = document.createElement("input")
+            csrfHiddenInput.setAttribute("type","hidden")
+            csrfHiddenInput.setAttribute("name",csrfName)
+            csrfHiddenInput.setAttribute("value",csrfToken)
+
+            const _csrfHiddenInput = document.createElement("input")
+            _csrfHiddenInput.setAttribute("name","_csrf")
+            _csrfHiddenInput.setAttribute("value",_csrf)
+            _csrfHiddenInput.setAttribute("type","hidden")
+
+            const deleteCommentHiddenInput = document.createElement("input")
+            deleteCommentHiddenInput.setAttribute("name","deleteCommentId")
+            deleteCommentHiddenInput.setAttribute("value",commentId)
+            deleteCommentHiddenInput.setAttribute("type","hidden")
+            form.append(csrfHiddenInput,_csrfHiddenInput,deleteCommentHiddenInput)
+
+
+            document.querySelector("body").appendChild(form)
+
+            form.submit()
         })
     })
 </script>
