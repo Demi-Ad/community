@@ -155,7 +155,7 @@ public class PostService {
                         .tagList(tagList)
                         .isCreated(authorizeCheckUtil.check(post))
                         .likeCount(postLikeService.postLikeCount(post))
-                        .commentResponseDtoList(commentService.getCommentResponse(post.getId()))
+                        .commentResponseDtoList(commentService.createCommentResponse(post.getId()))
                         .build();
             default:
                 throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"잘못된 요청입니다");

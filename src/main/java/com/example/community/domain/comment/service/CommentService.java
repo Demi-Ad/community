@@ -9,8 +9,10 @@ import com.example.community.domain.comment.repo.CommentRepository;
 import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.post.repo.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,10 +37,21 @@ public class CommentService {
         return commentRepository.save(comment).getId();
     }
 
-    public List<CommentResponseDto> getCommentResponse(Long postId) {
+    public List<CommentResponseDto> createCommentResponse(Long postId) {
         return commentRepository.notHaveParentCommentSet(postId)
                 .stream()
                 .map(CommentResponseDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public Long deleteComment(Long commentId, Account account) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow();
+        boolean isAuthor = comment.getAccount().equals(account);
+        if (isAuthor) {
+            Long postId = comment.getPost().getId();
+            commentRepository.delete(comment);
+            return postId;
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "작성한 유저가 아닙니다");
     }
 }

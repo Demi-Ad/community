@@ -49,7 +49,7 @@ class CommentServiceTest {
         entityManager.flush();
         entityManager.clear();
 
-        List<CommentResponseDto> commentResponse = commentService.getCommentResponse(post.getId());
+        List<CommentResponseDto> commentResponse = commentService.createCommentResponse(post.getId());
 
         Assertions.assertThat(commentResponse.size()).isEqualTo(1);
         Assertions.assertThat(commentResponse.get(0).getChildrenCommentList().size()).isEqualTo(2);
