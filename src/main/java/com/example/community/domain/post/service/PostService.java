@@ -12,6 +12,7 @@ import com.example.community.domain.post.entity.PostTag;
 import com.example.community.domain.post.entity.Tag;
 import com.example.community.domain.post.repo.PostRepository;
 import com.example.community.domain.post.util.AuthorizeCheckUtil;
+import com.example.community.domain.post.vo.LikeVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -41,7 +42,7 @@ public class PostService {
 
     private final CommentService commentService;
 
-    public Long save(PostRequestDto postRequestDto,Long accountId) {
+    public Long save(PostRequestDto postRequestDto, Long accountId) {
         List<String> tagStrList = List.of(postRequestDto.getTagJoiningStr().split(","));
         List<Tag> tagList = tagService.saveElseFind(tagStrList);
         Post post = new Post(postRequestDto.getTitle(), postRequestDto.getContent());
@@ -55,12 +56,11 @@ public class PostService {
     }
 
 
-
     public void editPost(PostRequestDto postRequestDto, Long postId) {
         Post post = postRepository.findById(postId).orElseThrow();
         post.getPostTagList().clear();
         List<Tag> tagList = tagService.saveElseFind(List.of(postRequestDto.getTagJoiningStr().split(",")));
-        postSetTag(tagList,post);
+        postSetTag(tagList, post);
         post.edit(postRequestDto.getTitle(), postRequestDto.getContent());
     }
 
@@ -73,7 +73,7 @@ public class PostService {
                 .stream()
                 .map(postTag -> postTag.getTag().getItem()).collect(Collectors.joining(","));
 
-        return new PostRequestDto(title,content,tagListStr);
+        return new PostRequestDto(title, content, tagListStr);
     }
 
 
@@ -90,11 +90,11 @@ public class PostService {
     public PostResponseDto findPostSingleView(Long postId) {
 
         Post post = postRepository.findByIdJoinAccount(postId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST,"존재 하지 않는 글"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재 하지 않는 글"));
 
         List<TagDto> tagList = createTagDtoList(post);
 
-        return createPostResponseDto(post, tagList,PostFindCriteria.FIND_ONE);
+        return createPostResponseDto(post, tagList);
     }
 
 
@@ -105,19 +105,12 @@ public class PostService {
 
         List<Post> posts = postPage.toList();
 
-        List<PostResponseDto> postResponseList = new ArrayList<>();
-        for (Post post : posts) {
-            List<TagDto> tagList = createTagDtoList(post);
-            PostResponseDto postResponseDto = createPostResponseDto(post, tagList,PostFindCriteria.FIND_ALL);
-            postResponseList.add(postResponseDto);
-        }
+        List<PostResponseDto> postResponseList = createPostResponseDto(posts);
 
         Pagination<PostResponseDto> postRequestDtoPagination = new Pagination<>((int) postPage.getTotalElements(), pageable.getPageNumber() + 1);
         postRequestDtoPagination.setDataList(postResponseList);
         return postRequestDtoPagination;
     }
-
-
 
     private void postSetTag(List<Tag> tagList, Post post) {
         tagList.forEach(tag -> {
@@ -134,46 +127,61 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    private PostResponseDto createPostResponseDto(Post post, List<TagDto> tagList, PostFindCriteria postFindCriteria) {
-        switch (postFindCriteria) {
-            case FIND_ALL:
-                return PostResponseDto.builder()
-                        .postId(post.getId())
-                        .postTitle(post.getTitle())
-                        .postContent(removeHtmlTag(post.getContent()))
-                        .author(post.getAccount().getNickname())
-                        .profilePath(post.getAccount().getProfileImg())
-                        .createdBy(post.getCreatedAt())
-                        .tagList(tagList)
-                        .likeCount(postLikeService.postLikeCount(post))
-                        .build();
+    private PostResponseDto createPostResponseDto(Post post, List<TagDto> tagList) {
 
-            case FIND_ONE:
-                return PostResponseDto.builder()
-                        .postId(post.getId())
-                        .postTitle(post.getTitle())
-                        .postContent(post.getContent())
-                        .author(post.getAccount().getNickname())
-                        .profilePath(post.getAccount().getProfileImg())
-                        .createdBy(post.getCreatedAt())
-                        .tagList(tagList)
-                        .isCreated(authorizeCheckUtil.check(post))
-                        .likeCount(postLikeService.postLikeCount(post))
-                        .commentResponseDtoList(commentService.createCommentResponse(post.getId()))
-                        .build();
-            default:
-                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR,"잘못된 요청입니다");
+        return PostResponseDto.builder()
+                .postId(post.getId())
+                .postTitle(post.getTitle())
+                .postContent(post.getContent())
+                .author(post.getAccount().getNickname())
+                .profilePath(post.getAccount().getProfileImg())
+                .createdBy(post.getCreatedAt())
+                .tagList(tagList)
+                .isCreated(authorizeCheckUtil.check(post))
+                .likeCount(postLikeService.postLikeCount(post))
+                .commentResponseDtoList(commentService.createCommentResponse(post.getId()))
+                .build();
+
+    }
+    private List<PostResponseDto> createPostResponseDto(List<Post> postList) {
+        List<Long> postIdList = postList.stream()
+                .map(Post::getId)
+                .collect(Collectors.toList());
+
+        List<LikeVo> likeVoList = postLikeService.postLikeCount(postIdList);
+        List<PostResponseDto> postResponseDtoList = new ArrayList<>();
+
+        for (Post post : postList) {
+
+            Long likeCount = likeVoList.stream()
+                    .filter(likeVo -> likeVo.getPostId().equals(post.getId()))
+                    .findFirst()
+                    .map(LikeVo::getLikeCount)
+                    .orElse(0L);
+
+            PostResponseDto postResponseDto = PostResponseDto.builder()
+                    .postId(post.getId())
+                    .postTitle(post.getTitle())
+                    .postContent(removeHtmlTag(post.getContent()))
+                    .author(post.getAccount().getNickname())
+                    .profilePath(post.getAccount().getProfileImg())
+                    .createdBy(post.getCreatedAt())
+                    .tagList(createTagDtoList(post))
+                    .likeCount(likeCount)
+                    .build();
+
+            postResponseDtoList.add(postResponseDto);
         }
+        return postResponseDtoList;
     }
 
     private String removeHtmlTag(String html) {
         return html
-                .replaceAll("<(/)?([a-zA-Z\\d]*)(\\\\s[a-zA-Z]*=[^>]*)?(\\\\s)*(/)?>","")
-                .replaceAll("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>","")
-                .replaceAll("<figure[^>]*class=[\"']?([^>\"']+)[\"']?[^>]*>","")
-                .replaceAll("&nbsp;","");
+                .replaceAll("<(/)?([a-zA-Z\\d]*)(\\\\s[a-zA-Z]*=[^>]*)?(\\\\s)*(/)?>", "")
+                .replaceAll("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>", "")
+                .replaceAll("<figure[^>]*class=[\"']?([^>\"']+)[\"']?[^>]*>", "")
+                .replaceAll("&nbsp;", "");
     }
-
 
 
 }

@@ -5,8 +5,11 @@ import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.post.entity.PostLike;
 import com.example.community.domain.post.repo.PostLikeRepository;
 import com.example.community.domain.post.repo.PostRepository;
+import com.example.community.domain.post.vo.LikeVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +35,9 @@ public class PostLikeService {
 
     public Long postLikeCount(Post post) {
         return postLikeRepository.countPostLike(post.getId());
+    }
+
+    public List<LikeVo> postLikeCount(List<Long> postIdList) {
+        return postLikeRepository.countPostLike(postIdList);
     }
 }
