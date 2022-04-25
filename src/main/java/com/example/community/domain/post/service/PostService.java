@@ -163,7 +163,11 @@ public class PostService {
     }
 
     private String removeHtmlTag(String html) {
-        return html.replaceAll("<(/)?([a-zA-Z\\d]*)(\\\\s[a-zA-Z]*=[^>]*)?(\\\\s)*(/)?>","").replaceAll("&nbsp;","");
+        return html
+                .replaceAll("<(/)?([a-zA-Z\\d]*)(\\\\s[a-zA-Z]*=[^>]*)?(\\\\s)*(/)?>","")
+                .replaceAll("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>","")
+                .replaceAll("<figure[^>]*class=[\"']?([^>\"']+)[\"']?[^>]*>","")
+                .replaceAll("&nbsp;","");
     }
 
 

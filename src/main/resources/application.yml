@@ -25,9 +25,12 @@ spring:
                 format_sql: true
                 default_batch_fetch_size: 1000
 static:
-    path:
+    profile:
         resource-location: file:///D:/test/
         save-path: D:\\test\\
+    postImg:
+        resource-location: file:///D:/img/
+        save-path: D:\\img\\
 
 
 server:
@@ -61,6 +64,9 @@ spring:
 server:
     port: 8081
 static:
-    path:
+    profile:
         resource-location: file:///D:/test/
         save-path: D:\\test\\
+    postImg:
+        resource-location: file:///D:/img/
+        save-path: D:\\img\\

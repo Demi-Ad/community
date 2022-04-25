@@ -1,27 +1,16 @@
 package com.example.community.config.security;
 
-import com.example.community.config.security.auth.AccountDetail;
 import com.example.community.config.security.auth.AccountDetailService;
 import com.example.community.config.security.hanlder.FailureHandlerCustom;
 import com.example.community.config.security.hanlder.SuccessUrlHandlerCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
-import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -45,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .regexMatchers(HttpMethod.GET, "/post/\\d+$")
                 .permitAll()
-                .antMatchers("/", "/sign", "/register/**", "/logout", "/login/**")
+                .antMatchers("/", "/sign", "/register/**", "/logout", "/login/**","/image/upload","/")
                 .permitAll()
                 .antMatchers(WHITE_LIST).permitAll()
                 .anyRequest().authenticated()
@@ -57,6 +46,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(successUrlHandlerCustom)
                 .failureHandler(failureHandlerCustom)
                 .permitAll();
+
+        http.csrf().ignoringAntMatchers("/image/upload");
 
     }
 }

@@ -67,9 +67,10 @@
 
                     </div>
                     <div class="card-body row">
-                        <h5 th:text="${post.postTitle}">title</h5>
-                        <a class="card-text text-truncate d-inline-block" th:href="@{/post/{id}(id=${post.postId})}"
-                           th:text="${post.postContent}">content...</a>
+                        <h5>
+                            <a th:href="@{/post/{id}(id=${post.postId})}" th:text="${post.postTitle}"></a>
+                        </h5>
+                        <p class="card-text text-truncate d-inline-block p-normal" th:text="${post.postContent}">content...</p>
                     </div>
 
                     <div class="card-footer">
