@@ -10,6 +10,10 @@ spring:
         activate:
             on-profile: local
         import: mail-properties.yml, salt.yml
+    data:
+        web:
+            pageable:
+                one-indexed-parameters: true
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         username: demi
@@ -38,6 +42,10 @@ server:
 
 ---
 spring:
+    data:
+        web:
+            pageable:
+                one-indexed-parameters: true
     h2:
         console:
             enabled: true

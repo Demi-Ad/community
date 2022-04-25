@@ -1,5 +1,6 @@
 package com.example.community.domain.post.service;
 
+import com.example.community.common.component.Pagination;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
 import com.example.community.domain.comment.service.CommentService;
@@ -13,8 +14,8 @@ import com.example.community.domain.post.repo.PostRepository;
 import com.example.community.domain.post.util.AuthorizeCheckUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,11 +99,11 @@ public class PostService {
 
 
     @Transactional(readOnly = true)
-    public List<PostResponseDto> findPagingPost(PageRequest pageRequest) {
+    public Pagination<PostResponseDto> listPost(Pageable pageable) {
 
-        List<Post> posts = postRepository
-                .pagingJoinAccount(PageRequest.of(0, 10, Sort.Direction.DESC,"id"))
-                .toList();
+        Page<Post> postPage = postRepository.pagingJoinAccount(pageable);
+
+        List<Post> posts = postPage.toList();
 
         List<PostResponseDto> postResponseList = new ArrayList<>();
         for (Post post : posts) {
@@ -110,7 +111,10 @@ public class PostService {
             PostResponseDto postResponseDto = createPostResponseDto(post, tagList,PostFindCriteria.FIND_ALL);
             postResponseList.add(postResponseDto);
         }
-        return postResponseList;
+
+        Pagination<PostResponseDto> postRequestDtoPagination = new Pagination<>((int) postPage.getTotalElements(), pageable.getPageNumber() + 1);
+        postRequestDtoPagination.setDataList(postResponseList);
+        return postRequestDtoPagination;
     }
 
 

@@ -8,13 +8,15 @@ import com.example.community.domain.post.entity.Tag;
 import com.example.community.domain.post.repo.PostRepository;
 import com.example.community.domain.post.repo.PostTagRepository;
 import com.example.community.domain.post.repo.TagRepository;
-import com.example.community.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Component
 @RequiredArgsConstructor
@@ -41,14 +43,19 @@ public class ApplicationStartListener implements ApplicationListener<ContextRefr
         account.unLock();
         accountRepository.save(account);
 
-        Post post = new Post("TEST1","TEST1");
         Tag tag = new Tag("#TEST_TAG");
-        PostTag postTag = new PostTag();
-        post.addPostTag(postTag);
-        postTag.setTag(tag);
-        post.postedAccount(account);
         tagRepository.save(tag);
-        postRepository.save(post);
 
+        IntStream.rangeClosed(1,100)
+                .mapToObj(i -> new Post("TEST" + i, "TEST" + i))
+                .collect(Collectors.toList())
+                .forEach(post -> {
+                    PostTag postTag = new PostTag();
+                    post.addPostTag(postTag);
+                    postTag.setTag(tag);
+                    post.postedAccount(account);
+                    tagRepository.save(tag);
+                    postRepository.save(post);
+                });
     }
 }
