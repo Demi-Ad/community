@@ -1,6 +1,6 @@
-package com.example.community.domain.post.repo;
+package com.example.community.domain.postFile.repo;
 
-import com.example.community.domain.post.entity.PostFile;
+import com.example.community.domain.postFile.entity.PostFile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

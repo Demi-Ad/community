@@ -1,6 +1,8 @@
 package com.example.community.domain.post.dto;
 
 import com.example.community.domain.comment.dto.CommentResponseDto;
+import com.example.community.domain.postFile.dto.PostFileDto;
+import com.example.community.domain.postTag.dto.TagDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

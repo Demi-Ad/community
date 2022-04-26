@@ -1,6 +1,6 @@
-package com.example.community.domain.post.repo;
+package com.example.community.domain.postTag.repo;
 
-import com.example.community.domain.post.entity.Tag;
+import com.example.community.domain.postTag.entity.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

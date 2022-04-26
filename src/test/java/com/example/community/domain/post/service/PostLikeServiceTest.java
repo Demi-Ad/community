@@ -3,8 +3,8 @@ package com.example.community.domain.post.service;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
 import com.example.community.domain.post.entity.Post;
-import com.example.community.domain.post.entity.PostLike;
 import com.example.community.domain.post.repo.PostRepository;
+import com.example.community.domain.postLike.service.PostLikeService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

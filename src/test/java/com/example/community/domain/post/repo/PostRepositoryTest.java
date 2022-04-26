@@ -1,22 +1,19 @@
 package com.example.community.domain.post.repo;
 
 import com.example.community.domain.post.entity.Post;
-import com.example.community.domain.post.entity.PostTag;
-import com.example.community.domain.post.entity.Tag;
+import com.example.community.domain.postTag.entity.PostTag;
+import com.example.community.domain.postTag.entity.Tag;
+import com.example.community.domain.postTag.repo.PostTagRepository;
+import com.example.community.domain.postTag.repo.TagRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.persistence.EntityManager;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 class PostRepositoryTest {

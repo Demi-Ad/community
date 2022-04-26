@@ -1,9 +1,9 @@
-package com.example.community.domain.post.service;
+package com.example.community.domain.postFile.service;
 
-import com.example.community.domain.post.dto.DownloadFileDto;
 import com.example.community.domain.post.entity.Post;
-import com.example.community.domain.post.entity.PostFile;
-import com.example.community.domain.post.repo.PostFilesRepository;
+import com.example.community.domain.postFile.dto.DownloadFileDto;
+import com.example.community.domain.postFile.entity.PostFile;
+import com.example.community.domain.postFile.repo.PostFilesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Value;

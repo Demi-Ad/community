@@ -1,4 +1,4 @@
-package com.example.community.domain.post.entity;
+package com.example.community.domain.postTag.entity;
 
 import lombok.AccessLevel;
 import lombok.Getter;

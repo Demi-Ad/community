@@ -3,7 +3,6 @@ package com.example.community.domain.post.service;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
 import com.example.community.domain.post.dto.PostRequestDto;
-import com.example.community.domain.post.dto.TagDto;
 import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.post.repo.PostRepository;
 import org.assertj.core.api.Assertions;
@@ -13,7 +12,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
-import java.util.List;
 
 @SpringBootTest
 @Transactional

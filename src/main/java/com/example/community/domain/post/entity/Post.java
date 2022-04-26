@@ -3,6 +3,8 @@ package com.example.community.domain.post.entity;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.baseentity.BaseTimeEntity;
 import com.example.community.domain.post.entitylisnter.PostEntityListener;
+import com.example.community.domain.postFile.entity.PostFile;
+import com.example.community.domain.postTag.entity.PostTag;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,8 +1,8 @@
 package com.example.community.domain.post.service;
 
-import com.example.community.domain.post.dto.TagDto;
-import com.example.community.domain.post.entity.Tag;
-import com.example.community.domain.post.repo.TagRepository;
+import com.example.community.domain.postTag.entity.Tag;
+import com.example.community.domain.postTag.repo.TagRepository;
+import com.example.community.domain.postTag.service.TagService;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

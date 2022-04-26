@@ -1,7 +1,7 @@
-package com.example.community.domain.post.controller;
+package com.example.community.domain.postFile.controller;
 
-import com.example.community.domain.post.dto.DownloadFileDto;
-import com.example.community.domain.post.service.PostFileService;
+import com.example.community.domain.postFile.dto.DownloadFileDto;
+import com.example.community.domain.postFile.service.PostFileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;

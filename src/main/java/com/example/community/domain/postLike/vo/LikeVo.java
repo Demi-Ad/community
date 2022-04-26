@@ -1,4 +1,4 @@
-package com.example.community.domain.post.vo;
+package com.example.community.domain.postLike.vo;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

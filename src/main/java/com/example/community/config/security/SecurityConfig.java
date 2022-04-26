@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .regexMatchers(HttpMethod.GET, "/post/\\d+$")
                 .permitAll()
-                .antMatchers("/", "/sign", "/register/**", "/logout", "/login/**","/image/upload","/")
+                .antMatchers("/", "/sign", "/register/**", "/logout", "/login/**","/image/upload","/","/download/**")
                 .permitAll()
                 .antMatchers(WHITE_LIST).permitAll()
                 .anyRequest().authenticated()

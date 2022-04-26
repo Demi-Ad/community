@@ -1,7 +1,7 @@
-package com.example.community.domain.post.service;
+package com.example.community.domain.postTag.service;
 
-import com.example.community.domain.post.entity.Tag;
-import com.example.community.domain.post.repo.TagRepository;
+import com.example.community.domain.postTag.entity.Tag;
+import com.example.community.domain.postTag.repo.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

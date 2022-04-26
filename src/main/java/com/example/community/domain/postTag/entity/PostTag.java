@@ -1,7 +1,10 @@
-package com.example.community.domain.post.entity;
+package com.example.community.domain.postTag.entity;
 
 import com.example.community.domain.baseentity.BaseTimeEntity;
-import lombok.*;
+import com.example.community.domain.post.entity.Post;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.Hibernate;
 
 import javax.persistence.*;

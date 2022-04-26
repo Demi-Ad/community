@@ -1,4 +1,4 @@
-package com.example.community.domain.post.util;
+package com.example.community.common.util;
 
 import com.example.community.config.security.auth.AccountDetail;
 import com.example.community.domain.post.entity.Post;

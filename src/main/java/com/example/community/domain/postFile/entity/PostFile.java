@@ -1,5 +1,6 @@
-package com.example.community.domain.post.entity;
+package com.example.community.domain.postFile.entity;
 
+import com.example.community.domain.post.entity.Post;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

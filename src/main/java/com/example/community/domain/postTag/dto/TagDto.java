@@ -1,4 +1,4 @@
-package com.example.community.domain.post.dto;
+package com.example.community.domain.postTag.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

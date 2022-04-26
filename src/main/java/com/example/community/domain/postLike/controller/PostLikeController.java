@@ -1,7 +1,7 @@
-package com.example.community.domain.post.controller;
+package com.example.community.domain.postLike.controller;
 
 import com.example.community.config.security.auth.AccountDetail;
-import com.example.community.domain.post.service.PostLikeService;
+import com.example.community.domain.postLike.service.PostLikeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;

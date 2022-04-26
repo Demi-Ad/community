@@ -1,4 +1,4 @@
-package com.example.community.domain.post.util;
+package com.example.community.common.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

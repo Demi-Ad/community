@@ -1,8 +1,8 @@
 package com.example.community.domain.post.entitylisnter;
 
+import com.example.community.common.util.BeanUtils;
+import com.example.community.common.util.StaticPathContext;
 import com.example.community.domain.post.entity.Post;
-import com.example.community.domain.post.util.BeanUtils;
-import com.example.community.domain.post.util.StaticPathContext;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.persistence.PostRemove;

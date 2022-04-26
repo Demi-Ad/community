@@ -1,4 +1,4 @@
-package com.example.community.domain.post.util;
+package com.example.community.common.util;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;

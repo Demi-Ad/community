@@ -1,6 +1,6 @@
-package com.example.community.domain.post.dto;
+package com.example.community.domain.postFile.dto;
 
-import com.example.community.domain.post.entity.PostFile;
+import com.example.community.domain.postFile.entity.PostFile;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

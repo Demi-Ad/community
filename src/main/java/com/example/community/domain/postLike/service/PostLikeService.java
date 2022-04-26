@@ -1,11 +1,11 @@
-package com.example.community.domain.post.service;
+package com.example.community.domain.postLike.service;
 
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.post.entity.Post;
-import com.example.community.domain.post.entity.PostLike;
-import com.example.community.domain.post.repo.PostLikeRepository;
 import com.example.community.domain.post.repo.PostRepository;
-import com.example.community.domain.post.vo.LikeVo;
+import com.example.community.domain.postLike.entity.PostLike;
+import com.example.community.domain.postLike.repo.PostLikeRepository;
+import com.example.community.domain.postLike.vo.LikeVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
