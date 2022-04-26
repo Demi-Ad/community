@@ -92,9 +92,7 @@ public class PostService {
         Post post = postRepository.findByIdJoinAccount(postId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재 하지 않는 글"));
 
-        List<TagDto> tagList = createTagDtoList(post);
-
-        return createPostResponseDto(post, tagList);
+        return createPostResponseDto(post);
     }
 
 
@@ -127,7 +125,7 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    private PostResponseDto createPostResponseDto(Post post, List<TagDto> tagList) {
+    private PostResponseDto createPostResponseDto(Post post) {
 
         return PostResponseDto.builder()
                 .postId(post.getId())
@@ -136,7 +134,7 @@ public class PostService {
                 .author(post.getAccount().getNickname())
                 .profilePath(post.getAccount().getProfileImg())
                 .createdBy(post.getCreatedAt())
-                .tagList(tagList)
+                .tagList(createTagDtoList(post))
                 .isCreated(authorizeCheckUtil.check(post))
                 .likeCount(postLikeService.postLikeCount(post))
                 .commentResponseDtoList(commentService.createCommentResponse(post.getId()))

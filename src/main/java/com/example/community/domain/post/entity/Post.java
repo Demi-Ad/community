@@ -2,6 +2,7 @@ package com.example.community.domain.post.entity;
 
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.baseentity.BaseTimeEntity;
+import com.example.community.domain.post.entitylisnter.PostEntityListener;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.Objects;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners({PostEntityListener.class})
 public class Post extends BaseTimeEntity {
 
     @Id
