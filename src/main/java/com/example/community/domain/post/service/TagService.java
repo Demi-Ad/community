@@ -1,6 +1,5 @@
 package com.example.community.domain.post.service;
 
-import com.example.community.domain.post.dto.TagDto;
 import com.example.community.domain.post.entity.Tag;
 import com.example.community.domain.post.repo.TagRepository;
 import lombok.RequiredArgsConstructor;

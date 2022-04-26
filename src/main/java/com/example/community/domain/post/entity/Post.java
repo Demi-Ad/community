@@ -39,6 +39,9 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL,orphanRemoval = true)
     private final List<PostTag> postTagList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL,orphanRemoval = true)
+    private final List<PostFile> postFiles = new ArrayList<>();
+
     public Post(String title, String content) {
         this.title = title;
         this.content = content;
@@ -51,6 +54,11 @@ public class Post extends BaseTimeEntity {
     public void addPostTag(PostTag tag) {
         this.postTagList.add(tag);
         tag.setPost(this);
+    }
+
+    public void addPostFile(PostFile postFile) {
+        this.postFiles.add(postFile);
+        postFile.setPost(this);
     }
 
     public boolean isCreatedUser(Account account) {

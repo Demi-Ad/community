@@ -4,6 +4,7 @@ import com.example.community.common.component.Pagination;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
 import com.example.community.domain.comment.service.CommentService;
+import com.example.community.domain.post.dto.PostFileDto;
 import com.example.community.domain.post.dto.PostRequestDto;
 import com.example.community.domain.post.dto.PostResponseDto;
 import com.example.community.domain.post.dto.TagDto;
@@ -42,15 +43,16 @@ public class PostService {
 
     private final CommentService commentService;
 
+    private final PostFileService postFileService;
+
     public Long save(PostRequestDto postRequestDto, Long accountId) {
         List<String> tagStrList = List.of(postRequestDto.getTagJoiningStr().split(","));
         List<Tag> tagList = tagService.saveElseFind(tagStrList);
         Post post = new Post(postRequestDto.getTitle(), postRequestDto.getContent());
         Account account = accountRepository.findById(accountId).orElseThrow();
-
         post.postedAccount(account);
         postSetTag(tagList, post);
-
+        postFileService.save(postRequestDto.getUploadFiles(), post);
         postRepository.save(post);
         return post.getId();
     }
@@ -137,6 +139,7 @@ public class PostService {
                 .tagList(createTagDtoList(post))
                 .isCreated(authorizeCheckUtil.check(post))
                 .likeCount(postLikeService.postLikeCount(post))
+                .uploadFileLink(post.getPostFiles().stream().map(PostFileDto::new).collect(Collectors.toList()))
                 .commentResponseDtoList(commentService.createCommentResponse(post.getId()))
                 .build();
 

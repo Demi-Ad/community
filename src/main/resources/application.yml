@@ -35,6 +35,8 @@ static:
     postImg:
         resource-location: file:///D:/img/
         save-path: D:\\img\\
+    upload:
+        save-path: D:\\upload\\
 
 
 server:
@@ -78,3 +80,5 @@ static:
     postImg:
         resource-location: file:///D:/img/
         save-path: D:\\img\\
+    upload:
+        save-path: D:\\upload\\

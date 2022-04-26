@@ -25,4 +25,5 @@ public class PostResponseDto {
     private Boolean isCreated;
     private Long likeCount;
     private List<CommentResponseDto> commentResponseDtoList;
+    private List<PostFileDto> uploadFileLink;
 }

@@ -1,7 +1,6 @@
 package com.example.community.domain.post.util;
 
 import com.example.community.config.security.auth.AccountDetail;
-import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.post.repo.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +8,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.security.Principal;
 
 @Component
 @Transactional(readOnly = true)

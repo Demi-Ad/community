@@ -1,6 +1,5 @@
 package com.example.community.domain.account.dto;
 
-import com.example.community.domain.account.entity.Account;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

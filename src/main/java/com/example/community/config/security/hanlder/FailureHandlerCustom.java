@@ -17,7 +17,7 @@ public class FailureHandlerCustom  implements AuthenticationFailureHandler {
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
-        String errormsg = "";
+        String errormsg;
         if (exception instanceof BadCredentialsException || exception instanceof InternalAuthenticationServiceException) {
             errormsg = "BadCredentialsException";
         } else if (exception instanceof DisabledException) {
