@@ -1,5 +1,6 @@
 package com.example.community.domain.postFile.service;
 
+import com.example.community.common.component.TextToSha256Converter;
 import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.postFile.dto.DownloadFileDto;
 import com.example.community.domain.postFile.entity.PostFile;
@@ -19,7 +20,6 @@ import java.net.MalformedURLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 @Service
 @Slf4j
@@ -27,10 +27,12 @@ public class PostFileService {
 
     private final String savePath;
     private final PostFilesRepository postFilesRepository;
+    private final TextToSha256Converter textToSha256Converter;
 
-    public PostFileService(@Value("${static.upload.save-path}") String savePath, PostFilesRepository postFilesRepository) {
+    public PostFileService(@Value("${static.upload.save-path}") String savePath, PostFilesRepository postFilesRepository, TextToSha256Converter textToSha256Converter) {
         this.savePath = savePath;
         this.postFilesRepository = postFilesRepository;
+        this.textToSha256Converter = textToSha256Converter;
     }
 
     public void save(List<MultipartFile> uploadFiles, Post post) {
@@ -60,9 +62,9 @@ public class PostFileService {
         String originName = fileNameMap.get("origin");
         log.info("origin = {}",originName);
         String extension = fileNameMap.get("extension");
-        String uuid = UUID.randomUUID().toString();
+        String sha256 = textToSha256Converter.convert(originName);
 
-        return new PostFile(originName,uuid + "." + extension, extension);
+        return new PostFile(originName,sha256 + "." + extension, extension);
     }
 
     private void uploadFile(MultipartFile multipartFile, String convertName) {

@@ -1,9 +1,9 @@
 package com.example.community.domain.account.service;
 
 
+import com.example.community.common.component.TextToSha256Converter;
 import com.example.community.common.mailing.dto.MailDto;
 import com.example.community.common.mailing.service.MailService;
-import com.example.community.domain.account.common.EmailToSha256Converter;
 import com.example.community.domain.account.common.EmailValidateQuery;
 import com.example.community.domain.account.common.RegisterState;
 import com.example.community.domain.account.dto.RegisterDto;
@@ -26,7 +26,7 @@ import java.util.NoSuchElementException;
 public class AccountRegisterService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
-    private final EmailToSha256Converter converter;
+    private final TextToSha256Converter converter;
 
     private final MailService mailService;
 
@@ -52,7 +52,7 @@ public class AccountRegisterService {
     }
 
     private void registerMailing(long id, String email) {
-        String sha256 = converter.emailToSha256(email);
+        String sha256 = converter.convert(email);
         String validationUri = EmailValidateQuery.of(id, sha256).toUri();
 
         MailDto mailDto = MailDto.builder()
@@ -78,7 +78,7 @@ public class AccountRegisterService {
         }
 
         if (account.getLock()) {
-            String sha256 = converter.emailToSha256(account.getEmail());
+            String sha256 = converter.convert(account.getEmail());
             if (query.validate(sha256)) {
                 account.unLock();
                 signDto.setEmail(account.getEmail());

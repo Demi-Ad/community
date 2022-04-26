@@ -1,4 +1,4 @@
-package com.example.community.domain.account.common;
+package com.example.community.common.component;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -8,16 +8,16 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 @Component
-public class EmailToSha256Converter {
+public class TextToSha256Converter {
 
     private final String salt;
 
-    public EmailToSha256Converter(@Value("${salt.key}") String salt) {
+    public TextToSha256Converter(@Value("${salt.key}") String salt) {
         this.salt = salt;
     }
 
-    public String emailToSha256(String email) {
-        byte[] bytes = email.concat(salt).getBytes(StandardCharsets.UTF_8);
+    public String convert(String text) {
+        byte[] bytes = text.concat(salt).getBytes(StandardCharsets.UTF_8);
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-256");
             md.update(bytes);
