@@ -7,6 +7,7 @@ import com.example.community.domain.account.repo.AccountRepository;
 import com.example.community.domain.comment.service.CommentService;
 import com.example.community.domain.post.dto.PostRequestDto;
 import com.example.community.domain.post.dto.PostResponseDto;
+import com.example.community.domain.post.dto.PostSearchParam;
 import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.post.repo.PostRepository;
 import com.example.community.domain.postFile.dto.PostFileDto;
@@ -106,7 +107,33 @@ public class PostService {
 
         Page<Post> postPage = postRepository.pagingJoinAccount(pageable);
 
+        return createPagination(pageable, postPage);
+    }
+
+    @Transactional(readOnly = true)
+    public Pagination<PostResponseDto> searchListPost(PostSearchParam postSearchParam, Pageable pageable) {
+        Page<Post> postList;
+
+        switch (postSearchParam.getParam()) {
+            case TAG:
+                postList = postRepository.findPostListFromTag(postSearchParam.getKeyword(), pageable);
+                break;
+            case TITLE:
+                postList = postRepository.findByTitleContains(postSearchParam.getKeyword(), pageable);
+                break;
+            case AUTHOR:
+                postList = postRepository.findByAccount_NicknameEquals(postSearchParam.getKeyword(), pageable);
+                break;
+            default:
+                postList = Page.empty();
+                break;
+        }
+        return createPagination(pageable,postList);
+    }
+
+    private Pagination<PostResponseDto> createPagination(Pageable pageable, Page<Post> postPage) {
         List<Post> posts = postPage.toList();
+        log.info("post = {}",posts);
 
         List<PostResponseDto> postResponseList = createPostResponseDto(posts);
 

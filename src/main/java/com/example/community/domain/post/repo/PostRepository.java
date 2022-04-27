@@ -24,6 +24,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("select (count(p) > 0) from Post p where p.account.id = :accountId and p.id = :postId")
     boolean checkCreateUser(@Param("accountId") Long postId, @Param("postId") Long accountId);
 
+    Page<Post> findByAccount_NicknameEquals(String nickname, Pageable pageable);
+
+    @Query("select p from Post p join PostTag pt on pt.post.id = p.id where pt.tag.item = :item")
+    Page<Post> findPostListFromTag(@Param("item") String item, Pageable pageable);
+
+    Page<Post> findByTitleContains(String title, Pageable pageable);
+
 
 
 }
