@@ -44,8 +44,10 @@
                 </form>
             </div>
 
-            <div>
-                <a th:each="file : ${post.getUploadFileLink}" th:href="@{/download/{name}(name=${file.convertFileName})}" th:text="${file.originFileName}"></a>
+            <div class="row">
+                <p class="mb-1" th:each="file : ${post.getUploadFileLink}">
+                    <a  th:href="@{/download/{name}(name=${file.convertFileName})}" th:text="${file.originFileName}"></a>
+                </p>
             </div>
 
             <div class="d-flex justify-content-end mb-3" th:if="${post.isCreated}" th:with="id=${post.postId}">

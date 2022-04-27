@@ -30,7 +30,6 @@ public class PostController {
     public String postSingleView(@PathVariable Long postId, Model model) {
         PostResponseDto post = postService.findPostSingleView(postId);
         model.addAttribute("post", post);
-        log.info("post = {}",post.getCommentResponseDtoList().size());
         return "post/postSingleView";
     }
 

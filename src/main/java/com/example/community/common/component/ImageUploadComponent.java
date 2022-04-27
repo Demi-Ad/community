@@ -1,5 +1,6 @@
 package com.example.community.common.component;
 
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,8 +29,7 @@ public class ImageUploadComponent {
 
     private String generateSaveFileName(MultipartFile multipartFile) {
         String originalFilename = multipartFile.getOriginalFilename();
-        String[] split = originalFilename.split("\\.");
-        String extension = split[split.length - 1] != null ? split[split.length - 1] : "";
+        String extension = FilenameUtils.getExtension(originalFilename);
         return UUID.randomUUID() + "." + extension;
     }
 }
