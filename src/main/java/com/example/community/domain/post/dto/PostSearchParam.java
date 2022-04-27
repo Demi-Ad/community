@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostSearchParam {
-    public SearchParam param;
-    public String keyword;
+    private SearchParam param;
+    private String keyword;
 
 }

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <th:block th:replace="frament/head :: head"/>
+    <style>
+        .p-normal {
+            margin-bottom: 0;
+        }
+        body {
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid p-3">
+    <th:block th:replace="frament/header::header"/>
+
+    <div class="row mb-5 p-3">
+        <form action="/search" class="col-6 offset-3" method="get">
+            <div>
+                <div class="input-group">
+                    <div class="input-group-btn search-panel dropstart">
+                        <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" type="button">
+                            <span id="search_concept" th:text="${searchedParam.param.description}">제목</span>
+                        </button>
+                        <ul class="dropdown-menu me-3" role="menu">
+                            <li th:each="searchParam : ${T(com.example.community.domain.post.common.SearchParam).values()}">
+                                <a class="dropdown-item" th:data-value="${searchParam.name()}" th:text="${searchParam.description}"></a>
+                            </li>
+                        </ul>
+                    </div>
+                    <input id="search_param" name="param" type="hidden" value="title">
+                    <input class="form-control rounded" name="keyword" placeholder="Search term..." th:value="${searchedParam.keyword}" type="text">
+
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">
+                        <span class="glyphicon glyphicon-search">
+                            <i class="bi bi-search"></i>
+                        </span>
+                    </button>
+                </span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-6 offset-3">
+
+        <th:block th:each="post : ${pagingPost.getDataList()}">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <div class="row">
+                        <div class="col-8">
+                            <div class="d-flex">
+                                <img alt="profile" class="rounded-circle profile-list " src=""
+                                     th:src="@{/profile/{img}(img=${post.getProfilePath()})}">
+                                <p class="p-normal ms-3" th:text="${post.author}">USERNAME</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="d-flex justify-content-end">
+                                <i class="bi bi-heart" th:if="${post.likeCount} == 0"></i>
+                                <i class="bi bi-heart-fill" th:if="${post.likeCount} > 0"></i>
+                                <p class="p-normal ms-2" th:text="${post.likeCount}">120</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="card-body row">
+                    <h5>
+                        <a th:href="@{/post/{id}(id=${post.postId})}" th:text="${post.postTitle}"></a>
+                    </h5>
+                    <p class="card-text text-truncate d-inline-block p-normal" th:text="${post.postContent}">
+                        content...
+                    </p>
+                </div>
+
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="d-flex justify-content-start foot-area">
+                                <p class="me-2 p-normal bg-info rounded-3 text-white bg-opacity-50 me-1 ps-2 pe-2"
+                                   th:each="tag:${post.tagList}"
+                                   th:text="${tag.item}"></p>
+                            </div>
+                        </div>
+                        <div class="col-3 offset-4">
+                            <div class="d-flex justify-content-end">
+                                <p class="p-normal align-content-center">Created On :
+                                    <span th:text="${#temporals.format(post.createdBy,'yyyy-MM-dd')}"></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+
+    <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3" th:with="startPage = ${pagingPost.startPage}, endPage = ${pagingPost.endPage}">
+        <ul class="pagination">
+            <li class="page-item" th:classappend="${pagingPost.existPrevPage ? '' : 'disabled'}">
+                <a aria-label="Previous" class="page-link" th:href="@{/search(param=${searchedParam.param.name()}, keyword=${searchedParam.keyword}, page=${pagingPost.startPage - 5})}">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <li class="page-item" th:classappend="${pagingPost.currentPage == pageNum ? 'active' : ''}"
+                th:each="pageNum: ${#numbers.sequence(startPage, endPage)}">
+                <a class="page-link" th:href="@{/search(param=${searchedParam.param.name()}, keyword=${searchedParam.keyword}, page=${pageNum})}" th:text="${pageNum}"></a>
+            </li>
+
+            <li class="page-item" th:classappend="${pagingPost.existNextPage ? '' : 'disabled'}">
+                <a aria-label="Next" class="page-link" th:href="@{/search(param=${searchedParam.param.name()}, keyword=${searchedParam.keyword}, page=${pagingPost.startPage + 5})}">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+</div>
+
+
+<th:block th:replace="frament/head :: search"></th:block>
+
+</body>
+</html>

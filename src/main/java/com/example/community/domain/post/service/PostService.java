@@ -107,7 +107,7 @@ public class PostService {
 
         Page<Post> postPage = postRepository.pagingJoinAccount(pageable);
 
-        return createPagination(pageable, postPage);
+        return createPagination(postPage);
     }
 
     @Transactional(readOnly = true)
@@ -128,13 +128,12 @@ public class PostService {
                 postList = Page.empty();
                 break;
         }
-        return createPagination(pageable,postList);
+        return createPagination(postList);
     }
 
-    private Pagination<PostResponseDto> createPagination(Pageable pageable, Page<Post> postPage) {
+    private Pagination<PostResponseDto> createPagination( Page<Post> postPage) {
         List<Post> posts = postPage.toList();
-        log.info("post = {}",posts);
-
+        Pageable pageable = postPage.getPageable();
         List<PostResponseDto> postResponseList = createPostResponseDto(posts);
 
         Pagination<PostResponseDto> postRequestDtoPagination = new Pagination<>((int) postPage.getTotalElements(), pageable.getPageNumber() + 1);
