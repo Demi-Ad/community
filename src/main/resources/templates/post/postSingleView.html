@@ -22,7 +22,7 @@
                             th:text="${post.author}"/></div>
                     <!-- Post categories-->
                     <th:block th:each="tag:${post.tagList}">
-                        <a class="badge bg-secondary text-decoration-none link-light" href="#" th:text="${tag.item}">Web
+                        <a class="badge bg-secondary text-decoration-none link-light" href="#" th:href="@{/search(param = ${'tag'}, keyword=${tag.item.replace('#','')})}" th:text="${tag.item}">Web
                             Design</a>
                     </th:block>
                 </header>
