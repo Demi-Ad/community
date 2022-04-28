@@ -12,4 +12,10 @@ public class PostSearchParam {
     private SearchParam param;
     private String keyword;
 
+    public String toUri(String result) {
+        if (param == SearchParam.TAG)
+            return "/search?" + "param=" + param.name() + "&" + "keyword=" + result.replace("#","");
+
+        return "/search?" + "param=" + param.name() + "&" + "keyword=" + result;
+    }
 }

@@ -2,14 +2,17 @@ package com.example.community.common.component;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
 
 @Getter
 @Setter
-public  class Pagination<T> {
+public class Pagination<T> {
 
     private int totalRecordCount;
     private int totalPageCount;
@@ -72,5 +75,14 @@ public  class Pagination<T> {
                 ", existPrevPage=" + existPrevPage +
                 ", existNextPage=" + existNextPage +
                 '}';
+    }
+
+    public static <T, U> Pagination<T> of(Page<U> page, Function<List<U>, List<T>> function) {
+        List<U> uList = page.toList();
+        Pageable pageable = page.getPageable();
+        List<T> tList = function.apply(uList);
+        Pagination<T> pagination = new Pagination<>((int) page.getTotalElements(), pageable.getPageNumber() + 1);
+        pagination.setDataList(tList);
+        return pagination;
     }
 }

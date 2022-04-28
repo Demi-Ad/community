@@ -7,6 +7,7 @@
         .p-normal {
             margin-bottom: 0;
         }
+
         body {
             overflow-x: hidden;
         }
@@ -26,12 +27,14 @@
                         </button>
                         <ul class="dropdown-menu me-3" role="menu">
                             <li th:each="searchParam : ${T(com.example.community.domain.post.common.SearchParam).values()}">
-                                <a class="dropdown-item" th:data-value="${searchParam.name()}" th:text="${searchParam.description}"></a>
+                                <a class="dropdown-item" th:data-value="${searchParam.name()}"
+                                   th:text="${searchParam.description}"></a>
                             </li>
                         </ul>
                     </div>
                     <input id="search_param" name="param" type="hidden" value="title">
-                    <input class="form-control rounded" name="keyword" placeholder="Search term..." type="text">
+                    <input autocomplete="off" class="form-control rounded" id="search_input" name="keyword"
+                           placeholder="Search term..." type="text">
 
                     <span class="input-group-btn">
                     <button class="btn btn-default" type="button">
@@ -43,6 +46,14 @@
                 </div>
             </div>
         </form>
+        <div class="ms-1 row" id="search_result_form" style="display: none">
+            <div class="col-6 offset-3">
+                <div class="d-flex flex-column border-2 rounded-2 mt-3 bg-white shadow" id="search_result">
+
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <div class="row mt-3">
@@ -132,6 +143,48 @@
 </div>
 
 <th:block th:replace="frament/head :: search"></th:block>
+<script>
+    const searchInputElement = document.querySelector("#search_input");
+    const resultFormElement = document.querySelector("#search_result_form");
+    searchInputElement.addEventListener("change", elem => {
+        if (elem.target.value.length < 0 || elem.target.value.replaceAll(" ", "").length === 0) {
+            resultFormElement.style.display = "none";
+            return;
+        }
+        const searchParam = document.querySelector("#search_param").value;
 
+        const params = {
+            "param": searchParam,
+            "keyword": elem.target.value
+        }
+
+        const query = Object.keys(params)
+            .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
+
+
+        fetch(`/search/preview?${query}`, {
+            method: "GET"
+        }).then(res => {
+            if (res && res.status === 200) {
+                return res.json()
+            }
+        }).then(json => {
+            if (json.previewDtoList.length === 0) {
+                resultFormElement.style.display = "none";
+                return;
+            }
+            const result = document.querySelector("#search_result")
+            result.innerHTML = json.previewDtoList
+                .map(dto => `
+                        <div class="d-flex ms-3">
+                            <img src="${dto.img}" class="m-2 rounded-circle" style="width: 25px;height: 25px" >
+                            <a href="${dto.link}" class="p-normal m-2">${dto.item}</a>
+                        </div>`)
+                .join("");
+            resultFormElement.style.display = "";
+        })
+
+    })
+</script>
 </body>
 </html>

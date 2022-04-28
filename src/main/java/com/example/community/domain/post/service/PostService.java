@@ -8,6 +8,7 @@ import com.example.community.domain.comment.service.CommentService;
 import com.example.community.domain.post.dto.PostRequestDto;
 import com.example.community.domain.post.dto.PostResponseDto;
 import com.example.community.domain.post.dto.PostSearchParam;
+import com.example.community.domain.post.dto.SearchPreviewDto;
 import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.post.repo.PostRepository;
 import com.example.community.domain.postFile.dto.PostFileDto;
@@ -17,11 +18,14 @@ import com.example.community.domain.postLike.vo.LikeVo;
 import com.example.community.domain.postTag.dto.TagDto;
 import com.example.community.domain.postTag.entity.PostTag;
 import com.example.community.domain.postTag.entity.Tag;
+import com.example.community.domain.postTag.repo.TagRepository;
 import com.example.community.domain.postTag.service.TagService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +42,7 @@ import java.util.stream.Collectors;
 public class PostService {
     private final PostRepository postRepository;
     private final AccountRepository accountRepository;
+    private final TagRepository tagRepository;
 
     private final TagService tagService;
 
@@ -104,10 +109,9 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public Pagination<PostResponseDto> listPost(Pageable pageable) {
-
         Page<Post> postPage = postRepository.pagingJoinAccount(pageable);
 
-        return createPagination(postPage);
+        return Pagination.of(postPage,this::createPostResponseDto);
     }
 
     @Transactional(readOnly = true)
@@ -128,17 +132,27 @@ public class PostService {
                 postList = Page.empty();
                 break;
         }
-        return createPagination(postList);
+        return Pagination.of(postList, this::createPostResponseDto);
     }
 
-    private Pagination<PostResponseDto> createPagination( Page<Post> postPage) {
-        List<Post> posts = postPage.toList();
-        Pageable pageable = postPage.getPageable();
-        List<PostResponseDto> postResponseList = createPostResponseDto(posts);
-
-        Pagination<PostResponseDto> postRequestDtoPagination = new Pagination<>((int) postPage.getTotalElements(), pageable.getPageNumber() + 1);
-        postRequestDtoPagination.setDataList(postResponseList);
-        return postRequestDtoPagination;
+    @Transactional(readOnly = true)
+    public List<SearchPreviewDto> searchPreview(PostSearchParam postSearchParam) {
+        PageRequest pageRequest = PageRequest.of(0, 8, Sort.by(Sort.Direction.ASC, "id"));
+        switch (postSearchParam.getParam()) {
+            case TAG:
+                return tagRepository.findByItemContains(postSearchParam.getKeyword(), pageRequest)
+                        .map(tag -> new SearchPreviewDto("/images/hash.svg",tag.getItem(), postSearchParam.toUri(tag.getItem())))
+                        .toList();
+            case TITLE:
+                return postRepository.findByTitleContains(postSearchParam.getKeyword(), pageRequest)
+                        .map(post -> new SearchPreviewDto("/images/search.svg",post.getTitle(),"/post/" + post.getId()))
+                        .toList();
+            case AUTHOR:
+                return accountRepository.findByNicknameContaining(postSearchParam.getKeyword(), pageRequest)
+                        .map(account -> new SearchPreviewDto("/profile/" + account.getProfileImg(), account.getNickname(), postSearchParam.toUri(account.getNickname())))
+                        .toList();
+        }
+        return List.of();
     }
 
     private void postSetTag(List<Tag> tagList, Post post) {

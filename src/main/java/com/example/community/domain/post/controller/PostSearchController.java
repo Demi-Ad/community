@@ -4,6 +4,7 @@ import com.example.community.common.component.Pagination;
 import com.example.community.domain.post.common.SearchParam;
 import com.example.community.domain.post.dto.PostResponseDto;
 import com.example.community.domain.post.dto.PostSearchParam;
+import com.example.community.domain.post.dto.SearchPreviewResult;
 import com.example.community.domain.post.resolver.Search;
 import com.example.community.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -11,9 +12,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @Slf4j
@@ -38,5 +41,12 @@ public class PostSearchController {
 
         model.addAttribute("searchedParam",postSearchParam);
         return "post/postSearchView";
+    }
+
+    @GetMapping("/search/preview")
+    @ResponseBody
+    public ResponseEntity<SearchPreviewResult> searchPreview(@Search PostSearchParam postSearchParam) {
+        // RETURN: img, value, link
+        return ResponseEntity.ok(new SearchPreviewResult(postService.searchPreview(postSearchParam)));
     }
 }
