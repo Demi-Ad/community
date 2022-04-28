@@ -56,6 +56,10 @@ public class Comment {
         this.parentComment = parentComment;
     }
 
+    public void changeComment(String content) {
+        this.content = content;
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +

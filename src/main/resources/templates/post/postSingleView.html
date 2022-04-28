@@ -22,7 +22,9 @@
                             th:text="${post.author}"/></div>
                     <!-- Post categories-->
                     <th:block th:each="tag:${post.tagList}">
-                        <a class="badge bg-secondary text-decoration-none link-light" href="#" th:href="@{/search(param = ${'tag'}, keyword=${tag.item.replace('#','')})}" th:text="${tag.item}">Web
+                        <a class="badge bg-secondary text-decoration-none link-light" href="#"
+                           th:href="@{/search(param = ${'tag'}, keyword=${tag.item.replace('#','')})}"
+                           th:text="${tag.item}">Web
                             Design</a>
                     </th:block>
                 </header>
@@ -46,7 +48,7 @@
 
             <div class="row">
                 <p class="mb-1" th:each="file : ${post.getUploadFileLink}">
-                    <a  th:href="@{/download/{name}(name=${file.convertFileName})}" th:text="${file.originFileName}"></a>
+                    <a th:href="@{/download/{name}(name=${file.convertFileName})}" th:text="${file.originFileName}"></a>
                 </p>
             </div>
 
@@ -64,12 +66,15 @@
             </div>
 
             <!-- Comments section-->
-            <section class="mb-5" th:if="${post.commentResponseDtoList.size() != 0} or !${#authentication.name.equals('anonymousUser')}">
+            <section class="mb-5"
+                     th:if="${post.commentResponseDtoList.size() != 0} or !${#authentication.name.equals('anonymousUser')}">
                 <div class="card bg-light">
                     <div class="card-body">
                         <!-- Comment form-->
-                        <form class="mb-4" id="commentForm" method="post" sec:authorize="isAuthenticated()" th:action="@{/comment}">
-                            <textarea class="form-control" name="commentContent" placeholder="Join the discussion and leave a comment!" rows="2"></textarea>
+                        <form class="mb-4" id="commentForm" method="post" sec:authorize="isAuthenticated()"
+                              th:action="@{/comment}">
+                            <textarea class="form-control" name="commentContent"
+                                      placeholder="Join the discussion and leave a comment!" rows="2"></textarea>
                             <div class="d-flex justify-content-end mt-3">
                                 <button class="btn btn-outline-primary" type="submit">댓글작성</button>
                             </div>
@@ -81,25 +86,36 @@
                         <div class="mb-3" th:each="comment : ${post.commentResponseDtoList}">
                             <div class="d-flex mb-5">
                                 <div class="flex-shrink-0">
-                                    <img alt="..." class="rounded-circle profile-comment" th:src="@{/profile/{imgPath}(imgPath=${comment.authorProfile})}">
+                                    <img alt="..." class="rounded-circle profile-comment"
+                                         th:src="@{/profile/{imgPath}(imgPath=${comment.authorProfile})}">
                                 </div>
                                 <div class="ms-3">
                                     <div class="fw-bold mb-1" th:text="${comment.author}">Commenter Name</div>
-                                    <p th:text="${comment.content}"></p>
-                                    <a class="text-info fs-6 addChildComment" sec:authorize="isAuthenticated()" th:value="${comment.commentId}">댓글달기</a>
-                                    <a class="text-danger fs-6 ms-2 delCommentBtn" th:if="${comment.createAuthor}" th:value="${comment.commentId}">댓글삭제</a>
+                                    <p class="comment" th:data-commentId="${comment.commentId}" th:text="${comment.content}"></p>
+                                    <a class="text-info fs-6 addChildComment" sec:authorize="isAuthenticated()"
+                                       th:value="${comment.commentId}">댓글달기</a>
+                                    <a class="text-danger fs-6 ms-2 delCommentBtn" th:if="${comment.createAuthor}"
+                                       th:value="${comment.commentId}">댓글삭제</a>
+                                    <a class="text-primary fs-6 editCommentBtn ms-2" th:if="${comment.createAuthor}"
+                                       th:value="${comment.commentId}">댓글 수정</a>
                                 </div>
                             </div>
                             <!-- Child comment-->
                             <div class="d-flex mt-4 ms-3" th:each="childComment : ${comment.childrenCommentList}">
                                 <div class="flex-shrink-0">
                                     <i class="bi bi-arrow-return-right me-3"></i>
-                                    <img alt="..." class="rounded-circle profile-comment" th:src="@{/profile/{imgPath}(imgPath=${childComment.authorProfile})}">
+                                    <img alt="..." class="rounded-circle profile-comment"
+                                         th:src="@{/profile/{imgPath}(imgPath=${childComment.authorProfile})}">
                                 </div>
                                 <div class="ms-3">
                                     <div class="fw-bold mb-1" th:text="${childComment.author}">Commenter Name</div>
-                                    <p th:text="${childComment.content}"></p>
-                                    <a class="text-danger fs-6 ms-2 delCommentBtn" th:if="${childComment.createAuthor}" th:value="${childComment.commentId}">댓글삭제</a>
+                                    <p class="comment" th:data-commentId="${childComment.commentId}" th:text="${childComment.content}"></p>
+                                    <a class="text-danger fs-6 delCommentBtn" th:if="${childComment.createAuthor}"
+                                       th:value="${childComment.commentId}">댓글삭제</a>
+
+                                    <a class="text-primary fs-6 editCommentBtn ms-2" th:if="${comment.createAuthor}"
+                                       th:value="${childComment.commentId}">댓글 수정</a>
+
                                 </div>
                             </div>
                         </div>
@@ -111,59 +127,76 @@
     </div>
 </div>
 <script defer sec:authorize="isAuthenticated()" th:inline="javascript">
-
+    window.addEventListener("load", _ => {
+        const url = new URL(window.location.href);
+        const commentId = url.searchParams.get("commentId");
+        if (commentId) {
+            const commentList = document.querySelectorAll("p[class='comment']");
+            for (let i = 0; i < commentList.length; i++) {
+                if (commentList[i].dataset.commentid === commentId) {
+                    commentList[i].scrollIntoView()
+                    break
+                }
+            }
+        }
+    })
     const csrfName = [[${_csrf.headerName}]]
     const csrfToken = [[${_csrf.token}]]
     const postId = [[${post.postId}]]
     const _csrf = document.querySelector("#commentForm > input[name = '_csrf']").value
 
+    const baseBody = {
+        csrfName: csrfToken,
+        "_csrf": _csrf,
+    }
+
     document.querySelectorAll(".addChildComment").forEach(elem => {
-        elem.addEventListener("click",e => {
+        elem.addEventListener("click", e => {
 
             if (elem.parentElement.parentElement.parentElement.lastElementChild.nodeName === "FORM")
                 return;
 
             const form = document.createElement("form")
             form.setAttribute("charset", "UTF-8")
-            form.setAttribute("method","post")
-            form.setAttribute("action","/comment")
+            form.setAttribute("method", "post")
+            form.setAttribute("action", "/comment")
 
 
             const csrfHiddenInput = document.createElement("input")
-            csrfHiddenInput.setAttribute("type","hidden")
-            csrfHiddenInput.setAttribute("name",csrfName)
-            csrfHiddenInput.setAttribute("value",csrfToken)
+            csrfHiddenInput.setAttribute("type", "hidden")
+            csrfHiddenInput.setAttribute("name", csrfName)
+            csrfHiddenInput.setAttribute("value", csrfToken)
 
             const postIdHiddenInput = document.createElement("input")
-            postIdHiddenInput.setAttribute("type","hidden")
-            postIdHiddenInput.setAttribute("name","postId")
-            postIdHiddenInput.setAttribute("value",postId)
+            postIdHiddenInput.setAttribute("type", "hidden")
+            postIdHiddenInput.setAttribute("name", "postId")
+            postIdHiddenInput.setAttribute("value", postId)
 
             const parentCommentId = elem.getAttribute("value")
 
             const parentCommentHiddenInput = document.createElement("input")
-            parentCommentHiddenInput.setAttribute("type","hidden")
-            parentCommentHiddenInput.setAttribute("name","parentCommentId")
-            parentCommentHiddenInput.setAttribute("value",parentCommentId)
+            parentCommentHiddenInput.setAttribute("type", "hidden")
+            parentCommentHiddenInput.setAttribute("name", "parentCommentId")
+            parentCommentHiddenInput.setAttribute("value", parentCommentId)
 
 
             const childCommentInput = document.createElement("input")
-            childCommentInput.setAttribute("name","commentContent")
+            childCommentInput.setAttribute("name", "commentContent")
             childCommentInput.className = "form-control mb-4"
-            childCommentInput.setAttribute("placeholder","Join the discussion and leave a comment!")
+            childCommentInput.setAttribute("placeholder", "Join the discussion and leave a comment!")
 
             const div = document.createElement("div");
             div.className = "row mt-3 ms-5"
 
             const submitBtn = document.createElement("button");
-            submitBtn.setAttribute("type","submit")
+            submitBtn.setAttribute("type", "submit")
             submitBtn.innerHTML = "댓글 작성"
             submitBtn.className = "btn btn-outline-primary btn-sm col-1 offset-11 me-3"
 
             const _csrfHiddenInput = document.createElement("input")
-            _csrfHiddenInput.setAttribute("name","_csrf")
-            _csrfHiddenInput.setAttribute("value",_csrf)
-            _csrfHiddenInput.setAttribute("type","hidden")
+            _csrfHiddenInput.setAttribute("name", "_csrf")
+            _csrfHiddenInput.setAttribute("value", _csrf)
+            _csrfHiddenInput.setAttribute("type", "hidden")
 
             //TODO : 댓글 취소 버튼 추가
             div.appendChild(childCommentInput)
@@ -181,36 +214,67 @@
     })
 
     document.querySelectorAll(".delCommentBtn").forEach(elem => {
-        elem.addEventListener("click",function (e) {
+        elem.addEventListener("click", function (e) {
 
-            const commentId = elem.getAttribute("value");
-            const form = document.createElement("form");
+            const body = {
+                ...baseBody,
+                "deleteCommentId": elem.getAttribute("value")
+            }
 
-            form.setAttribute("charset", "UTF-8")
-            form.setAttribute("method","post")
-            form.setAttribute("action","/comment/delete")
-            form.setAttribute("type","hidden")
+            fetch("/comment/delete", {
+                method: "POST",
+                headers: {
+                    "Content-Type":'application/x-www-form-urlencoded;charset=UTF-8',
+                },
+                body: new URLSearchParams(body),
+                redirect: 'follow'
+            }).then(res => {
+                if (res.redirected) {
+                    window.location.href = res.url
+                }
+            })
 
-            const csrfHiddenInput = document.createElement("input")
-            csrfHiddenInput.setAttribute("type","hidden")
-            csrfHiddenInput.setAttribute("name",csrfName)
-            csrfHiddenInput.setAttribute("value",csrfToken)
+        })
+    })
 
-            const _csrfHiddenInput = document.createElement("input")
-            _csrfHiddenInput.setAttribute("name","_csrf")
-            _csrfHiddenInput.setAttribute("value",_csrf)
-            _csrfHiddenInput.setAttribute("type","hidden")
+    document.querySelectorAll(".editCommentBtn").forEach(elem => {
+        elem.addEventListener("click", _ => {
+            const htmlInputElement = document.createElement("input");
+            for (const child of elem.parentNode.children) {
+                console.log(child.nodeName)
+                if (child.nodeName === 'P') {
+                    htmlInputElement.value = child.innerText
+                    htmlInputElement.type = 'text'
+                    htmlInputElement.className = "form-control"
+                    htmlInputElement.style.width = "300px"
+                    htmlInputElement.name = "comment"
+                    htmlInputElement.addEventListener("keypress", evt => {
+                        if (evt.code !== "Enter") {
+                            return;
+                        }
 
-            const deleteCommentHiddenInput = document.createElement("input")
-            deleteCommentHiddenInput.setAttribute("name","deleteCommentId")
-            deleteCommentHiddenInput.setAttribute("value",commentId)
-            deleteCommentHiddenInput.setAttribute("type","hidden")
-            form.append(csrfHiddenInput,_csrfHiddenInput,deleteCommentHiddenInput)
+                        const body = {
+                            ...baseBody,
+                            "commentId": elem.getAttribute("value"),
+                            "commentItem" : htmlInputElement.value
+                        }
 
+                        fetch("/comment/edit", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type":'application/x-www-form-urlencoded;charset=UTF-8',
+                            },
+                            body: new URLSearchParams(body)
+                        }).then(res => {
+                            if (res.redirected) {
+                                window.location.href = res.url
+                            }
+                        })
+                    })
+                    child.replaceWith(htmlInputElement)
+                }
+            }
 
-            document.querySelector("body").appendChild(form)
-
-            form.submit()
         })
     })
 </script>

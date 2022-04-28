@@ -2,6 +2,7 @@ package com.example.community.domain.comment.service;
 
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
+import com.example.community.domain.comment.dto.CommentEditRequestDto;
 import com.example.community.domain.comment.dto.CommentRequestDto;
 import com.example.community.domain.comment.dto.CommentResponseDto;
 import com.example.community.domain.comment.entity.Comment;
@@ -51,6 +52,17 @@ public class CommentService {
             Long postId = comment.getPost().getId();
             commentRepository.delete(comment);
             return postId;
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "작성한 유저가 아닙니다");
+    }
+
+    public Long editComment(CommentEditRequestDto commentEditRequestDto, Account account) {
+        Comment comment = commentRepository.findById(commentEditRequestDto.getCommentId()).orElseThrow();
+
+        boolean isAuthor = comment.getAccount().equals(account);
+        if (isAuthor) {
+            comment.changeComment(commentEditRequestDto.getCommentItem());
+            return comment.getPost().getId();
         }
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "작성한 유저가 아닙니다");
     }

@@ -1,17 +1,16 @@
 package com.example.community.domain.comment.controller;
 
 import com.example.community.config.security.auth.AccountDetail;
+import com.example.community.domain.comment.dto.CommentEditRequestDto;
 import com.example.community.domain.comment.dto.CommentRequestDto;
 import com.example.community.domain.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -37,10 +36,16 @@ public class CommentController {
     public String deleteComment(@RequestParam Long deleteCommentId,
                                 @AuthenticationPrincipal AccountDetail accountDetail,
                                 RedirectAttributes redirectAttributes) {
-        if (accountDetail == null)
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "로그인 한 유저가 아닙니다");
-
         Long postId = commentService.deleteComment(deleteCommentId, accountDetail.getAccount());
+        redirectAttributes.addAttribute("id",postId);
+        return "redirect:/post/{id}";
+    }
+
+    @PostMapping("/comment/edit")
+    public String editComment(@ModelAttribute CommentEditRequestDto commentEditRequestDto,
+                              @AuthenticationPrincipal AccountDetail accountDetail,
+                              RedirectAttributes redirectAttributes) {
+        Long postId = commentService.editComment(commentEditRequestDto, accountDetail.getAccount());
         redirectAttributes.addAttribute("id",postId);
         return "redirect:/post/{id}";
     }
