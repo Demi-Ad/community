@@ -9,9 +9,11 @@ import org.springframework.stereotype.Component;
 @Getter
 public class StaticPathContext {
     private final String imgPath;
+    private final String filePath;
 
     @Autowired
-    public StaticPathContext(@Value("${static.postImg.save-path}") String imgPath) {
+    public StaticPathContext(@Value("${static.postImg.save-path}") String imgPath, @Value("${static.upload.save-path}") String filePath) {
         this.imgPath = imgPath;
+        this.filePath = filePath;
     }
 }

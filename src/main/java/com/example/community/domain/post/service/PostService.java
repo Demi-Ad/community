@@ -210,6 +210,7 @@ public class PostService {
                 .replaceAll("<(/)?([a-zA-Z\\d]*)(\\\\s[a-zA-Z]*=[^>]*)?(\\\\s)*(/)?>", "")
                 .replaceAll("<img[^>]*src=[\"']?([^>\"']+)[\"']?[^>]*>", "")
                 .replaceAll("<figure[^>]*class=[\"']?([^>\"']+)[\"']?[^>]*>", "")
+                .replaceAll("<a[^>]*href=[\"']?([^>\"']+)[\"']?[^>]*>", "")
                 .replaceAll("&nbsp;", "");
     }
 

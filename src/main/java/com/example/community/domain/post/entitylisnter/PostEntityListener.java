@@ -19,20 +19,23 @@ public class PostEntityListener {
     public void postRemoveAfter(Object o) {
         if (o instanceof Post) {
             Post post = (Post) o;
-            String content = post.getContent();
-            List<String> imgSrcList = htmlImgSrcParse(content);
-            StaticPathContext staticPathContext = BeanUtils.getBean(StaticPathContext.class);
-            String imgPath = staticPathContext.getImgPath();
-            imgSrcList.stream()
-                    .map(s -> {
-                        String[] srcSplit = s.split("/");
-                        return srcSplit[srcSplit.length - 1];
-                    })
-                    .map(s -> new File(imgPath + "//" + s))
-                    .forEach(File::delete);
-
-            log.info("post ImgList = {}", imgSrcList);
+            deletePostImage(post);
+            deletePostUploadFile(post);
         }
+    }
+
+    private void deletePostImage(Post post) {
+        String content = post.getContent();
+        List<String> imgSrcList = htmlImgSrcParse(content);
+        StaticPathContext staticPathContext = BeanUtils.getBean(StaticPathContext.class);
+        String imgPath = staticPathContext.getImgPath();
+        imgSrcList.stream()
+                .map(s -> {
+                    String[] srcSplit = s.split("/");
+                    return srcSplit[srcSplit.length - 1];
+                })
+                .map(s -> new File(imgPath + "//" + s))
+                .forEach(File::delete);
     }
 
     private List<String> htmlImgSrcParse(String html) {
@@ -46,6 +49,12 @@ public class PostEntityListener {
         }
 
         return result;
+    }
 
+    private void deletePostUploadFile(Post post) {
+        StaticPathContext staticPathContext = BeanUtils.getBean(StaticPathContext.class);
+        post.getPostFiles().stream()
+                .map(postFile -> new File(staticPathContext.getFilePath() + postFile.getFileConvertName()))
+                .forEach(File::delete);
     }
 }
