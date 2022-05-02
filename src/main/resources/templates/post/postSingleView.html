@@ -17,7 +17,7 @@
                     <!-- Post title-->
                     <h1 class="fw-bolder mb-1" th:text="${post.postTitle}">Welcome to Blog Post!</h1>
                     <!-- Post meta content-->
-                    <div class="text-muted fst-italic mb-2 mt-3">
+                    <div class="text-muted fst-italic mb-2">
                         <img alt="" class="profile-post rounded-circle profile" th:src="${'/profile/' + post.profilePath}">
                         Posted on
                         <span th:text="${#temporals.format(post.createdBy,'yyyy-MM-dd HH:mm')}"/> by
@@ -25,8 +25,8 @@
 
                     </div>
                     <!-- Post categories-->
-                    <div class="mt-3">
-                        <a th:each="tag:${post.tagList}" class="badge bg-secondary text-decoration-none link-light me-2"
+                    <div class="mt-3" th:each="tag:${post.tagList}">
+                        <a class="badge bg-secondary text-decoration-none link-light" href="#"
                            th:href="@{/search(param = ${'tag'}, keyword=${tag.item.replace('#','')})}"
                            th:text="${tag.item}">Web
                             Design</a>

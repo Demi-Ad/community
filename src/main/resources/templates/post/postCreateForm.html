@@ -43,7 +43,7 @@
     </div>
 </div>
 <script th:inline="javascript">
-    let tag = []
+
 
     window.addEventListener("load",function () {
         document.getElementById("form").addEventListener("submit",function (e) {
@@ -90,12 +90,7 @@
             }
 
             const tagItem = tagInput.value;
-            if (tag.includes(tagItem)) {
-                alert("중복된 태그")
-                tagInput.value = ""
-                return;
-            }
-            tag.push(tagItem)
+
             const spanOuter = document.createElement("span")
             const spanInner = document.createElement("span")
 
@@ -107,7 +102,6 @@
 
             spanInnerDeleteBtn.addEventListener("click",function () {
                 tagList.removeChild(spanOuter)
-                tag = [...tag.filter(value => value !== tagItem)]
             })
             spanOuter.appendChild(spanInner)
             spanOuter.appendChild(spanInnerDeleteBtn)
