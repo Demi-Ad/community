@@ -1,0 +1,35 @@
+package com.example.community.domain.account.repo.impl;
+
+import com.example.community.domain.account.dto.AccountInfoDto;
+import com.example.community.domain.account.repo.AccountInfoRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
+@RequiredArgsConstructor
+@Profile("h2")
+@Repository("accountInfoRepository")
+public class H2AccountInfoRepository implements AccountInfoRepository {
+
+    private final NamedParameterJdbcTemplate jdbcTemplate;
+
+    @Override
+    public AccountInfoDto projectionAccountInfo(Long userId) {
+
+        String sql = "select a.nickname as nickname , a.email as email, a.profile_img as profile, " +
+                "(select count(p.post_id) from Post p where p.account_id = :userId) as postWriteCount, " +
+                "(select count(c.comment_id) from Comment c where c.account_id = :userId) as commentWriteCount " +
+                "from Account a where a.account_id = :userId";
+
+        MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
+        mapSqlParameterSource.addValue("userId", userId);
+        return jdbcTemplate.queryForObject(sql, mapSqlParameterSource, this::rowMapping);
+
+    }
+}
