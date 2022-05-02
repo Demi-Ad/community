@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <th:block th:replace="frament/head::head"/>
+</head>
+<body>
+<div class="container-fluid p-3">
+    <th:block th:replace="frament/header::header"/>
+    <div class="row">
+
+        <div class="col-2">
+            <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
+                <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none" href="/">
+                    <svg class="bi me-2" height="32" width="40"><use xlink:href="#bootstrap"></use></svg>
+                    <span class="fs-4">Sidebar</span>
+                </a>
+                <hr>
+                <ul class="nav nav-pills flex-column mb-auto">
+
+                    <li class="nav-item">
+                        <a aria-current="page" class="nav-link active" href="#">
+                            <i class="bi bi-info-square me-3"></i>
+                            Home
+                        </a>
+                    </li>
+                    <li>
+                        <a class="nav-link link-dark" href="#">
+                            <i class="bi bi-pen me-3"></i>
+                            방문록
+                        </a>
+                    </li>
+                    <th:block th:if="${@authorizeCheckUtil.check(#request)}">
+                        <li>
+                            <a class="nav-link link-dark" href="#">
+                                <svg class="bi me-2" height="16" width="16"><use xlink:href="#table"></use></svg>
+                                Orders
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="nav-link link-dark" href="#">
+                                <svg class="bi me-2" height="16" width="16"><use xlink:href="#grid"></use></svg>
+                                Products
+                            </a>
+                        </li>
+
+                        <li>
+                            <a class="nav-link link-dark" href="#">
+                                <svg class="bi me-2" height="16" width="16"><use xlink:href="#people-circle"></use></svg>
+                                Customers
+                            </a>
+                        </li>
+                    </th:block>
+
+                </ul>
+                <hr>
+
+            </div>
+        </div>
+
+        <div class="col-9 ms-4">
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-center">
+                        <img alt="..." class="rounded-circle" style="width: 150px;height: 150px" th:src="@{${userInfo.profile}}">
+                    </div>
+                    <div class="text-center my-6">
+                        <!-- Title -->
+                        <a class="d-block h5 mb-0 mt-3" th:text="${userInfo.nickname}">Julienne Moore</a>
+                        <!-- Subtitle -->
+                        <span class="d-block text-sm text-muted mt-3" th:text="${userInfo.email}">julianne.moore@company.com</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5 p-3">
+                <!-- Earnings (Monthly) Card Example -->
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                        글 작성 수
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${userInfo.postWriteCount}">0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings (Monthly) Card Example -->
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card border-left-success shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                        댓글 작성 수
+                                    </div>
+                                    <div class="h5 mb-0 font-weight-bold text-gray-800" th:text="${userInfo.commentWriteCount}">
+                                        0
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Earnings (Monthly) Card Example -->
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card border-left-info shadow h-100 py-2">
+                        <div class="card-body">
+                            <div class="row no-gutters align-items-center">
+                                <div class="col mr-2">
+                                    <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                        RATIO
+                                    </div>
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col-auto">
+                                            <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="progress progress-sm mr-2">
+                                                <div aria-valuemax="100" aria-valuemin="0" aria-valuenow="50" class="progress-bar bg-info" role="progressbar" style="width: 50%"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+<script crossOrigin="anonymous"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+</body>
+</html>

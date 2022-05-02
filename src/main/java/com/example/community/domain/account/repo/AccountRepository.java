@@ -20,10 +20,4 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query("select a from Account a where a.nickname like %:nickname% and a.lock = false")
     Page<Account> findByNicknameContaining(@Param("nickname") String nickname, Pageable pageable);
 
-
-
-
-
-
-
 }

@@ -59,6 +59,10 @@ public class Account {
         this.password = password;
     }
 
+    public void changeNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     public void unLock() {
         this.lock = false;
     }
