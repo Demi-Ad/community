@@ -137,7 +137,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public List<SearchPreviewDto> searchPreview(PostSearchParam postSearchParam) {
-        PageRequest pageRequest = PageRequest.of(0, 8, Sort.by(Sort.Direction.ASC, "id"));
+        PageRequest pageRequest = PageRequest.of(0, 8, Sort.by(Sort.Direction.DESC, "id"));
         switch (postSearchParam.getParam()) {
             case TAG:
                 return tagRepository.findByItemContains(postSearchParam.getKeyword(), pageRequest)

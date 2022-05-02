@@ -55,6 +55,10 @@ public class Account {
         this.profileImg = profileImg;
     }
 
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
     public void unLock() {
         this.lock = false;
     }

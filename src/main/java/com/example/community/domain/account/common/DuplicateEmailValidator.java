@@ -25,7 +25,7 @@ public class DuplicateEmailValidator implements Validator {
     public void validate(Object target, Errors errors) {
         RegisterDto registerDto = (RegisterDto) target;
         String email = registerDto.getEmail();
-        if (accountRepository.existsByEmail(email)) {
+        if (accountRepository.existsByEmailEquals(email)) {
             errors.rejectValue("email","email.duplicate","아이디 중복");
         }
     }

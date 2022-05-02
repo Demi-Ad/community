@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .regexMatchers(HttpMethod.GET, "/post/\\d+$")
                 .permitAll()
-                .antMatchers("/", "/sign", "/register/**", "/logout", "/login/**","/image/upload","/","/download/**","/search/**")
+                .antMatchers("/", "/sign", "/register/**", "/logout", "/login/**","/image/upload","/","/download/**","/search/**","/forgotPassword")
                 .permitAll()
                 .antMatchers(WHITE_LIST).permitAll()
                 .anyRequest().authenticated()
@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(failureHandlerCustom)
                 .permitAll();
 
-        http.csrf().ignoringAntMatchers("/image/upload");
+        http.csrf().ignoringAntMatchers("/image/upload","/forgotPassword");
 
     }
 }

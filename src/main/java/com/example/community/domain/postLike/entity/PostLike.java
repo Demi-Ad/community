@@ -32,7 +32,7 @@ public class PostLike {
     private Account account;
 
     @CreatedDate
-    private LocalDateTime localDateTime;
+    private LocalDateTime likedAt;
 
     public PostLike(Post post, Account account) {
         this.post = post;
