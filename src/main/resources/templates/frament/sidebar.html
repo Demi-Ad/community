@@ -5,22 +5,22 @@
     <title>Title</title>
 </head>
 <body>
-<th:block th:fragment="side(active)">
+<th:block th:fragment="side(active,id)">
 
     <div class="col-2">
         <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
             <ul class="nav nav-pills flex-column mb-auto">
 
                 <li class="nav-item">
-                    <a aria-current="page" class="nav-link" href="#" th:classappend="${active == 'info'} ? active : ''">
+                    <a aria-current="page" class="nav-link" th:classappend="${active == 'info'} ? active : ''" th:href="@{/info/{id}(id=${id})}">
                         <i class="bi bi-info-square me-3"></i>
                         Home
                     </a>
                 </li>
                 <li>
-                    <a class="nav-link link-dark" href="#" th:classappend="${active == 'guestBook'} ? active : ''">
+                    <a class="nav-link link-dark" th:classappend="${active == 'guestBook'} ? active : ''" th:href="@{/guestBook/{id}(id=${id})}">
                         <i class="bi bi-pen me-3"></i>
-                        방문록
+                        방명록
                     </a>
                 </li>
                 <th:block th:if="${@authorizeCheckUtil.check(#request)}">

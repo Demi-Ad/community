@@ -23,4 +23,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
 
     Optional<AccountInfoProjection> searchById(Long id);
+
 }

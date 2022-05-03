@@ -206,6 +206,7 @@ public class PostService {
             PostResponseDto postResponseDto = PostResponseDto.builder()
                     .postId(post.getId())
                     .postTitle(post.getTitle())
+                    .authorId(post.getAccount().getId())
                     .postContent(removeHtmlTag(post.getContent()))
                     .author(post.getAccount().getNickname())
                     .profilePath(post.getAccount().getProfileImg())

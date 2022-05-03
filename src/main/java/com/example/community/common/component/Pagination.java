@@ -85,4 +85,12 @@ public class Pagination<T> {
         pagination.setDataList(tList);
         return pagination;
     }
+
+    public static <T> Pagination<T> of(Page<T> page) {
+        List<T> list = page.toList();
+        Pageable pageable = page.getPageable();
+        Pagination<T> pagination = new Pagination<>((int) page.getTotalElements(), pageable.getPageNumber() + 1);
+        pagination.setDataList(list);
+        return pagination;
+    }
 }

@@ -49,4 +49,8 @@ public class AuthorizeCheckUtil {
     private boolean isNotLoginUser(Authentication authentication) {
         return authentication == null || !(authentication.getPrincipal() instanceof AccountDetail);
     }
+
+    public boolean isLoginUser(Authentication authentication) {
+        return authentication.getPrincipal() instanceof AccountDetail;
+    }
 }

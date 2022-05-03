@@ -1,5 +1,6 @@
 package com.example.community.domain.account.dto;
 
+import com.example.community.domain.account.projection.AccountInfoProjection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -22,6 +23,13 @@ public class AccountInfoDto {
         setProfile(profile);
         this.postWriteCount = postWriteCount;
         this.commentWriteCount = commentWriteCount;
+    }
+
+
+    public AccountInfoDto(AccountInfoProjection accountInfoProjection) {
+        this.nickname = accountInfoProjection.getNickname();
+        this.email = accountInfoProjection.getEmail();
+        setProfile(accountInfoProjection.getProfileImg());
     }
 
     public void setProfile(String profile) {

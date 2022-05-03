@@ -32,9 +32,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .regexMatchers(HttpMethod.GET, "/post/\\d+$")
+                .regexMatchers(HttpMethod.GET, "/post/\\d+$", "/info/\\d+$","/guestBook/\\d+$")
                 .permitAll()
-                .antMatchers("/", "/sign", "/register/**", "/logout", "/login/**","/image/upload","/","/download/**","/search/**","/forgotPassword","/info/**")
+                .regexMatchers(HttpMethod.POST, "/guestBook/\\d+$")
+                .authenticated()
+                .antMatchers("/", "/sign", "/register/**", "/logout", "/login/**","/image/upload","/","/download/**","/search/**","/forgotPassword")
                 .permitAll()
                 .antMatchers(WHITE_LIST).permitAll()
                 .anyRequest().authenticated()

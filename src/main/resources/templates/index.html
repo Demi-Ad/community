@@ -73,7 +73,7 @@
                                 <div class="d-flex">
                                     <img alt="profile" class="rounded-circle profile-list " src=""
                                          th:src="@{/profile/{img}(img=${post.getProfilePath()})}">
-                                    <p class="p-normal ms-3" th:text="${post.author}">USERNAME</p>
+                                    <a class="ms-3 text-decoration-none text-info" th:href="@{/info/{id}(id=${post.authorId})}" th:text="${post.author}">USERNAME</a>
                                 </div>
                             </div>
                             <div class="col-4">
@@ -88,10 +88,10 @@
                     </div>
                     <div class="card-body row">
                         <h5>
-                            <a th:href="@{/post/{id}(id=${post.postId})}" th:text="${post.postTitle}"></a>
+                            <a class="text-decoration-none text-muted" th:href="@{/post/{id}(id=${post.postId})}" th:text="${post.postTitle}"></a>
                         </h5>
-                        <p class="card-text text-truncate d-inline-block p-normal" th:text="${post.postContent}">
-                            content...
+                        <p class="card-text text-truncate d-inline-block p-normal">
+                            <i class="bi bi-chevron-right me-3"></i>[[${post.postContent}]]
                         </p>
                     </div>
 
@@ -118,7 +118,7 @@
         </div>
     </div>
 
-    <nav aria-label="Page navigation example" class="d-flex justify-content-center mt-3"
+    <nav aria-label="Page navigation" class="d-flex justify-content-center mt-3"
          th:with="startPage = ${pagingPost.startPage}, endPage = ${pagingPost.endPage}">
         <ul class="pagination">
             <li class="page-item" th:classappend="${pagingPost.existPrevPage ? '' : 'disabled'}">

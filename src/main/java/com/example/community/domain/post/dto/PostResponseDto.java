@@ -21,11 +21,12 @@ public class PostResponseDto {
     private String postTitle;
     private String postContent;
     private String author;
+    private Long authorId;
     private String profilePath;
     private LocalDateTime createdBy;
-    private List<TagDto> tagList;
     private Boolean isCreated;
     private Long likeCount;
+    private List<TagDto> tagList;
     private List<CommentResponseDto> commentResponseDtoList;
     private List<PostFileDto> uploadFileLink;
 }
