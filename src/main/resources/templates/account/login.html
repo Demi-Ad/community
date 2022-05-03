@@ -27,29 +27,23 @@
                                 </th:block>
 
                                 <div class="col-12">
-                                    <label>Email<span class="text-danger">*</span></label>
+                                    <label>Email<span class="text-danger ms-1">*</span></label>
                                     <div class="input-group">
-                                        <div class="input-group-text"><i class="bi bi-person-fill"></i></div>
+                                        <div class="input-group-text"><i class="bi bi-at"></i></div>
                                         <input type="email" name="id" required class="form-control" placeholder="Enter Username">
                                     </div>
                                 </div>
 
                                 <div class="col-12">
-                                    <label>Password<span class="text-danger">*</span></label>
+                                    <label>Password<span class="text-danger ms-1">*</span></label>
                                     <div class="input-group">
                                         <div class="input-group-text"><i class="bi bi-lock-fill"></i></div>
                                         <input type="password" name="password" required class="form-control" placeholder="Enter Password">
                                     </div>
                                 </div>
 
-                                <div class="col-sm-6">
-                                    <div class="form-check">
-                                        <input class="form-check-input" id="inlineFormCheck" name="rememberMe" type="checkbox">
-                                        <label class="form-check-label" for="inlineFormCheck" >Remember me</label>
-                                    </div>
-                                </div>
 
-                                <div class="col-sm-6">
+                                <div class="col-6 offset-6">
                                     <a class="float-end text-primary" th:href="@{/forgotPassword}">Forgot Password?</a>
                                 </div>
 
