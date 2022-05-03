@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<th:block th:fragment="side(active)">
+
+    <div class="col-2">
+        <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
+            <ul class="nav nav-pills flex-column mb-auto">
+
+                <li class="nav-item">
+                    <a aria-current="page" class="nav-link" href="#" th:classappend="${active == 'info'} ? active : ''">
+                        <i class="bi bi-info-square me-3"></i>
+                        Home
+                    </a>
+                </li>
+                <li>
+                    <a class="nav-link link-dark" href="#" th:classappend="${active == 'guestBook'} ? active : ''">
+                        <i class="bi bi-pen me-3"></i>
+                        방문록
+                    </a>
+                </li>
+                <th:block th:if="${@authorizeCheckUtil.check(#request)}">
+                    <hr>
+                    <li>
+                        <a class="nav-link link-dark" href="#" th:classappend="${active == 'chagneInfo'} ? active : ''">
+                            <i class="bi bi-person-plus me-3"></i>
+                            회원정보 수정
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="nav-link link-dark" href="#" th:classappend="${active == 'chagnePassword'} ? active : ''">
+                            <i class="bi bi-check me-3"></i>
+                            비밀번호 변경
+                        </a>
+                    </li>
+
+                    <li>
+                        <a class="nav-link link-dark" href="#" th:classappend="${active == 'secession'} ? active : ''">
+                            <i class="bi bi-person-x-fill me-3"></i>
+                            회원탈퇴
+                        </a>
+                    </li>
+                </th:block>
+
+            </ul>
+            <hr>
+
+        </div>
+    </div>
+
+</th:block>
+</body>
+</html>

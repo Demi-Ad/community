@@ -8,6 +8,8 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @RequiredArgsConstructor
 @Profile("local")
 @Repository("accountInfoRepository")
@@ -17,7 +19,7 @@ public class MySqlAccountInfoRepository implements AccountInfoRepository {
 
 
     @Override
-    public AccountInfoDto projectionAccountInfo(Long userId) {
+    public Optional<AccountInfoDto> projectionAccountInfo(Long userId) {
 
         String sql = "select a.nickname as nickname , a.email as email, a.profile_img as profile, " +
                 "(select count(p.post_id) from post p where p.account_id = :userId) as postWriteCount, " +
@@ -26,7 +28,8 @@ public class MySqlAccountInfoRepository implements AccountInfoRepository {
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("userId", userId);
-        return jdbcTemplate.queryForObject(sql, mapSqlParameterSource, this::rowMapping);
+        AccountInfoDto accountInfoDto = jdbcTemplate.queryForObject(sql, mapSqlParameterSource, this::rowMapping);
+        return Optional.ofNullable(accountInfoDto);
 
     }
 }

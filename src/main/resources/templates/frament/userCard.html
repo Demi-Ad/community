@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div class="card" th:fragment="userCard(profile,nickname,email)">
+        <div class="card-body">
+            <div class="d-flex justify-content-center">
+                <img alt="..." class="rounded-circle" style="width: 150px;height: 150px" th:src="@{${profile}}">
+            </div>
+            <div class="text-center my-6">
+                <!-- Title -->
+                <a class="d-block h5 mb-0 mt-3" th:text="${nickname}">Julienne Moore</a>
+                <!-- Subtitle -->
+                <span class="d-block text-sm text-muted mt-3" th:text="${email}">julianne.moore@company.com</span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

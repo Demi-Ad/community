@@ -78,7 +78,7 @@
                         <form class="mb-3" id="commentForm" method="post" sec:authorize="isAuthenticated()"
                               th:action="@{/comment}">
                             <textarea class="form-control" name="commentContent"
-                                      placeholder="Join the discussion and leave a comment!" rows="2"></textarea>
+                                      placeholder="댓글을 작성해주세요" rows="2"></textarea>
                             <div class="d-flex justify-content-end mt-3">
                                 <button class="btn btn-outline-primary" type="submit">댓글작성</button>
                             </div>
@@ -130,6 +130,8 @@
         </div>
     </div>
 </div>
+
+
 <script defer sec:authorize="isAuthenticated()" th:inline="javascript">
     window.addEventListener("load", _ => {
         const url = new URL(window.location.href);
@@ -202,7 +204,7 @@
             _csrfHiddenInput.setAttribute("value", _csrf)
             _csrfHiddenInput.setAttribute("type", "hidden")
 
-            //TODO : 댓글 취소 버튼 추가
+
             div.appendChild(childCommentInput)
             div.appendChild(submitBtn)
 

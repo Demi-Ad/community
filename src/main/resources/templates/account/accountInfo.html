@@ -10,70 +10,12 @@
     <th:block th:replace="frament/header::header"/>
     <div class="row">
 
-        <div class="col-2">
-            <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
-                <a class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none" href="/">
-                    <svg class="bi me-2" height="32" width="40"><use xlink:href="#bootstrap"></use></svg>
-                    <span class="fs-4">Sidebar</span>
-                </a>
-                <hr>
-                <ul class="nav nav-pills flex-column mb-auto">
-
-                    <li class="nav-item">
-                        <a aria-current="page" class="nav-link active" href="#">
-                            <i class="bi bi-info-square me-3"></i>
-                            Home
-                        </a>
-                    </li>
-                    <li>
-                        <a class="nav-link link-dark" href="#">
-                            <i class="bi bi-pen me-3"></i>
-                            방문록
-                        </a>
-                    </li>
-                    <th:block th:if="${@authorizeCheckUtil.check(#request)}">
-                        <li>
-                            <a class="nav-link link-dark" href="#">
-                                <svg class="bi me-2" height="16" width="16"><use xlink:href="#table"></use></svg>
-                                Orders
-                            </a>
-                        </li>
-
-                        <li>
-                            <a class="nav-link link-dark" href="#">
-                                <svg class="bi me-2" height="16" width="16"><use xlink:href="#grid"></use></svg>
-                                Products
-                            </a>
-                        </li>
-
-                        <li>
-                            <a class="nav-link link-dark" href="#">
-                                <svg class="bi me-2" height="16" width="16"><use xlink:href="#people-circle"></use></svg>
-                                Customers
-                            </a>
-                        </li>
-                    </th:block>
-
-                </ul>
-                <hr>
-
-            </div>
-        </div>
+        <th:block th:replace="frament/sidebar :: side('info')"/>
 
         <div class="col-9 ms-4">
 
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-center">
-                        <img alt="..." class="rounded-circle" style="width: 150px;height: 150px" th:src="@{${userInfo.profile}}">
-                    </div>
-                    <div class="text-center my-6">
-                        <!-- Title -->
-                        <a class="d-block h5 mb-0 mt-3" th:text="${userInfo.nickname}">Julienne Moore</a>
-                        <!-- Subtitle -->
-                        <span class="d-block text-sm text-muted mt-3" th:text="${userInfo.email}">julianne.moore@company.com</span>
-                    </div>
-                </div>
+            <div th:replace="frament/userCard :: userCard(${userInfo.profile},${userInfo.nickname},${userInfo.email})">
+
             </div>
 
             <div class="row mt-5 p-3">

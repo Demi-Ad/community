@@ -24,20 +24,17 @@ public class AuthorizeCheckUtil {
 
     public boolean check(Post post) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !(authentication.getPrincipal() instanceof AccountDetail))
+        if (isNotLoginUser(authentication))
             return false;
 
         AccountDetail accountDetail = (AccountDetail) authentication.getPrincipal();
-
-        if (accountDetail == null)
-            return false;
 
         return post.isCreatedUser(accountDetail.getAccount());
     }
 
     public boolean check(HttpServletRequest request) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !(authentication.getPrincipal() instanceof AccountDetail))
+        if (isNotLoginUser(authentication))
             return false;
 
         AccountDetail accountDetail = (AccountDetail) authentication.getPrincipal();
@@ -47,5 +44,9 @@ public class AuthorizeCheckUtil {
 
         return accountDetail.getAccount().getId().equals(id);
 
+    }
+
+    private boolean isNotLoginUser(Authentication authentication) {
+        return authentication == null || !(authentication.getPrincipal() instanceof AccountDetail);
     }
 }

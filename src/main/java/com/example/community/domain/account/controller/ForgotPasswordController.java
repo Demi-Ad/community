@@ -26,15 +26,14 @@ public class ForgotPasswordController {
 
     @PostMapping
     public String passwordChangeUrl(@ModelAttribute(name = "email") String email, Model model) {
-        log.info("email = {}",email);
-        if (!accountForgotPasswordService.isExistsAccount(email)) {
-            model.addAttribute("err",true);
-            return "account/forgotPassword";
-        }
-        else {
+        if (accountForgotPasswordService.isExistsAccount(email)) {
             accountForgotPasswordService.changePassword(email);
             model.addAttribute("result",email);
             return "account/forgotPasswordAfter";
+        }
+        else {
+            model.addAttribute("err",true);
+            return "account/forgotPassword";
         }
     }
 

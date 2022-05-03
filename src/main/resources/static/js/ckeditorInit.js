@@ -33,7 +33,7 @@ class UploadAdapter {
             }
 
             resolve({
-                default: response.url //업로드된 파일 주소 TODO: {url:http:~~~}
+                default: response.url
             })
         })
     }

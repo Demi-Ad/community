@@ -1,6 +1,7 @@
 package com.example.community.domain.account.repo;
 
 import com.example.community.domain.account.entity.Account;
+import com.example.community.domain.account.projection.AccountInfoProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -20,4 +21,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     @Query("select a from Account a where a.nickname like %:nickname% and a.lock = false")
     Page<Account> findByNicknameContaining(@Param("nickname") String nickname, Pageable pageable);
 
+
+    Optional<AccountInfoProjection> searchById(Long id);
 }

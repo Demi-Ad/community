@@ -13,3 +13,45 @@ document.querySelectorAll(".dropdown-item").forEach(elem => {
     })
 })
 
+
+const searchInputElement = document.querySelector("#search_input");
+const resultFormElement = document.querySelector("#search_result_form");
+searchInputElement.addEventListener("change", elem => {
+    if (elem.target.value.length < 0 || elem.target.value.replaceAll(" ", "").length === 0) {
+        resultFormElement.style.display = "none";
+        return;
+    }
+    const searchParam = document.querySelector("#search_param").value;
+
+    const params = {
+        "param": searchParam,
+        "keyword": elem.target.value
+    }
+
+    const query = Object.keys(params)
+        .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
+
+
+    fetch(`/search/preview?${query}`, {
+        method: "GET"
+    }).then(res => {
+        if (res && res.status === 200) {
+            return res.json()
+        }
+    }).then(json => {
+        if (json.previewDtoList.length === 0) {
+            resultFormElement.style.display = "none";
+            return;
+        }
+        const result = document.querySelector("#search_result")
+        result.innerHTML = json.previewDtoList
+            .map(dto => `
+                        <div class="d-flex ms-3">
+                            <img src="${dto.img}" class="m-2 rounded-circle" style="width: 25px;height: 25px" >
+                            <a href="${dto.link}" class="p-normal m-2">${dto.item}</a>
+                        </div>`)
+            .join("");
+        resultFormElement.style.display = "";
+    })
+
+})
