@@ -2,7 +2,8 @@ package com.example.community.domain.account.controller;
 
 import com.example.community.common.component.Pagination;
 import com.example.community.config.security.auth.AccountDetail;
-import com.example.community.domain.account.dto.AccountInfoDto;
+import com.example.community.domain.account.dto.AccountInfoBasicDto;
+import com.example.community.domain.account.dto.AccountInfoDetailDto;
 import com.example.community.domain.account.service.AccountInfoService;
 import com.example.community.domain.guestBook.dto.GuestBookResponseDto;
 import com.example.community.domain.guestBook.service.GuestBookService;
@@ -31,7 +32,7 @@ public class AccountInfoController {
 
     @GetMapping("/info/{id}")
     public String accountInfoForm(@PathVariable("id") Long userId, Model model) {
-        AccountInfoDto accountInfo = accountInfoService.createAccountInfo(userId);
+        AccountInfoDetailDto accountInfo = accountInfoService.createAccountInfo(userId);
 
         model.addAttribute("userInfo", accountInfo);
         model.addAttribute("userId", userId);
@@ -40,10 +41,10 @@ public class AccountInfoController {
 
     @GetMapping("/guestBook/{id}")
     public String guestBook(@PathVariable("id") Long ownerId, @PageableDefault() Pageable pageable, Model model) {
-        AccountInfoDto accountInfoDto = accountInfoService.projectionAccountInfo(ownerId);
+        AccountInfoBasicDto accountInfoBasicDto = accountInfoService.projectionAccountInfo(ownerId);
         Pagination<GuestBookResponseDto> page = guestBookService.listGuestBook(ownerId, pageable);
 
-        model.addAttribute("accountInfo", accountInfoDto);
+        model.addAttribute("accountInfo", accountInfoBasicDto);
         model.addAttribute("userId", ownerId);
         model.addAttribute("pageResponse", page);
         return "account/guestBook";

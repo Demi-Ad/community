@@ -1,6 +1,7 @@
 package com.example.community.domain.post.service;
 
 import com.example.community.common.component.Pagination;
+import com.example.community.common.exceptionSupplier.ExceptionSupplier;
 import com.example.community.common.util.AuthorizeCheckUtil;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
@@ -58,7 +59,7 @@ public class PostService {
         List<String> tagStrList = List.of(postRequestDto.getTagJoiningStr().split(","));
         List<Tag> tagList = tagService.saveElseFind(tagStrList);
         Post post = new Post(postRequestDto.getTitle(), postRequestDto.getContent());
-        Account account = accountRepository.findById(accountId).orElseThrow();
+        Account account = accountRepository.findById(accountId).orElseThrow(ExceptionSupplier::supply400);
         post.postedAccount(account);
         postSetTag(tagList, post);
         postFileService.save(postRequestDto.getUploadFiles(), post);
@@ -68,7 +69,7 @@ public class PostService {
 
 
     public void editPost(PostRequestDto postRequestDto, Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow();
+        Post post = postRepository.findById(postId).orElseThrow(ExceptionSupplier::supply400);
         post.getPostTagList().clear();
         List<Tag> tagList = tagService.saveElseFind(List.of(postRequestDto.getTagJoiningStr().split(",")));
         postSetTag(tagList, post);
@@ -77,7 +78,7 @@ public class PostService {
 
     @Transactional(readOnly = true)
     public PostRequestDto getEditPostForm(Long postId) {
-        Post post = postRepository.findById(postId).orElseThrow();
+        Post post = postRepository.findById(postId).orElseThrow(ExceptionSupplier::supply400);
         String title = post.getTitle();
         String content = post.getContent();
         String tagListStr = post.getPostTagList()
@@ -89,12 +90,12 @@ public class PostService {
 
 
     public void deletePost(Long postId) {
-        Post post = postRepository.findByIdJoinAccount(postId).orElseThrow();
+        Post post = postRepository.findByIdJoinAccount(postId).orElseThrow(ExceptionSupplier::supply400);
 
         if (authorizeCheckUtil.check(post))
             postRepository.delete(post);
         else
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "접근 권한이 없습니다");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "접근 권한이 없습니다");
     }
 
     @Transactional(readOnly = true)

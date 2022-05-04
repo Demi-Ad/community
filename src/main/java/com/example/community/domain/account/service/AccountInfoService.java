@@ -1,6 +1,7 @@
 package com.example.community.domain.account.service;
 
-import com.example.community.domain.account.dto.AccountInfoDto;
+import com.example.community.domain.account.dto.AccountInfoBasicDto;
+import com.example.community.domain.account.dto.AccountInfoDetailDto;
 import com.example.community.domain.account.projection.AccountInfoProjection;
 import com.example.community.domain.account.repo.AccountInfoRepository;
 import com.example.community.domain.account.repo.AccountRepository;
@@ -19,18 +20,18 @@ public class AccountInfoService {
     private final AccountInfoRepository accountInfoRepository;
     private final AccountRepository accountRepository;
 
-    public AccountInfoDto createAccountInfo(Long userId) {
+    public AccountInfoDetailDto createAccountInfo(Long userId) {
         return accountInfoRepository.projectionAccountInfo(userId).orElseThrow(this::BadRequestSupplier);
     }
 
-    public AccountInfoDto projectionAccountInfo(Long userId) {
+    public AccountInfoBasicDto projectionAccountInfo(Long userId) {
         AccountInfoProjection accountInfoProjection = accountRepository.searchById(userId)
                 .orElseThrow(this::BadRequestSupplier);
 
-        return new AccountInfoDto(accountInfoProjection);
+        return new AccountInfoBasicDto(accountInfoProjection);
     }
 
     private RuntimeException BadRequestSupplier() {
-        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재 하지않는 유저");
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재하지않는 유저");
     }
 }

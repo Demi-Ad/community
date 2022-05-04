@@ -1,6 +1,7 @@
 package com.example.community.domain.guestBook.service;
 
 import com.example.community.common.component.Pagination;
+import com.example.community.common.exceptionSupplier.ExceptionSupplier;
 import com.example.community.config.security.auth.AccountDetail;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
@@ -25,7 +26,7 @@ public class GuestBookService {
 
 
     public Long save(String content, Long ownerId, Account guest) {
-        Account owner = accountRepository.findById(ownerId).orElseThrow();
+        Account owner = accountRepository.findById(ownerId).orElseThrow(ExceptionSupplier::supply400);
 
         GuestBook guestBook = GuestBook.builder()
                 .owner(owner)
@@ -52,14 +53,14 @@ public class GuestBookService {
 
 
     public Long delete(Long guestBookId) {
-        GuestBook guestBook = guestBookRepository.findById(guestBookId).orElseThrow();
+        GuestBook guestBook = guestBookRepository.findById(guestBookId).orElseThrow(ExceptionSupplier::supply400);
         Long id = guestBook.getOwner().getId();
         guestBookRepository.deleteById(guestBookId);
         return id;
     }
 
     public boolean isOwner(Long guestBookId, AccountDetail accountDetail) {
-        GuestBook guestBook = guestBookRepository.findById(guestBookId).orElseThrow();
+        GuestBook guestBook = guestBookRepository.findById(guestBookId).orElseThrow(ExceptionSupplier::supply400);
         return guestBook.getOwner().getId().equals(accountDetail.getAccount().getId());
     }
 }

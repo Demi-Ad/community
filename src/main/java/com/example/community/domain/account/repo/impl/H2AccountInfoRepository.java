@@ -1,6 +1,6 @@
 package com.example.community.domain.account.repo.impl;
 
-import com.example.community.domain.account.dto.AccountInfoDto;
+import com.example.community.domain.account.dto.AccountInfoDetailDto;
 import com.example.community.domain.account.repo.AccountInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
@@ -19,7 +19,7 @@ public class H2AccountInfoRepository implements AccountInfoRepository {
     private final NamedParameterJdbcTemplate jdbcTemplate;
 
     @Override
-    public Optional<AccountInfoDto> projectionAccountInfo(Long userId) {
+    public Optional<AccountInfoDetailDto> projectionAccountInfo(Long userId) {
 
         String sql = "select a.nickname as nickname , a.email as email, a.profile_img as profile, " +
                 "(select count(p.post_id) from Post p where p.account_id = :userId) as postWriteCount, " +
@@ -29,7 +29,7 @@ public class H2AccountInfoRepository implements AccountInfoRepository {
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("userId", userId);
-        AccountInfoDto accountInfoDto = jdbcTemplate.queryForObject(sql, mapSqlParameterSource, this::rowMapping);
-        return Optional.ofNullable(accountInfoDto);
+        AccountInfoDetailDto accountInfoDetailDto = jdbcTemplate.queryForObject(sql, mapSqlParameterSource, this::rowMapping);
+        return Optional.ofNullable(accountInfoDetailDto);
     }
 }

@@ -1,6 +1,6 @@
 package com.example.community.domain.account.repo;
 
-import com.example.community.domain.account.dto.AccountInfoDto;
+import com.example.community.domain.account.dto.AccountInfoDetailDto;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -8,10 +8,10 @@ import java.util.Optional;
 
 
 public interface AccountInfoRepository {
-    Optional<AccountInfoDto> projectionAccountInfo(Long userId);
+    Optional<AccountInfoDetailDto> projectionAccountInfo(Long userId);
 
-    default AccountInfoDto rowMapping(ResultSet rs, int count) throws SQLException {
-        AccountInfoDto dto = new AccountInfoDto();
+    default AccountInfoDetailDto rowMapping(ResultSet rs, int count) throws SQLException {
+        AccountInfoDetailDto dto = new AccountInfoDetailDto();
         dto.setNickname(rs.getString("nickname"));
         dto.setEmail(rs.getString("email"));
         dto.setProfile(rs.getString("profile"));

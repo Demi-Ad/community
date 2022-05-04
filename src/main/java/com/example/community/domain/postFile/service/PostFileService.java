@@ -1,6 +1,7 @@
 package com.example.community.domain.postFile.service;
 
 import com.example.community.common.component.TextToSha256Converter;
+import com.example.community.common.exceptionSupplier.ExceptionSupplier;
 import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.postFile.dto.DownloadFileDto;
 import com.example.community.domain.postFile.entity.PostFile;
@@ -47,7 +48,7 @@ public class PostFileService {
     }
 
     public DownloadFileDto findFile(String name) {
-        PostFile postFile = postFilesRepository.findByFileConvertNameEquals(name).orElseThrow();
+        PostFile postFile = postFilesRepository.findByFileConvertNameEquals(name).orElseThrow(ExceptionSupplier::supply400);
         String fileConvertName = postFile.getFileConvertName();
 
         try {

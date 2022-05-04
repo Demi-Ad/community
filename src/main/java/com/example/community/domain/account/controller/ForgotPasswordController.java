@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.NoSuchElementException;
+
 @Controller
 @Slf4j
 @RequiredArgsConstructor
@@ -26,12 +28,12 @@ public class ForgotPasswordController {
 
     @PostMapping
     public String passwordChangeUrl(@ModelAttribute(name = "email") String email, Model model) {
-        if (accountForgotPasswordService.isExistsAccount(email)) {
+        try {
             accountForgotPasswordService.changePassword(email);
             model.addAttribute("result",email);
             return "account/forgotPasswordAfter";
         }
-        else {
+        catch (NoSuchElementException e){
             model.addAttribute("err",true);
             return "account/forgotPassword";
         }

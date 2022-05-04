@@ -1,6 +1,5 @@
 package com.example.community.domain.account.dto;
 
-import com.example.community.domain.account.projection.AccountInfoProjection;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -8,7 +7,7 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @ToString
-public class AccountInfoDto {
+public class AccountInfoDetailDto {
     private String nickname;
     private String email;
     private String profile;
@@ -18,7 +17,7 @@ public class AccountInfoDto {
     private int guestBookWriteCount;
 
 
-    public AccountInfoDto(String nickname, String email, String profile, int postWriteCount, int commentWriteCount, int guestBookWriteCount) {
+    public AccountInfoDetailDto(String nickname, String email, String profile, int postWriteCount, int commentWriteCount, int guestBookWriteCount) {
         this.nickname = nickname;
         this.email = email;
         setProfile(profile);
@@ -28,11 +27,7 @@ public class AccountInfoDto {
     }
 
 
-    public AccountInfoDto(AccountInfoProjection accountInfoProjection) {
-        this.nickname = accountInfoProjection.getNickname();
-        this.email = accountInfoProjection.getEmail();
-        setProfile(accountInfoProjection.getProfileImg());
-    }
+
 
     public void setProfile(String profile) {
         this.profile = "/profile/" +  profile;

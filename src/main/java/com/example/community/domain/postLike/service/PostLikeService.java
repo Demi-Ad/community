@@ -1,5 +1,6 @@
 package com.example.community.domain.postLike.service;
 
+import com.example.community.common.exceptionSupplier.ExceptionSupplier;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.post.repo.PostRepository;
@@ -22,7 +23,7 @@ public class PostLikeService {
         boolean isAccountLikePost = postLikeRepository.existsByPost_IdAndAccount_Id(id, account.getId());
 
         if (!isAccountLikePost) {
-            PostLike postLike = new PostLike(postRepository.findById(id).orElseThrow(), account);
+            PostLike postLike = new PostLike(postRepository.findById(id).orElseThrow(ExceptionSupplier::supply400), account);
             postLikeRepository.save(postLike);
         } else {
             PostLike postLike = postLikeRepository.findByPost_IdAndAccount_Id(id, account.getId()).orElse(null);
