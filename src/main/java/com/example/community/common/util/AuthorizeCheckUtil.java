@@ -1,6 +1,10 @@
 package com.example.community.common.util;
 
+import com.example.community.common.exceptionSupplier.ExceptionSupplier;
 import com.example.community.config.security.auth.AccountDetail;
+import com.example.community.domain.account.entity.Account;
+import com.example.community.domain.comment.entity.Comment;
+import com.example.community.domain.comment.repo.CommentRepository;
 import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.post.repo.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,30 +21,29 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthorizeCheckUtil {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
-    public boolean check(Long postId, Long accountId) {
-        return postRepository.checkCreateUser(accountId,postId);
-    }
-
-    public boolean check(Post post) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (isNotLoginUser(authentication))
-            return false;
-
-        AccountDetail accountDetail = (AccountDetail) authentication.getPrincipal();
-
-        return post.isCreatedUser(accountDetail.getAccount());
-    }
-
-    public boolean check(AccountDetail accountDetail, Long id) {
-        if (accountDetail == null) {
-            return false;
+    public boolean postAuthorizedCheck(Long postId) {
+        Account account = this.currentContextAccount();
+        if (account != null) {
+            Post post = postRepository.findById(postId).orElseThrow(ExceptionSupplier::supply400);
+            return post.isCreatedUser(account);
         }
-        return accountDetail.getAccount().getId().equals(id);
+        return false;
     }
 
-    private boolean isNotLoginUser(Authentication authentication) {
-        return authentication == null || !(authentication.getPrincipal() instanceof AccountDetail);
+    public boolean commentAuthorizedCheck(Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(ExceptionSupplier::supply400);
+        Account account = currentContextAccount();
+        return comment.isAuthor(account);
+    }
+
+    private Account currentContextAccount() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof AccountDetail) {
+            return ((AccountDetail) principal).getAccount();
+        }
+        return null;
     }
 
     public boolean isLoginUser(Authentication authentication) {

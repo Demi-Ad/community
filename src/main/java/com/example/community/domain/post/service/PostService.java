@@ -55,11 +55,10 @@ public class PostService {
 
     private final PostFileService postFileService;
 
-    public Long save(PostRequestDto postRequestDto, Long accountId) {
+    public Long save(PostRequestDto postRequestDto, Account account) {
         List<String> tagStrList = List.of(postRequestDto.getTagJoiningStr().split(","));
         List<Tag> tagList = tagService.saveElseFind(tagStrList);
         Post post = new Post(postRequestDto.getTitle(), postRequestDto.getContent());
-        Account account = accountRepository.findById(accountId).orElseThrow(ExceptionSupplier::supply400);
         post.postedAccount(account);
         postSetTag(tagList, post);
         postFileService.save(postRequestDto.getUploadFiles(), post);
@@ -91,11 +90,8 @@ public class PostService {
 
     public void deletePost(Long postId) {
         Post post = postRepository.findByIdJoinAccount(postId).orElseThrow(ExceptionSupplier::supply400);
+        postRepository.delete(post);
 
-        if (authorizeCheckUtil.check(post))
-            postRepository.delete(post);
-        else
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "접근 권한이 없습니다");
     }
 
     @Transactional(readOnly = true)
@@ -181,7 +177,7 @@ public class PostService {
                 .profilePath(post.getAccount().getProfileImg())
                 .createdBy(post.getCreatedAt())
                 .tagList(createTagDtoList(post))
-                .isCreated(authorizeCheckUtil.check(post))
+                .isCreated(authorizeCheckUtil.postAuthorizedCheck(post.getId()))
                 .likeCount(postLikeService.postLikeCount(post))
                 .uploadFileLink(post.getPostFiles().stream().map(PostFileDto::new).collect(Collectors.toList()))
                 .commentResponseDtoList(commentService.createCommentResponse(post.getId()))

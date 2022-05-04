@@ -1,12 +1,12 @@
 package com.example.community.domain.comment.controller;
 
-import com.example.community.config.security.auth.AccountDetail;
 import com.example.community.domain.comment.dto.CommentEditRequestDto;
+import com.example.community.domain.comment.dto.CommentEditResponseDto;
 import com.example.community.domain.comment.dto.CommentRequestDto;
 import com.example.community.domain.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,31 +22,28 @@ public class CommentController {
 
     @PostMapping("/comment")
     public String createComment(@ModelAttribute CommentRequestDto commentRequestDto,
-                                @AuthenticationPrincipal AccountDetail accountDetail,
                                 RedirectAttributes redirectAttributes) {
 
-        commentRequestDto.setCommentWriteAccountId(accountDetail.getAccount().getId());
         Long commentId = commentService.save(commentRequestDto);
         redirectAttributes.addAttribute("postId", commentRequestDto.getPostId());
         redirectAttributes.addAttribute("commentId", commentId);
         return "redirect:/post/{postId}";
     }
 
+    @PreAuthorize("@authorizeCheckUtil.commentAuthorizedCheck(#deleteCommentId)")
     @PostMapping("/comment/delete")
-    public String deleteComment(@RequestParam Long deleteCommentId,
-                                @AuthenticationPrincipal AccountDetail accountDetail,
-                                RedirectAttributes redirectAttributes) {
-        Long postId = commentService.deleteComment(deleteCommentId, accountDetail.getAccount());
+    public String deleteComment(@RequestParam Long deleteCommentId, RedirectAttributes redirectAttributes) {
+        Long postId = commentService.deleteComment(deleteCommentId);
         redirectAttributes.addAttribute("id",postId);
         return "redirect:/post/{id}";
     }
 
     @PostMapping("/comment/edit")
-    public String editComment(@ModelAttribute CommentEditRequestDto commentEditRequestDto,
-                              @AuthenticationPrincipal AccountDetail accountDetail,
-                              RedirectAttributes redirectAttributes) {
-        Long postId = commentService.editComment(commentEditRequestDto, accountDetail.getAccount());
-        redirectAttributes.addAttribute("id",postId);
+    @PreAuthorize("@authorizeCheckUtil.commentAuthorizedCheck(#commentEditRequestDto.commentId)")
+    public String editComment(@ModelAttribute CommentEditRequestDto commentEditRequestDto, RedirectAttributes redirectAttributes) {
+        CommentEditResponseDto dto = commentService.editComment(commentEditRequestDto);
+        redirectAttributes.addAttribute("id",dto.getPostId());
+        redirectAttributes.addAttribute("commentId",dto.getCommentId());
         return "redirect:/post/{id}";
     }
 }

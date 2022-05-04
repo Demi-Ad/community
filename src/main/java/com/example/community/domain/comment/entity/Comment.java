@@ -53,6 +53,10 @@ public class Comment {
 
     }
 
+    public boolean isAuthor(Account account) {
+        return this.account.equals(account);
+    }
+
     public void setParentComment(Comment parentComment) {
         this.parentComment = parentComment;
     }

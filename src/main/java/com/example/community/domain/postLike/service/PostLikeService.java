@@ -19,14 +19,14 @@ public class PostLikeService {
     private final PostRepository postRepository;
 
 
-    public void toggleLikePost(Account account, Long id) {
-        boolean isAccountLikePost = postLikeRepository.existsByPost_IdAndAccount_Id(id, account.getId());
+    public void toggleLikePost(Account account, Long postId) {
+        boolean isAccountLikePost = postLikeRepository.existsByPost_IdAndAccount_Id(postId, account.getId());
 
         if (!isAccountLikePost) {
-            PostLike postLike = new PostLike(postRepository.findById(id).orElseThrow(ExceptionSupplier::supply400), account);
+            PostLike postLike = new PostLike(postRepository.findById(postId).orElseThrow(ExceptionSupplier::supply400), account);
             postLikeRepository.save(postLike);
         } else {
-            PostLike postLike = postLikeRepository.findByPost_IdAndAccount_Id(id, account.getId()).orElse(null);
+            PostLike postLike = postLikeRepository.findByPost_IdAndAccount_Id(postId, account.getId()).orElse(null);
             if (postLike == null) {
                 return;
             }

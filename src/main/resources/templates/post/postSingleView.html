@@ -117,7 +117,7 @@
                                     <a class="text-danger fs-6 delCommentBtn" th:if="${childComment.createAuthor}"
                                        th:value="${childComment.commentId}">댓글삭제</a>
 
-                                    <a class="text-primary fs-6 editCommentBtn ms-2" th:if="${comment.createAuthor}"
+                                    <a class="text-primary fs-6 editCommentBtn ms-2" th:if="${childComment.createAuthor}"
                                        th:value="${childComment.commentId}">댓글 수정</a>
 
                                 </div>

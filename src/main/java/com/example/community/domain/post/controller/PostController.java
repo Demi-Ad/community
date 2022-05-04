@@ -47,28 +47,29 @@ public class PostController {
         if (bindingResult.hasErrors()) {
             return "post/postCreateForm";
         }
-        Long postId = postService.save(postRequestDto, accountDetail.getAccount().getId());
+        Long postId = postService.save(postRequestDto, accountDetail.getAccount());
         redirectAttributes.addAttribute("id", postId);
         return "redirect:/post/{id}";
     }
 
     @PostMapping("/post/{id}/delete")
+    @PreAuthorize("@authorizeCheckUtil.postAuthorizedCheck(#postId)")
     public String deletePost(@PathVariable("id") Long postId) {
         postService.deletePost(postId);
         return "redirect:/";
     }
 
     @GetMapping("/post/{id}/edite")
-    @PreAuthorize("@authorizeCheckUtil.check(#postId,#accountDetail.account.id)")
-    public String editePostForm(@PathVariable("id") Long postId, Model model, @AuthenticationPrincipal AccountDetail accountDetail) {
+    @PreAuthorize("@authorizeCheckUtil.postAuthorizedCheck(#postId)")
+    public String editePostForm(@PathVariable("id") Long postId, Model model) {
         PostRequestDto postRequestDto = postService.getEditPostForm(postId);
         model.addAttribute("post", postRequestDto);
         return "post/postEditForm";
     }
 
     @PostMapping("/post/{id}/edite")
-    @PreAuthorize("@authorizeCheckUtil.check(#postId,#accountDetail.account.id)")
-    public String editPost(@PathVariable("id") Long postId, @ModelAttribute("post") PostRequestDto postRequestDto, @AuthenticationPrincipal AccountDetail accountDetail) {
+    @PreAuthorize("@authorizeCheckUtil.postAuthorizedCheck(#postId)")
+    public String editPost(@PathVariable("id") Long postId, @ModelAttribute("post") PostRequestDto postRequestDto) {
         postService.editPost(postRequestDto, postId);
         return "redirect:/post/{id}";
     }
