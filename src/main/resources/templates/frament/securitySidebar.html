@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<th:block th:fragment="security(active)">
+
+    <div class="col-2">
+        <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
+            <ul class="nav nav-pills flex-column mb-auto">
+                <li>
+                    <a class="nav-link link-dark" th:classappend="${active == 'changeInformation'} ? active : ''"
+                       th:href="@{/changeInformation}">
+                        <i class="bi bi-person-plus me-3"></i>
+                        회원정보 수정
+                    </a>
+                </li>
+
+                <li>
+                    <a class="nav-link link-dark" href="#"
+                       th:classappend="${active == 'chagnePassword'} ? active : ''">
+                        <i class="bi bi-check me-3"></i>
+                        비밀번호 변경
+                    </a>
+                </li>
+
+                <li>
+                    <a class="nav-link link-dark" href="#" th:classappend="${active == 'secession'} ? active : ''">
+                        <i class="bi bi-person-x-fill me-3"></i>
+                        회원탈퇴
+                    </a>
+                </li>
+            </ul>
+
+            <hr>
+
+        </div>
+    </div>
+</th:block>
+</body>
+</html>

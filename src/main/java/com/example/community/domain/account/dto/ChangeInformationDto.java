@@ -16,7 +16,7 @@ public class ChangeInformationDto {
 
     @NotEmpty
     @NotNull
-    @Size(min = 2, message = "2글자 이상")
+    @Size(min = 2, max = 10)
     private String nickname;
     private MultipartFile profile;
 }

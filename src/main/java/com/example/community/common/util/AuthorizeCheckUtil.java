@@ -10,8 +10,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Component
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -32,20 +30,6 @@ public class AuthorizeCheckUtil {
         AccountDetail accountDetail = (AccountDetail) authentication.getPrincipal();
 
         return post.isCreatedUser(accountDetail.getAccount());
-    }
-
-    public boolean check(HttpServletRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (isNotLoginUser(authentication))
-            return false;
-
-        AccountDetail accountDetail = (AccountDetail) authentication.getPrincipal();
-
-        String[] split = request.getRequestURI().split("/");
-        Long id = Long.parseLong(split[split.length - 1]);
-
-        return accountDetail.getAccount().getId().equals(id);
-
     }
 
     public boolean check(AccountDetail accountDetail, Long id) {
