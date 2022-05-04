@@ -14,9 +14,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.io.Serializable;
 
 @Component
-public class SuccessUrlHandlerCustom implements AuthenticationSuccessHandler {
+public class SuccessUrlHandlerCustom implements AuthenticationSuccessHandler, Serializable {
 
     private final RequestCache requestCache = new HttpSessionRequestCache();
 

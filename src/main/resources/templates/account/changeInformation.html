@@ -15,7 +15,7 @@
     <th:block th:replace="frament/header::header"/>
     <div class="row">
 
-        <th:block th:replace="frament/sidebar :: side('chagneInfomation',${userId})"/>
+        <th:block th:replace="frament/sidebar :: side('changeInformation',${userId})"/>
 
         <div class="col-9 ms-4">
             <form enctype="multipart/form-data" method="post" th:action th:object="${information}">
@@ -23,9 +23,10 @@
                     <span class="input-group-text" id="basic-addon1">NickName</span>
                     <input aria-describedby="basic-addon1" aria-label="Username" class="form-control" placeholder="Username" th:field="*{nickname}" type="text">
                 </div>
+                <p class="text-danger" th:if="${#fields.hasErrors('nickname')}"> 닉네임은 2글자 이상입력해주세요</p>
 
                 <div class="mb-3">
-                    <label class="form-label" for="formFile">Default file input example</label>
+                    <label class="form-label" for="formFile">프로필 이미지</label>
                     <input accept=".jpg, .png, .jpeg" class="form-control" id="formFile" th:field="*{profile}" type="file">
                 </div>
 
