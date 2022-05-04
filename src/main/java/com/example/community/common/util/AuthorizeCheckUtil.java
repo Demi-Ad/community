@@ -1,9 +1,11 @@
 package com.example.community.common.util;
 
 import com.example.community.config.security.auth.AccountDetail;
+import com.example.community.domain.account.repo.AccountRepository;
 import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.post.repo.PostRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -14,9 +16,11 @@ import javax.servlet.http.HttpServletRequest;
 @Component
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Slf4j
 public class AuthorizeCheckUtil {
 
     private final PostRepository postRepository;
+    private final AccountRepository accountRepository;
 
     public boolean check(Long postId, Long accountId) {
         return postRepository.checkCreateUser(accountId,postId);
@@ -44,6 +48,14 @@ public class AuthorizeCheckUtil {
 
         return accountDetail.getAccount().getId().equals(id);
 
+    }
+
+    public boolean check(AccountDetail accountDetail, Long id) {
+        if (accountDetail == null) {
+            return false;
+        }
+        log.info(accountDetail.getAccount().toString());
+        return accountDetail.getAccount().getId().equals(id);
     }
 
     private boolean isNotLoginUser(Authentication authentication) {

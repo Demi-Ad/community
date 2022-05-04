@@ -26,7 +26,7 @@
                 <th:block th:if="${@authorizeCheckUtil.check(#request)}">
                     <hr>
                     <li>
-                        <a class="nav-link link-dark" href="#" th:classappend="${active == 'chagneInfo'} ? active : ''">
+                        <a class="nav-link link-dark" th:classappend="${active == 'changeInformation'} ? active : ''" th:href="@{/changeInformation/{id}(id=${id})}">
                             <i class="bi bi-person-plus me-3"></i>
                             회원정보 수정
                         </a>
