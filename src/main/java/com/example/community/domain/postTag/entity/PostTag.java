@@ -19,6 +19,7 @@ public class PostTag extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_tag_id")
     private Long id;
 
     @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)

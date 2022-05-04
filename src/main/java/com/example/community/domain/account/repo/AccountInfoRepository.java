@@ -17,6 +17,7 @@ public interface AccountInfoRepository {
         dto.setProfile(rs.getString("profile"));
         dto.setPostWriteCount(rs.getInt("postWriteCount"));
         dto.setCommentWriteCount(rs.getInt("commentWriteCount"));
+        dto.setGuestBookWriteCount(rs.getInt("guestBookWriteCount"));
         return dto;
     }
 }

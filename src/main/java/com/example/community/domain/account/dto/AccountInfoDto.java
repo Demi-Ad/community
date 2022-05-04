@@ -15,14 +15,16 @@ public class AccountInfoDto {
 
     private int postWriteCount;
     private int commentWriteCount;
+    private int guestBookWriteCount;
 
 
-    public AccountInfoDto(String nickname, String email, String profile, int postWriteCount, int commentWriteCount) {
+    public AccountInfoDto(String nickname, String email, String profile, int postWriteCount, int commentWriteCount, int guestBookWriteCount) {
         this.nickname = nickname;
         this.email = email;
         setProfile(profile);
         this.postWriteCount = postWriteCount;
         this.commentWriteCount = commentWriteCount;
+        this.guestBookWriteCount = guestBookWriteCount;
     }
 
 

@@ -17,6 +17,7 @@ public class PostFile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "post_file_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

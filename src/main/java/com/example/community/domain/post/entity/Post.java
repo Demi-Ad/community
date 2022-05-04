@@ -19,6 +19,7 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EntityListeners({PostEntityListener.class})
+@Table(name = "post")
 public class Post extends BaseTimeEntity {
 
     @Id
