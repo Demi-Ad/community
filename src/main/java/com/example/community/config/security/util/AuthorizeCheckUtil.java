@@ -1,4 +1,4 @@
-package com.example.community.common.util;
+package com.example.community.config.security.util;
 
 import com.example.community.common.exceptionSupplier.ExceptionSupplier;
 import com.example.community.config.security.auth.AccountDetail;
@@ -10,7 +10,6 @@ import com.example.community.domain.post.repo.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,8 +22,10 @@ public class AuthorizeCheckUtil {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
+    private final SecurityContextUtil securityContextUtil;
+
     public boolean postAuthorizedCheck(Long postId) {
-        Account account = this.currentContextAccount();
+        Account account = securityContextUtil.currentAccount();
         if (account != null) {
             Post post = postRepository.findById(postId).orElseThrow(ExceptionSupplier::supply400);
             return post.isCreatedUser(account);
@@ -34,16 +35,8 @@ public class AuthorizeCheckUtil {
 
     public boolean commentAuthorizedCheck(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(ExceptionSupplier::supply400);
-        Account account = currentContextAccount();
+        Account account = securityContextUtil.currentAccount();
         return comment.isAuthor(account);
-    }
-
-    private Account currentContextAccount() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof AccountDetail) {
-            return ((AccountDetail) principal).getAccount();
-        }
-        return null;
     }
 
     public boolean isLoginUser(Authentication authentication) {

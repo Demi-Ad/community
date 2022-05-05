@@ -30,8 +30,8 @@
         <a th:href="@{/logout}" th:method="post" class="btn btn-outline-primary me-2">Logout</a>
         <a class="btn btn-outline-info me-3" th:href="@{/changeInformation}">정보 수정</a>
 
-        <a class="btn btn-primary" th:href="@{/info/{id}(id=${#session.getAttribute('userId')})}" th:text="${#session.getAttribute('nickname')}"></a>
-        <img th:src="@{/profile/{img}(img=${#session.getAttribute('profile')})}" alt="profile" class="rounded-circle profile ms-3">
+        <a class="btn btn-primary" th:href="@{/info/{id}(id=${#session.getAttribute('userId')})}" th:text="${@securityContextUtil.currentAccount().nickname}"></a>
+        <img th:src="@{/profile/{img}(img=${@securityContextUtil.currentAccount().profileImg})}" alt="profile" class="rounded-circle profile ms-3">
     </div>
 </header>
 </body>

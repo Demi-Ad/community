@@ -1,7 +1,8 @@
 package com.example.community.domain.comment.service;
 
 import com.example.community.common.exceptionSupplier.ExceptionSupplier;
-import com.example.community.common.util.AccountContext;
+import com.example.community.config.security.util.SecurityContextUtil;
+import com.example.community.config.security.util.exception.SecurityContextNotFoundException;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.comment.dto.CommentEditRequestDto;
 import com.example.community.domain.comment.dto.CommentEditResponseDto;
@@ -23,12 +24,12 @@ import java.util.stream.Collectors;
 @Transactional
 public class CommentService {
     private final CommentRepository commentRepository;
-    private final AccountContext accountContext;
+    private final SecurityContextUtil securityContextUtil;
     private final PostRepository postRepository;
 
     public Long save(CommentRequestDto commentRequestDto) {
         Post post = postRepository.findById(commentRequestDto.getPostId()).orElseThrow(ExceptionSupplier::supply400);
-        Account account = accountContext.getAccount();
+        Account account = securityContextUtil.currentAccount();
         Comment comment = new Comment(commentRequestDto.getCommentContent(), account, post);
 
         if (commentRequestDto.getParentCommentId() != null) {

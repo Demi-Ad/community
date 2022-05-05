@@ -2,7 +2,7 @@ package com.example.community.domain.post.service;
 
 import com.example.community.common.component.Pagination;
 import com.example.community.common.exceptionSupplier.ExceptionSupplier;
-import com.example.community.common.util.AuthorizeCheckUtil;
+import com.example.community.config.security.util.AuthorizeCheckUtil;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
 import com.example.community.domain.comment.service.CommentService;

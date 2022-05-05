@@ -1,13 +1,11 @@
 package com.example.community.config.mvcconfig;
 
-import com.example.community.config.mvcconfig.interceptor.ChangeInformationInterceptor;
 import com.example.community.domain.post.resolver.PostSearchParamArgResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -21,12 +19,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     private final String profileLocation;
     private final String postImgLocation;
-    private final ChangeInformationInterceptor changeInformationInterceptor;
     @Autowired
-    public WebMvcConfig(@Value("${static.profile.resource-location}") String profileLocation, @Value("${static.postImg.resource-location}") String postImgLocation, ChangeInformationInterceptor changeInformationInterceptor) {
+    public WebMvcConfig(@Value("${static.profile.resource-location}") String profileLocation, @Value("${static.postImg.resource-location}") String postImgLocation) {
         this.profileLocation = profileLocation;
         this.postImgLocation = postImgLocation;
-        this.changeInformationInterceptor = changeInformationInterceptor;
     }
 
     @Override
@@ -45,8 +41,4 @@ public class WebMvcConfig implements WebMvcConfigurer {
         resolvers.add(new PostSearchParamArgResolver());
     }
 
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(changeInformationInterceptor).addPathPatterns("/changeInformation/**");
-    }
 }

@@ -25,27 +25,10 @@ public class SuccessUrlHandlerCustom implements AuthenticationSuccessHandler, Se
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
-        AccountDetail accountDetail = (AccountDetail) authentication.getPrincipal();
-        HttpSession session = request.getSession();
-        sessionSetProfileAndNickname(accountDetail,session);
-
         if(savedRequest != null) {
             response.sendRedirect(savedRequest.getRedirectUrl());
         } else {
             response.sendRedirect("/");
         }
-    }
-
-    private void sessionSetProfileAndNickname(AccountDetail accountDetail, HttpSession session) {
-        String profileImg = accountDetail.getAccount().getProfileImg();
-
-        if (StringUtils.hasText(profileImg)) {
-            session.setAttribute("profile",profileImg);
-        } else {
-            session.setAttribute("profile","person.png");
-        }
-        session.setAttribute("nickname", accountDetail.getAccount().getNickname());
-        session.setAttribute("userId",accountDetail.getAccount().getId());
-
     }
 }
