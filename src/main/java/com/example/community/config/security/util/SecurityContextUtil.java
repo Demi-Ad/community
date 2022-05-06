@@ -1,14 +1,23 @@
 package com.example.community.config.security.util;
 
 import com.example.community.config.security.auth.AccountDetail;
-import com.example.community.config.security.util.exception.SecurityContextNotFoundException;
 import com.example.community.domain.account.entity.Account;
-import org.springframework.security.core.context.SecurityContext;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
+@RequiredArgsConstructor
 public class SecurityContextUtil {
+
+    private final AuthenticationManager authenticationManager;
 
     public Account currentAccount() {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -16,7 +25,17 @@ public class SecurityContextUtil {
         if (principal instanceof AccountDetail) {
             return ((AccountDetail) principal).getAccount();
         }
-        throw new SecurityContextNotFoundException();
+        return null;
+    }
+
+    public void anonymousAuthentication() {
+        List<SimpleGrantedAuthority> role_anonymous = List.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS"));
+        AnonymousAuthenticationToken anonymousAuthenticationToken = new AnonymousAuthenticationToken("2316", "anonymousUser",role_anonymous);
+        Authentication authenticate = authenticationManager.authenticate(anonymousAuthenticationToken);
+        SecurityContextImpl securityContext = new SecurityContextImpl(authenticate);
+
+        SecurityContextHolder.clearContext();
+        SecurityContextHolder.setContext(securityContext);
     }
 
 }

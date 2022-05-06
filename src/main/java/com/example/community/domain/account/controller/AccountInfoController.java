@@ -30,7 +30,7 @@ public class AccountInfoController {
     private final GuestBookService guestBookService;
 
 
-    @GetMapping("/info/{id}")
+    @GetMapping("/info/{id:^0{0}[1-9]+}")
     public String accountInfoForm(@PathVariable("id") Long userId, Model model) {
         AccountInfoDetailDto accountInfo = accountInfoService.createAccountInfo(userId);
 
@@ -39,7 +39,7 @@ public class AccountInfoController {
         return "account/accountInfo";
     }
 
-    @GetMapping("/guestBook/{id}")
+    @GetMapping("/guestBook/{id:^0{0}[1-9]+}")
     public String guestBook(@PathVariable("id") Long ownerId, @PageableDefault() Pageable pageable, Model model) {
         AccountInfoBasicDto accountInfoBasicDto = accountInfoService.projectionAccountInfo(ownerId);
         Pagination<GuestBookResponseDto> page = guestBookService.listGuestBook(ownerId, pageable);
@@ -50,7 +50,7 @@ public class AccountInfoController {
         return "account/guestBook";
     }
 
-    @PostMapping("/guestBook/{id}")
+    @PostMapping("/guestBook/{id:^0{0}[1-9]+}")
     public String guestBookSave(@ModelAttribute("content") String content,
                                 @PathVariable("id") Long ownerId,
                                 @AuthenticationPrincipal AccountDetail accountDetail) {
@@ -58,7 +58,7 @@ public class AccountInfoController {
         return "redirect:/guestBook/{id}";
     }
 
-    @PostMapping("/guestBook/delete/{id}")
+    @PostMapping("/guestBook/delete/{id:^0{0}[1-9]+}")
     @PreAuthorize("@guestBookService.isOwner(#guestBookId, #accountDetail)")
     public String guestBookDelete(@PathVariable("id") Long guestBookId, @AuthenticationPrincipal AccountDetail accountDetail, RedirectAttributes redirectAttributes) {
         Long ownerId = guestBookService.delete(guestBookId);

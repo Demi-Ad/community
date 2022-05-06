@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <th:block th:replace="frament/head::head"/>
+</head>
+<body>
+<div class="container-fluid p-3">
+    <th:block th:replace="frament/header::header"/>
+    <div class="row">
+        <th:block th:replace="frament/securitySidebar :: security('secession')"/>
+        <div class="col-6 offset-1">
+            <h4>회원탈퇴</h4>
+            <p>작성하신 모든 데이터는 삭제됩니다</p>
+            <form method="post" th:action th:object="${secessionDto}">
+
+                <div class="form-check">
+                    <input class="form-check-input" id="flexCheckDefault" required th:field="*{allDeleteCheck}" type="checkbox">
+                    <label class="form-check-label" for="flexCheckDefault">작성한 모든 글을 삭제함에 동의 합니다</label>
+                    <p th:errors="*{allDeleteCheck}"></p>
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">회원 탈퇴 확인</span>
+                    <input aria-describedby="basic-addon1" aria-label="Username" class="form-control" placeholder="가입시 입력한 Email을 입력해주세요" required th:field="*{emailConfirm}" type="email">
+                    <p th:errors="*{emailConfirm}"></p>
+                </div>
+
+                <button class="btn btn-danger" id="secessionBtn">회원탈퇴</button>
+            </form>
+        </div>
+    </div>
+
+</div>
+<script crossOrigin="anonymous"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+</body>
+</html>

@@ -2,7 +2,6 @@ package com.example.community.domain.comment.service;
 
 import com.example.community.common.exceptionSupplier.ExceptionSupplier;
 import com.example.community.config.security.util.SecurityContextUtil;
-import com.example.community.config.security.util.exception.SecurityContextNotFoundException;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.comment.dto.CommentEditRequestDto;
 import com.example.community.domain.comment.dto.CommentEditResponseDto;

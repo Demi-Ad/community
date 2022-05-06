@@ -34,6 +34,10 @@ public class PostLike {
     @CreatedDate
     private LocalDateTime likedAt;
 
+    public void accountNull() {
+        this.account = null;
+    }
+
     public PostLike(Post post, Account account) {
         this.post = post;
         this.account = account;

@@ -1,5 +1,6 @@
 package com.example.community.domain.postLike.repo;
 
+import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.postLike.entity.PostLike;
 import com.example.community.domain.postLike.vo.LikeVo;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -21,5 +22,6 @@ public interface PostLikeRepository extends JpaRepository<PostLike, Long> {
 
     Optional<PostLike> findByPost_IdAndAccount_Id(Long postId, Long accountId);
 
+    List<PostLike> findByAccount(Account account);
 
 }

@@ -6,7 +6,6 @@ import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.post.repo.PostRepository;
 import com.example.community.domain.postTag.entity.PostTag;
 import com.example.community.domain.postTag.entity.Tag;
-import com.example.community.domain.postTag.repo.PostTagRepository;
 import com.example.community.domain.postTag.repo.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationListener;
@@ -28,7 +27,6 @@ public class ApplicationStartListener implements ApplicationListener<ContextRefr
 
     private final PostRepository postRepository;
 
-    private final PostTagRepository postTagRepository;
 
     private final TagRepository tagRepository;
 

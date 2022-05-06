@@ -39,10 +39,10 @@ public class Post extends BaseTimeEntity {
     @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "account_fk"))
     private Account account;
 
-    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     private final List<PostTag> postTagList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     private final List<PostFile> postFiles = new ArrayList<>();
 
     public Post(String title, String content) {

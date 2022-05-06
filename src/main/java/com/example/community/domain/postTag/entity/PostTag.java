@@ -22,7 +22,7 @@ public class PostTag extends BaseTimeEntity {
     @Column(name = "post_tag_id")
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.PERSIST,fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tag_id")
     private Tag tag;
 

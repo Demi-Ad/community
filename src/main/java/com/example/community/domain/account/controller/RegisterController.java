@@ -1,8 +1,8 @@
 package com.example.community.domain.account.controller;
 
-import com.example.community.domain.account.common.DuplicateEmailValidator;
 import com.example.community.domain.account.dto.RegisterDto;
 import com.example.community.domain.account.service.AccountRegisterService;
+import com.example.community.domain.account.validator.DuplicateEmailValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -13,10 +13,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -49,7 +47,7 @@ public class RegisterController {
     }
 
     @GetMapping("/guide")
-    public String guideForm(HttpSession session, Model model, HttpServletResponse response) throws IOException {
+    public String guideForm(HttpSession session, Model model) {
         RegisterDto dto = (RegisterDto) session.getAttribute("confirm");
 
         if (dto == null) {
