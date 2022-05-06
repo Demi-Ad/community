@@ -4,6 +4,7 @@ import com.example.community.domain.account.dto.AccountInfoDetailDto;
 import com.example.community.domain.account.repo.AccountInfoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -29,8 +30,12 @@ public class MySqlAccountInfoRepository implements AccountInfoRepository {
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
         mapSqlParameterSource.addValue("userId", userId);
-        AccountInfoDetailDto accountInfoDetailDto = jdbcTemplate.queryForObject(sql, mapSqlParameterSource, this::rowMapping);
-        return Optional.ofNullable(accountInfoDetailDto);
+        try {
+            AccountInfoDetailDto accountInfoDetailDto = jdbcTemplate.queryForObject(sql, mapSqlParameterSource, this::rowMapping);
+            return Optional.ofNullable(accountInfoDetailDto);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
 
     }
 }
