@@ -25,6 +25,7 @@ public class RegisterDto implements Serializable {
 
     @NotEmpty
     @NotNull
+    @Size(min = 4)
     private String password;
 
 

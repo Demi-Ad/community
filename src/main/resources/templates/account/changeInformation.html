@@ -16,8 +16,8 @@
     <div class="row">
 
         <th:block th:replace="frament/securitySidebar :: security('changeInformation')"/>
-
-        <div class="col-9 ms-4">
+        <div class="col-6 offset-1">
+            <h4 class="mb-1">회원정보 변경</h4>
             <form enctype="multipart/form-data" method="post" th:action th:object="${information}">
                 <div class="input-group mb-3">
                     <span class="input-group-text" id="basic-addon1">NickName</span>

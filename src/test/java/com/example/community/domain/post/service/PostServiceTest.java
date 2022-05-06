@@ -36,7 +36,7 @@ class PostServiceTest {
         Account account = new Account("test@test.com","AAA",null,"AAA");
         Long id = accountRepository.save(account).getId();
 
-        Long postId = postService.save(postRequestDto, id);
+        Long postId = postService.save(postRequestDto, account);
 
         em.flush();
         em.clear();

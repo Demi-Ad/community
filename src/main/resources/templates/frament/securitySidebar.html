@@ -19,8 +19,8 @@
                 </li>
 
                 <li>
-                    <a class="nav-link link-dark" href="#"
-                       th:classappend="${active == 'chagnePassword'} ? active : ''">
+                    <a class="nav-link link-dark" th:classappend="${active == 'changePassword'} ? active : ''"
+                       th:href="@{/changePassword}">
                         <i class="bi bi-check me-3"></i>
                         비밀번호 변경
                     </a>

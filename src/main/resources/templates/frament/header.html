@@ -26,12 +26,12 @@
         <a th:href="@{/register}" class="btn btn-primary">Sign-up</a>
     </div>
 
-    <div class="col-md-3 text-end" sec:authorize="isAuthenticated()">
+    <div class="col-md-3 text-end" sec:authorize="isAuthenticated()" th:with="account = ${@securityContextUtil.currentAccount()}">
         <a th:href="@{/logout}" th:method="post" class="btn btn-outline-primary me-2">Logout</a>
         <a class="btn btn-outline-info me-3" th:href="@{/changeInformation}">정보 수정</a>
 
-        <a class="btn btn-primary" th:href="@{/info/{id}(id=${#session.getAttribute('userId')})}" th:text="${@securityContextUtil.currentAccount().nickname}"></a>
-        <img th:src="@{/profile/{img}(img=${@securityContextUtil.currentAccount().profileImg})}" alt="profile" class="rounded-circle profile ms-3">
+        <a class="btn btn-primary" th:href="@{/info/{id}(id=${account.id})}" th:text="${account.nickname}"></a>
+        <img alt="profile" class="rounded-circle profile ms-3" th:src="@{/profile/{img}(img=${account.profileImg})}">
     </div>
 </header>
 </body>
