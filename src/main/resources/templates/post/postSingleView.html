@@ -90,7 +90,7 @@
                         <div class="mb-3" th:each="comment : ${post.commentResponseDtoList}">
                             <div class="d-flex mb-3">
                                 <div class="flex-shrink-0">
-                                    <img alt="..." class="rounded-circle profile-comment"
+                                    <img alt="..." class="rounded-circle profile"
                                          th:src="@{/profile/{imgPath}(imgPath=${comment.authorProfile})}">
                                 </div>
                                 <div class="ms-3">
