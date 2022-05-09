@@ -1,6 +1,5 @@
 package com.example.community.domain.notification.handler;
 
-import com.example.community.domain.account.repo.AccountRepository;
 import com.example.community.domain.notification.entity.Notification;
 import com.example.community.domain.notification.repo.NotificationRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class NotificationEventHandler {
 
     private final NotificationRepository notificationRepository;
-    private final AccountRepository accountRepository;
 
     @EventListener
     public void notificationSave(Notification notification) {

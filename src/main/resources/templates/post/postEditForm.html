@@ -3,13 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <th:block th:replace="frament/head::head"/>
-    <th:block th:replace="frament/postCreateCdn::cdn"/>
+    <th:block th:replace="fragment/head::head"/>
 
 </head>
 <body>
 <div class="container-fluid p-3">
-    <th:block th:replace="frament/header::header"/>
+    <th:block th:replace="fragment/header::header"/>
     <div class="row">
         <div class="col-8 offset-2">
             <form method="post" th:action th:object="${post}" id="form" enctype="multipart/form-data">
@@ -36,118 +35,6 @@
         </div>
     </div>
 </div>
-<script th:inline="javascript">
-    let tag = []
-    window.addEventListener("load",function () {
-        document.getElementById("form").addEventListener("submit",function (e) {
-            e.preventDefault()
-            const form = document.getElementById("form")
-            const formData = new FormData(form)
-            const tagList = []
-
-            document.querySelectorAll(".tag").forEach(elem => {
-                tagList.push(elem.innerText)
-            })
-
-            const tagStr = tagList.join(",")
-
-            formData.append("tagJoiningStr",tagStr)
-            fetch("",{
-                method: "POST",
-                body: formData
-            }).then(res => {
-                if (res.ok) {
-                    window.location.href = res.url
-                } else {
-                    alert("작성중에 오류가 발생했습니다")
-                }
-            }).catch(reason => {
-                console.log(reason)
-            })
-        })
-    })
-
-    window.addEventListener("load",function () {
-        let tag = []
-        if ([[${post.tagJoiningStr}]] === undefined || [[${post.tagJoiningStr}]] === null || [[${post.tagJoiningStr}]] === "")
-            return;
-
-        const tagList = [[${post.tagJoiningStr}]].split(",")
-        console.log(tagList)
-        if (tagList.length === 0)
-            return;
-        tagList.forEach(function (item) {
-            const tagList = document.getElementById("tagShow")
-            tag.push(item.split("#")[1])
-            const tagItem = item;
-
-            const spanOuter = document.createElement("span")
-            const spanInner = document.createElement("span")
-
-            spanInner.innerText = tagItem;
-            spanInner.className = "fs-5 tag"
-            const spanInnerDeleteBtn = document.createElement("span")
-            spanInnerDeleteBtn.innerHTML = "<i class=\"bi bi-x\"></i>"
-            spanInnerDeleteBtn.className = "ms-2 text-black fs-5"
-
-            spanInnerDeleteBtn.addEventListener("click",function () {
-                tagList.removeChild(spanOuter)
-                tag = [...tag.filter(value => value !== tagItem)]
-            })
-            spanOuter.appendChild(spanInner)
-            spanOuter.appendChild(spanInnerDeleteBtn)
-            spanOuter.className = "me-2 bg-info rounded-3 text-white bg-opacity-50 me-1 ps-2 pe-2"
-            tagList.appendChild(spanOuter)
-        })
-    })
-
-    document.getElementById("tagInput").addEventListener("keypress", function (key) {
-        if (key.key === "Enter") {
-            const tagInput = document.getElementById("tagInput")
-
-            if (tagInput.value === "")
-                return
-
-            const tagList = document.getElementById("tagShow")
-
-            if (tag.includes(tagInput.value)) {
-                alert("중복된 태그")
-                tagInput.value = ""
-                return;
-            }
-            tag.push(tagInput.value)
-
-            if (tagList.childNodes.length >= 6) {
-                alert("태그는 5개까지 가능합니다")
-                return;
-            }
-
-            const tagItem = tagInput.value;
-
-            const spanOuter = document.createElement("span")
-            const spanInner = document.createElement("span")
-
-            spanInner.innerText = "#" + tagItem;
-            spanInner.className = "fs-5 tag"
-            const spanInnerDeleteBtn = document.createElement("span")
-            spanInnerDeleteBtn.innerHTML = "<i class=\"bi bi-x\"></i>"
-            spanInnerDeleteBtn.className = "ms-2 text-black fs-5"
-
-            spanInnerDeleteBtn.addEventListener("click",function () {
-                tagList.removeChild(spanOuter)
-                tag = [...tag.filter(value => value !== tagItem)]
-            })
-            spanOuter.appendChild(spanInner)
-            spanOuter.appendChild(spanInnerDeleteBtn)
-            spanOuter.className = "me-2 bg-info rounded-3 text-white bg-opacity-50 me-1 ps-2 pe-2"
-            tagList.appendChild(spanOuter)
-
-            tagInput.value = ""
-
-            tagInput.focus()
-        }
-    })
-</script>
-<script th:src="@{/js/ckeditorInit.js}"></script>
+<th:block th:replace="/fragment/post/editScrpitFragment :: scrpit(${post})"/>
 </body>
 </html>

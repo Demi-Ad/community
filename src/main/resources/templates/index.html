@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:sec="http://www.thymeleaf.org/extras/spring-security" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Title</title>
-    <th:block th:replace="frament/head :: head"/>
+    <th:block th:replace="fragment/head :: head"/>
     <style>
         body {
             overflow-x: hidden;
@@ -11,7 +11,7 @@
 </head>
 <body>
 <div class="container-fluid p-3">
-    <th:block th:replace="frament/header::header"/>
+    <th:block th:replace="fragment/header::header"/>
 
     <div class="row mb-5 p-3">
         <form action="/search" class="col-6 offset-3" method="get">
@@ -128,7 +128,7 @@
 
 </div>
 
-<th:block th:replace="frament/head :: search"></th:block>
+<th:block th:replace="fragment/head :: search"></th:block>
 
 </body>
 </html>

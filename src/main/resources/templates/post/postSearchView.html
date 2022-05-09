@@ -4,11 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <th:block th:replace="frament/head :: head"/>
+    <th:block th:replace="fragment/head :: head"/>
     <style>
-        .p-normal {
-            margin-bottom: 0;
-        }
         body {
             overflow-x: hidden;
         }
@@ -16,7 +13,7 @@
 </head>
 <body>
 <div class="container-fluid p-3">
-    <th:block th:replace="frament/header::header"/>
+    <th:block th:replace="fragment/header::header"/>
 
     <div class="row mb-5 p-3">
         <form action="/search" class="col-6 offset-3" method="get">
@@ -24,19 +21,21 @@
                 <div class="input-group">
                     <div class="input-group-btn search-panel dropstart">
                         <button class="btn btn-default dropdown-toggle" data-bs-toggle="dropdown" type="button">
-                            <span id="search_concept" th:text="${searchedParam.param.description}">제목</span>
+                            <span id="search_concept">제목</span>
                         </button>
                         <ul class="dropdown-menu me-3" role="menu">
                             <li th:each="searchParam : ${T(com.example.community.domain.post.common.SearchParam).values()}">
-                                <a class="dropdown-item" th:data-value="${searchParam.name()}" th:text="${searchParam.description}"></a>
+                                <a class="dropdown-item" th:data-value="${searchParam.name()}"
+                                   th:text="${searchParam.description}"></a>
                             </li>
                         </ul>
                     </div>
                     <input id="search_param" name="param" type="hidden" value="title">
-                    <input class="form-control rounded" name="keyword" placeholder="Search term..." th:value="${searchedParam.keyword}" type="text">
+                    <input autocomplete="off" class="form-control rounded" id="search_input" name="keyword"
+                           placeholder="Search term..." type="text">
 
                     <span class="input-group-btn">
-                    <button class="btn btn-default" type="button">
+                    <button class="btn btn-default" type="submit">
                         <span class="glyphicon glyphicon-search">
                             <i class="bi bi-search"></i>
                         </span>
@@ -45,7 +44,16 @@
                 </div>
             </div>
         </form>
+        <div class="ms-1 row" id="search_result_form" style="display: none">
+            <div class="col-6 offset-3">
+                <div class="d-flex flex-column border-2 rounded-2 mt-3 bg-white shadow" id="search_result">
+
+                </div>
+            </div>
+        </div>
+
     </div>
+
     <div class="col-6 offset-3">
 
         <th:block th:each="post : ${pagingPost.getDataList()}">
@@ -114,7 +122,7 @@
 </div>
 
 
-<th:block th:replace="frament/head :: search"></th:block>
+<th:block th:replace="fragment/head :: search"></th:block>
 
 </body>
 </html>

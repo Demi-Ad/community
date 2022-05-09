@@ -49,10 +49,6 @@ public class Notification {
         this.content = createContent();
     }
 
-    public static Notification emptyNotification() {
-        return new Notification();
-    }
-
     private String createContent() {
         StringBuilder stringBuilder = new StringBuilder();
         switch (eventType) {
