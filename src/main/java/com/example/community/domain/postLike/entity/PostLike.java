@@ -1,6 +1,7 @@
 package com.example.community.domain.postLike.entity;
 
 import com.example.community.domain.account.entity.Account;
+import com.example.community.domain.notification.listner.NotificationTargetEntityListener;
 import com.example.community.domain.post.entity.Post;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners({AuditingEntityListener.class, NotificationTargetEntityListener.class})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "post_like")
@@ -23,7 +24,7 @@ public class PostLike {
     @Column(name = "post_like_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 

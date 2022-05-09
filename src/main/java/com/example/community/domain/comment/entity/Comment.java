@@ -1,6 +1,7 @@
 package com.example.community.domain.comment.entity;
 
 import com.example.community.domain.account.entity.Account;
+import com.example.community.domain.notification.listner.NotificationTargetEntityListener;
 import com.example.community.domain.post.entity.Post;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import java.util.Set;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners({AuditingEntityListener.class, NotificationTargetEntityListener.class})
 @Table(name = "comment")
 public class Comment {
 

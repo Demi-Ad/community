@@ -1,6 +1,7 @@
 package com.example.community.domain.guestBook.entity;
 
 import com.example.community.domain.account.entity.Account;
+import com.example.community.domain.notification.listner.NotificationTargetEntityListener;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,7 +13,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@EntityListeners(AuditingEntityListener.class)
+@EntityListeners({AuditingEntityListener.class, NotificationTargetEntityListener.class})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "guest_book")

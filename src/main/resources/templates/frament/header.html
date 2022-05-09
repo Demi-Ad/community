@@ -27,12 +27,60 @@
     </div>
 
     <div class="col-md-3 text-end" sec:authorize="isAuthenticated()" th:with="account = ${@securityContextUtil.currentAccount()}">
+        <button aria-controls="offcanvasRight" class="btn btn-success" data-bs-target="#offcanvasRight"
+                data-bs-toggle="offcanvas"
+                th:disabled="${notiCount == 0}" th:href="@{/notification}" th:with= "notiCount = ${@notificationService.countNotification()}">
+            <th:block th:text="${notiCount}"></th:block>
+            <i class="bi bi-bell" th:if="${notiCount == 0}"></i>
+            <i class="bi bi-bell-fill" th:if="${notiCount > 0}"></i>
+        </button>
+
         <a th:href="@{/logout}" th:method="post" class="btn btn-outline-primary me-2">Logout</a>
         <a class="btn btn-outline-info me-3" th:href="@{/changeInformation}">정보 수정</a>
 
         <a class="btn btn-primary" th:href="@{/info/{id}(id=${account.id})}" th:text="${account.nickname}"></a>
         <img alt="profile" class="rounded-circle profile ms-3" th:src="@{/profile/{img}(img=${account.profileImg})}">
     </div>
+
+    <div aria-labelledby="offcanvasRightLabel" class="offcanvas offcanvas-end" id="offcanvasRight" tabindex="-1">
+        <div class="offcanvas-header">
+            <h5 id="offcanvasRightLabel">Notification</h5>
+            <button aria-label="Close" class="btn-close text-reset" data-bs-dismiss="offcanvas" type="button"></button>
+        </div>
+        <form class="d-flex justify-content-center" th:action="@{/notification/removeAll}" th:method="post">
+            <button class="btn btn-outline-danger m-3">모두삭제</button>
+            <input th:name="${_csrf.headerName}" th:value="${_csrf.token}" type="hidden">
+        </form>
+
+        <div class="offcanvas-body">
+            <div class="d-flex flex-column" id="offcanvas-body">
+
+            </div>
+        </div>
+    </div>
+
+    <script crossOrigin="anonymous"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+
+    <script defer>
+        function createHtml(data) {
+            return `<div class="alert alert-primary mb-3 d-flex justify-content-xl-between" role="alert">
+                    <a href="${data.uri}">${data.content}</a>
+                </div> `
+        }
+
+        const body = document.getElementById("offcanvas-body");
+        document.getElementById("offcanvasRight").addEventListener("show.bs.offcanvas",() => {
+            fetch("/notification")
+                .then(res => res.json())
+                .then(json => json.data)
+                .then(data => data.map(value => createHtml(value)))
+                .then(data => body.innerHTML = data.join(""))
+        })
+
+    </script>
 </header>
 </body>
 </html>

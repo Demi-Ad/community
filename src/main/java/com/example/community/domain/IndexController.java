@@ -1,4 +1,4 @@
-package com.example.community.domain.post.controller;
+package com.example.community.domain;
 
 import com.example.community.common.component.Pagination;
 import com.example.community.domain.post.dto.PostResponseDto;
@@ -24,8 +24,8 @@ public class IndexController {
     @GetMapping
     public String index(Model model, @PageableDefault(sort={"createdAt"},direction = Sort.Direction.DESC) Pageable pageable) {
         Pagination<PostResponseDto> pagingPost = postService.listPost(pageable);
-        log.info("pagination = {}",pagingPost);
         model.addAttribute("pagingPost",pagingPost);
+
         return "index";
     }
 }
