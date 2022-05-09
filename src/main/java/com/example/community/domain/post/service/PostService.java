@@ -19,6 +19,7 @@ import com.example.community.domain.postLike.vo.LikeVo;
 import com.example.community.domain.postTag.dto.TagDto;
 import com.example.community.domain.postTag.entity.PostTag;
 import com.example.community.domain.postTag.entity.Tag;
+import com.example.community.domain.postTag.repo.PostTagRepository;
 import com.example.community.domain.postTag.repo.TagRepository;
 import com.example.community.domain.postTag.service.TagService;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +56,8 @@ public class PostService {
 
     private final PostFileService postFileService;
 
+    private final PostTagRepository postTagRepository;
+
     public Long save(PostRequestDto postRequestDto, Account account) {
         List<String> tagStrList = List.of(postRequestDto.getTagJoiningStr().split(","));
         List<Tag> tagList = tagService.saveElseFind(tagStrList);
@@ -73,6 +76,7 @@ public class PostService {
         List<Tag> tagList = tagService.saveElseFind(List.of(postRequestDto.getTagJoiningStr().split(",")));
         postSetTag(tagList, post);
         post.edit(postRequestDto.getTitle(), postRequestDto.getContent());
+        postRepository.save(post);
     }
 
     @Transactional(readOnly = true)

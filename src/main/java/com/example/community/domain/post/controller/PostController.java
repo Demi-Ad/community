@@ -70,6 +70,7 @@ public class PostController {
     @PostMapping("/post/{id}/edite")
     @PreAuthorize("@authorizeCheckUtil.postAuthorizedCheck(#postId)")
     public String editPost(@PathVariable("id") Long postId, @ModelAttribute("post") PostRequestDto postRequestDto) {
+        log.info("dto = {}",postRequestDto);
         postService.editPost(postRequestDto, postId);
         return "redirect:/post/{id}";
     }
