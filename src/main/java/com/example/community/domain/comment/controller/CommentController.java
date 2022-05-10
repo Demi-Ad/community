@@ -21,6 +21,7 @@ public class CommentController {
 
 
     @PostMapping("/comment")
+    @PreAuthorize("isAuthenticated()")
     public String createComment(@ModelAttribute CommentRequestDto commentRequestDto,
                                 RedirectAttributes redirectAttributes) {
 

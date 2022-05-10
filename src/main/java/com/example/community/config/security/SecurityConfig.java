@@ -6,6 +6,7 @@ import com.example.community.config.security.hanlder.SuccessUrlHandlerCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @RequiredArgsConstructor
+@Order(2)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final AccountDetailService accountDetailService;
@@ -24,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SuccessUrlHandlerCustom successUrlHandlerCustom;
     private final FailureHandlerCustom failureHandlerCustom;
-    private final String[] WHITE_LIST = {"/images/**", "/js/**", "/css/**","/profile/**","/favicon.ico"};
+    private final String[] WHITE_LIST = {"/images/**", "/js/**", "/css/**", "/profile/**", "/favicon.ico"};
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -33,15 +35,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .regexMatchers(HttpMethod.GET, "/post/\\d+$", "/info/\\d+$","/guestBook/\\d+$")
-                .permitAll()
-                .regexMatchers(HttpMethod.POST, "/guestBook/\\d+$")
-                .authenticated()
-                .antMatchers("/", "/sign", "/register/**", "/logout", "/login/**","/image/upload","/","/download/**","/search/**","/forgotPassword")
-                .permitAll()
+        http.antMatcher("/**")
+                .authorizeRequests()
+                .regexMatchers(HttpMethod.GET, "/post/\\d+$", "/info/\\d+$", "/guestBook/\\d+$").permitAll()
+                .regexMatchers(HttpMethod.POST, "/guestBook/\\d+$").authenticated()
+                .antMatchers("/", "/sign", "/register/**", "/logout", "/login/**", "/image/upload", "/download/**", "/search/**", "/forgotPassword").permitAll()
+                .antMatchers("/post/**").authenticated()
                 .antMatchers(WHITE_LIST).permitAll()
-                .anyRequest().authenticated()
+                .antMatchers("/notification/**").authenticated()
                 .and()
                 .formLogin()
                 .loginPage("/login")
@@ -51,9 +52,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(failureHandlerCustom)
                 .permitAll();
 
-        http.csrf().ignoringAntMatchers("/image/upload","/forgotPassword");
+        http.csrf().ignoringAntMatchers("/image/upload", "/forgotPassword");
 
     }
+
     @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {

@@ -1,7 +1,10 @@
 package com.example.community.common.lisnter;
 
+import com.example.community.config.security.Role;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
+import com.example.community.domain.admin.entity.Admin;
+import com.example.community.domain.admin.repo.AdminRepository;
 import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.post.repo.PostRepository;
 import com.example.community.domain.postTag.entity.PostTag;
@@ -23,6 +26,7 @@ import java.util.stream.IntStream;
 public class ApplicationStartListener implements ApplicationListener<ContextRefreshedEvent> {
 
     private final AccountRepository accountRepository;
+    private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
 
     private final PostRepository postRepository;
@@ -55,5 +59,14 @@ public class ApplicationStartListener implements ApplicationListener<ContextRefr
                     tagRepository.save(tag);
                     postRepository.save(post);
                 });
+
+        Admin admin = Admin.builder()
+                .adminId("admin")
+                .password(passwordEncoder.encode("admin"))
+                .adminName("admin")
+                .role(Role.ROLE_ADMIN)
+                .build();
+
+        adminRepository.save(admin);
     }
 }
