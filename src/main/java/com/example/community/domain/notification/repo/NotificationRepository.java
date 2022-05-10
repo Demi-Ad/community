@@ -2,6 +2,7 @@ package com.example.community.domain.notification.repo;
 
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.notification.entity.Notification;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,7 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
+
     List<Notification> findByToAccount(Account toAccount);
+
+    List<Notification> findByToAccount(Account toAccount, Sort sort);
 
     @Query("select count(n) from Notification n where n.toAccount = :account")
     long countByToAccount(@Param("account") Account toAccount);

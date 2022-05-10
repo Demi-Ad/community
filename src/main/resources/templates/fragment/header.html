@@ -107,10 +107,24 @@
                     break
             }
 
-            return `<div class="alert alert-secondary mb-3 d-flex justify-content-start" role="alert">
-                    <i class="${iClass}"></i>
-                    <a class="ms-3 text-decoration-none text-black" href="${data.notificationId}">${data.content}</a>
-                </div> `
+            const notifiedDate = new Date(data.notifiedTime)
+            const formatDate = (current_datetime)=>{
+                return current_datetime.getFullYear() + "-" + (current_datetime.getMonth() + 1) + "-" +
+                    current_datetime.getDate() + " " + current_datetime.getHours() + ":" +
+                    current_datetime.getMinutes();
+            }
+
+
+            return `<div class="d-flex flex-column alert alert-secondary">
+                    <div class=" mb-3 d-flex justify-content-start" role="alert">
+                        <i class="${iClass}"></i>
+                        <a class="ms-3 text-decoration-none text-black" href="${data.notificationId}">${data.content}</a>
+                    </div>
+                    <div>
+                        <i class="bi bi-calendar-event"></i>
+                        <span class="mb-0 ms-2 align-self-center">${formatDate(notifiedDate)}</span>
+                    </div>
+                </div>`
         }
 
         const body = document.getElementById("offcanvas-body");

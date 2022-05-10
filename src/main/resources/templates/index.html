@@ -79,14 +79,16 @@
                     <div class="d-flex justify-content-start">
                         <i class="bi bi-pencil">
                             <span>
-                                <a style="font-style: normal" class="ms-2 text-decoration-none fs-5" th:href="@{/info/{id}(id=${post.authorId})}" th:text="${post.author}"></a>
+                                <a class="ms-3 text-decoration-none fs-5" style="font-style: normal" th:href="@{/info/{id}(id=${post.authorId})}" th:text="${post.author}"></a>
                             </span>
                         </i>
                     </div>
-                    <p class="mt-3" th:text="${post.postContent}"></p>
+                    <span class="mt-3">
+                        <i class="bi bi-body-text me-3"></i> [[${post.postContent}]]
+                    </span>
                 </div>
 
-                <div class="mt-2">
+                <div class="mt-4">
                     <div class="d-flex justify-content-between">
                         <i class="bi bi-calendar ms-1">
                             <span class="ms-1" style="font-style: normal" th:text="${#temporals.format(post.createdBy,'yyyy-MM-dd HH:mm')}"></span>

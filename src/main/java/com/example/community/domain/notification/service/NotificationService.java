@@ -7,6 +7,7 @@ import com.example.community.domain.notification.dto.NotificationDto;
 import com.example.community.domain.notification.entity.Notification;
 import com.example.community.domain.notification.repo.NotificationRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,7 +23,7 @@ public class NotificationService {
 
     public List<NotificationDto> notificationList() {
         Account loginAccount = securityContextUtil.currentAccount();
-        return notificationRepository.findByToAccount(loginAccount)
+        return notificationRepository.findByToAccount(loginAccount, Sort.by(Sort.Direction.DESC,"createdAt"))
                 .stream()
                 .map(NotificationDto::new)
                 .collect(Collectors.toList());
