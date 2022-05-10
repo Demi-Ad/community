@@ -6,6 +6,7 @@ import com.example.community.domain.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -18,11 +19,17 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    @GetMapping("/notification")
+    @GetMapping(value = "/notification")
     @ResponseBody
     public ResponseWrapper<NotificationDto> notificationList() {
         List<NotificationDto> notificationList = notificationService.notificationList();
         return ResponseWrapper.of(notificationList);
+    }
+
+    @GetMapping("/notification/{id:^0{0}[1-9]+}")
+    public String notificationRedirect(@PathVariable Long id) {
+        String redirectNotify = notificationService.redirectNotify(id);
+        return "redirect:" + redirectNotify;
     }
 
     @PostMapping("/notification/removeAll")

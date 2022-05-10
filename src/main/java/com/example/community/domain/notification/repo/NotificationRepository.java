@@ -21,6 +21,10 @@ public interface NotificationRepository extends JpaRepository<Notification, Long
     @Query("delete from Notification n where n.toAccount = :account")
     void deleteByToAccount(@Param("account") Account toAccount);
 
+    List<Notification> findByFromAccount(Account fromAccount);
+
+
+
 
 
 }

@@ -7,14 +7,15 @@ import lombok.Data;
 
 @Data
 public class NotificationDto {
-    private Long notificationId;
+
+    private String notificationId;
     private EventType eventType;
     private String content;
 
     private String uri;
 
     public NotificationDto(Notification notification) {
-        this.notificationId = notification.getId();
+        this.notificationId = "/notification/" + notification.getId();
         this.eventType = notification.getEventType();
         this.content = notification.getContent();
         this.uri = notification.getUri();

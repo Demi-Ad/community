@@ -54,7 +54,7 @@
                data-bs-toggle="tooltip"
                th:href="@{/info/{id}(id=${account.id})}"
                th:title="${account.nickname}">
-            <img alt="profile" class="rounded-circle profile ms-3" th:src="@{/profile/{img}(img=${account.profileImg})}">
+            <img alt="profile" class="rounded-circle profile-post ms-3" th:src="@{/profile/{img}(img=${account.profileImg})}">
         </a>
     </div>
 
@@ -77,8 +77,27 @@
 
     <script defer>
         function createHtml(data) {
-            return `<div class="alert alert-primary mb-3 d-flex justify-content-xl-between" role="alert">
-                    <a href="${data.uri}">${data.content}</a>
+            let iClass = ""
+            switch (data.eventType) {
+                case "LIKE_EVENT":
+                    iClass += "bi bi-heart-fill"
+                    break
+                case "COMMENT_EVENT":
+                    iClass += "bi bi-chat"
+                    break
+
+                case "GUEST_BOOK_EVENT":
+                    iClass += "bi bi-pen"
+                    break
+
+                case "RE_REPLY":
+                    iClass += "bi bi-chat-dots"
+                    break
+            }
+
+            return `<div class="alert alert-secondary mb-3 d-flex justify-content-start" role="alert">
+                    <i class="${iClass}"></i>
+                    <a class="ms-3 text-decoration-none text-black" href="${data.notificationId}">${data.content}</a>
                 </div> `
         }
 
