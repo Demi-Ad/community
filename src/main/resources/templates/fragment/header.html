@@ -27,35 +27,47 @@
     </div>
 
     <div class="col-md-3 text-end" sec:authorize="isAuthenticated()" th:with="account = ${@securityContextUtil.currentAccount()}">
+        <div class="d-flex justify-content-end">
 
-        <button aria-controls="offcanvasRight" class="btn btn-success" data-bs-target="#offcanvasRight"
-                data-bs-toggle="offcanvas"
-                th:disabled="${notiCount == 0}" th:href="@{/notification}" th:with= "notiCount = ${@notificationService.countNotification()}">
-            <th:block th:text="${notiCount}"></th:block>
-            <i class="bi bi-bell" th:if="${notiCount == 0}"></i>
-            <i class="bi bi-bell-fill" th:if="${notiCount > 0}"></i>
-        </button>
+            <div class="dropdown me-3">
 
-        <div class="dropdown me-3 ms-3" style="display: inline-block">
-            <button aria-expanded="false" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" id="dropdownMenuButton1" type="button">
-                <i class="bi bi-grid-3x3-gap"></i>
+                <a aria-expanded="false" data-bs-offset="10,20" data-bs-toggle="dropdown" id="dropdownMenuButton1" style="cursor: pointer">
+                    <img alt="profile" class="rounded-circle profile-post ms-3" th:src="@{/profile/{img}(img=${account.profileImg})}">
+                </a>
+
+                <ul aria-labelledby="dropdownMenuButton1" class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+                    <li>
+                        <a class="me-3 dropdown-item" th:href="@{/info/{id}(id=${account.id})}">
+                            <i class="bi bi-person-bounding-box"></i>
+                            <span class="ms-2">Profile</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a class="me-3 dropdown-item" th:href="@{/changeInformation}">
+                            <i class="bi bi-person-lines-fill"></i>
+                            <span class="ms-2">정보 수정</span>
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <a class="me-3 dropdown-item" th:href="@{/logout}" th:method="post">
+                            <i class="bi bi-arrow-down-left-square"></i>
+                            <span class="ms-2">Logout</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <button aria-controls="offcanvasRight" class="btn btn-success" data-bs-target="#offcanvasRight" data-bs-toggle="offcanvas"
+                    style="display: inline"
+                    th:disabled="${notiCount == 0}" th:href="@{/notification}" th:with= "notiCount = ${@notificationService.countNotification()}">
+                <th:block th:text="${notiCount}"></th:block>
+                <i class="bi bi-bell" th:if="${notiCount == 0}"></i>
+                <i class="bi bi-bell-fill" th:if="${notiCount > 0}"></i>
             </button>
-            <ul aria-labelledby="dropdownMenuButton1" class="dropdown-menu">
-                <li>
-                    <a class="me-3 dropdown-item" th:href="@{/changeInformation}">정보 수정</a>
-                </li>
-                <li>
-                    <a class="me-3 dropdown-item" th:href="@{/logout}" th:method="post">Logout</a>
-                </li>
-            </ul>
+
         </div>
 
-        <a data-bs-placement="bottom"
-               data-bs-toggle="tooltip"
-               th:href="@{/info/{id}(id=${account.id})}"
-               th:title="${account.nickname}">
-            <img alt="profile" class="rounded-circle profile-post ms-3" th:src="@{/profile/{img}(img=${account.profileImg})}">
-        </a>
     </div>
 
     <div aria-labelledby="offcanvasRightLabel" class="offcanvas offcanvas-end" id="offcanvasRight" tabindex="-1">
@@ -100,11 +112,6 @@
                     <a class="ms-3 text-decoration-none text-black" href="${data.notificationId}">${data.content}</a>
                 </div> `
         }
-
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
 
         const body = document.getElementById("offcanvas-body");
         document.getElementById("offcanvasRight").addEventListener("show.bs.offcanvas",() => {
