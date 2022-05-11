@@ -54,7 +54,7 @@
 
     <div class="row mt-3">
         <div class="col-6 offset-3">
-            <th:block sec:authorize="isAuthenticated()">
+            <th:block sec:authorize="hasRole('USER')">
                 <div class="d-flex justify-content-end">
                     <a class="btn btn-outline-primary" th:href="@{/post/create}">글 작성</a>
                 </div>

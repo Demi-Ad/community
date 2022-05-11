@@ -77,10 +77,10 @@ public class AccountRegisterService {
             return signDto;
         }
 
-        if (account.getLock()) {
+        if (!account.getIsEmailVerified()) {
             String sha256 = converter.convert(account.getEmail());
             if (query.validate(sha256)) {
-                account.unLock();
+                account.emailVerification();
                 signDto.setEmail(account.getEmail());
                 signDto.setNickName(account.getNickname());
                 signDto.setRegisterState(RegisterState.SUCCESS);

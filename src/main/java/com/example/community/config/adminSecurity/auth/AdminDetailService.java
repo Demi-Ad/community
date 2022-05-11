@@ -1,7 +1,7 @@
 package com.example.community.config.adminSecurity.auth;
 
-import com.example.community.domain.admin.entity.Admin;
-import com.example.community.domain.admin.repo.AdminRepository;
+import com.example.community.admin.entity.Admin;
+import com.example.community.admin.repo.AdminRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

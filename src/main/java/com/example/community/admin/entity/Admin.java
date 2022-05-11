@@ -1,4 +1,4 @@
-package com.example.community.domain.admin.entity;
+package com.example.community.admin.entity;
 
 
 import com.example.community.config.security.Role;

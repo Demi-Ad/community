@@ -30,7 +30,7 @@ public class Account {
     private String password;
 
     @Column(name = "user_lock")
-    private Boolean lock;
+    private Boolean isEmailVerified;
 
     @Enumerated(value = EnumType.STRING)
     private Role role;
@@ -46,7 +46,7 @@ public class Account {
     public Account(String email, String password, String profileImg,String nickname) {
         this.email = email;
         this.password = password;
-        this.lock = true;
+        this.isEmailVerified = false;
         this.role = Role.ROLE_USER;
         this.nickname = nickname;
         this.profileImg = profileImg;
@@ -64,8 +64,8 @@ public class Account {
         this.nickname = nickname;
     }
 
-    public void unLock() {
-        this.lock = false;
+    public void emailVerification() {
+        this.isEmailVerified = true;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class Account {
         return getClass().getSimpleName() + "(" +
                 "id = " + id + ", " +
                 "email = " + email + ", " +
-                "lock = " + lock + ", " +
+                "lock = " + isEmailVerified + ", " +
                 "role = " + role + ", " +
                 "nickname = " + nickname + ", " +
                 "registeredAt = " + registeredAt + ")";

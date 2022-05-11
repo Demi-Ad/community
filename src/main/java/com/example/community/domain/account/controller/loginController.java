@@ -1,5 +1,6 @@
 package com.example.community.domain.account.controller;
 
+import com.example.community.config.security.auth.AccountDetail;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
@@ -20,7 +21,7 @@ public class loginController {
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null) {
+        if (authentication.getPrincipal() instanceof AccountDetail) {
             new SecurityContextLogoutHandler().logout(request,response,authentication);
         }
         return "redirect:/";

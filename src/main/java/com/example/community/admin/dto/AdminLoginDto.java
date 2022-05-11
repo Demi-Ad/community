@@ -1,4 +1,4 @@
-package com.example.community.domain.admin.dto;
+package com.example.community.admin.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
