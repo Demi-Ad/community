@@ -27,9 +27,9 @@ public class DashBoardService {
     }
 
     public DashBoardDto createDashBoard() {
-        String nativeSQL = "select * from (select count(p.POST_ID) from Post p) as countAllPost," +
-                "(select count(a.ACCOUNT_ID) from ACCOUNT a) as countAllAccount," +
-                "(select count(c.COMMENT_ID) from COMMENT c) as countAllComment";
+        String nativeSQL = "select * from (select count(p.POST_ID) from post p) as countAllPost," +
+                "(select count(a.ACCOUNT_ID) from account a) as countAllAccount," +
+                "(select count(c.COMMENT_ID) from comment c) as countAllComment";
 
         Query nativeQuery = em.createNativeQuery(nativeSQL);
 

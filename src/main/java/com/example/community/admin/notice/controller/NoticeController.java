@@ -3,7 +3,10 @@ package com.example.community.admin.notice.controller;
 import com.example.community.admin.notice.dto.NoticeCreateDto;
 import com.example.community.admin.notice.dto.NoticeResponseDto;
 import com.example.community.admin.notice.service.NoticeService;
+import com.example.community.common.component.Pagination;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,9 +24,9 @@ public class NoticeController {
 
 
     @GetMapping("/notice")
-    public String noticeList(Model model) {
-        List<NoticeResponseDto> noticeList = noticeService.noticeList();
-        model.addAttribute("noticeList",noticeList);
+    public String noticeList(Model model, @PageableDefault Pageable pageable) {
+        Pagination<NoticeResponseDto> pageList = noticeService.noticeList(pageable);
+        model.addAttribute("noticeList",pageList);
         return "notice/noticeList";
     }
 
@@ -36,9 +39,9 @@ public class NoticeController {
 
 
     @GetMapping("/admin/notice")
-    public String adminNoticeList(Model model) {
-        List<NoticeResponseDto> noticeList = noticeService.noticeList();
-        model.addAttribute("noticeList",noticeList);
+    public String adminNoticeList(Model model, Pageable pageable) {
+        Pagination<NoticeResponseDto> pageList = noticeService.noticeList(pageable);
+        model.addAttribute("noticeList",pageList);
         return "admin/notice/noticeList";
     }
 

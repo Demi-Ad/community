@@ -58,14 +58,6 @@
                 </ul>
             </div>
 
-<!--            <button aria-controls="offcanvasRight" class="btn btn-success" data-bs-target="#offcanvasRight" data-bs-toggle="offcanvas"-->
-<!--                    style="display: inline"-->
-<!--                    th:disabled="${notiCount == 0}" th:href="@{/notification}" th:with= "notiCount = ${@notificationService.countNotification()}">-->
-<!--                <th:block th:text="${notiCount}"></th:block>-->
-<!--                <i class="bi bi-bell" th:if="${notiCount == 0}"></i>-->
-<!--                <i class="bi bi-bell-fill" th:if="${notiCount > 0}"></i>-->
-<!--            </button>-->
-
             <button aria-controls="offcanvasRight" class="btn btn-outline-secondary position-relative"
                     data-bs-target="#offcanvasRight"
                     data-bs-toggle="offcanvas"
@@ -83,7 +75,7 @@
     </div>
 
     <div class="col-md-3 text-end" sec:authorize="hasRole('ADMIN')">
-        ADMIN
+        <a th:href="@{/admin/dashboard}" class="text-decoration-none text-muted">ADMIN</a>
     </div>
 
     <div aria-labelledby="offcanvasRightLabel" class="offcanvas offcanvas-end" id="offcanvasRight" tabindex="-1">

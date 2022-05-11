@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="admin/fragment/adminStaticFragment :: head"/>
+    <title>Spur - A Bootstrap Admin Template</title>
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+
+<body>
+<div class="dash">
+    <th:block th:replace="/admin/fragment/adminComponent :: sideBar"/>
+
+    <div class="dash-app">
+        <th:block th:replace="/admin/fragment/adminComponent :: toolbar"/>
+
+
+
+    </div>
+</div>
+<th:block th:replace="admin/fragment/adminStaticFragment :: script"/>
+</body>
+
+</html>

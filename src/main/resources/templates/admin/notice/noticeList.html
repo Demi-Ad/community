@@ -28,7 +28,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="notice : ${noticeList}">
+                <tr th:each="notice : ${noticeList.getDataList()}">
                     <th th:text="${notice.id}">1</th>
                     <td>
                         <a th:href="@{/notice/{id}(id=${notice.id})}" th:text="${notice.title}"></a>
@@ -41,7 +41,30 @@
                 </tr>
                 </tbody>
             </table>
+
+
         </div>
+        <nav aria-label="Page navigation" class="d-flex justify-content-center mt-3"
+             th:with="startPage = ${noticeList.startPage}, endPage = ${noticeList.endPage}">
+            <ul class="pagination">
+                <li class="page-item" th:classappend="${noticeList.existPrevPage ? '' : 'disabled'}">
+                    <a aria-label="Previous" class="page-link" th:href="@{/notice(page=${noticeList.startPage - 5})}">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                <li class="page-item" th:classappend="${noticeList.currentPage == page ? 'active' : ''}"
+                    th:each="page: ${#numbers.sequence(startPage, endPage)}">
+                    <a class="page-link" th:href="@{/notice(page=${page})}" th:text="${page}"></a>
+                </li>
+
+                <li class="page-item" th:classappend="${noticeList.existNextPage ? '' : 'disabled'}">
+                    <a aria-label="Next" class="page-link" th:href="@{/notice(page=${noticeList.startPage + 5})}">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
 
     </div>
 </div>
