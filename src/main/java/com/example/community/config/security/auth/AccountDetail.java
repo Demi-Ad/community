@@ -12,9 +12,11 @@ import java.util.List;
 public class AccountDetail implements UserDetails, Serializable {
 
     private final Account account;
+    private final boolean isBlock;
 
-    public AccountDetail(Account account) {
+    public AccountDetail(Account account, boolean isBlock) {
         this.account = account;
+        this.isBlock = isBlock;
     }
 
     public Account getAccount() {
@@ -44,7 +46,7 @@ public class AccountDetail implements UserDetails, Serializable {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return !isBlock;
     }
 
     @Override
