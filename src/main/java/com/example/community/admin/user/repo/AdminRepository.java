@@ -1,6 +1,6 @@
-package com.example.community.admin.repo;
+package com.example.community.admin.user.repo;
 
-import com.example.community.admin.entity.Admin;
+import com.example.community.admin.user.entity.Admin;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

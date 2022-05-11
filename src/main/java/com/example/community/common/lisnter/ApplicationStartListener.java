@@ -1,7 +1,7 @@
 package com.example.community.common.lisnter;
 
-import com.example.community.admin.entity.Admin;
-import com.example.community.admin.repo.AdminRepository;
+import com.example.community.admin.user.entity.Admin;
+import com.example.community.admin.user.repo.AdminRepository;
 import com.example.community.config.security.Role;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
@@ -63,7 +63,7 @@ public class ApplicationStartListener implements ApplicationListener<ContextRefr
         Admin admin = Admin.builder()
                 .adminId("admin")
                 .password(passwordEncoder.encode("admin"))
-                .adminName("admin")
+                .adminName("전체관리자")
                 .role(Role.ROLE_ADMIN)
                 .build();
 

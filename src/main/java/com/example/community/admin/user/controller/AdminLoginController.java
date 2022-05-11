@@ -1,6 +1,6 @@
-package com.example.community.admin.controller;
+package com.example.community.admin.user.controller;
 
-import com.example.community.admin.dto.AdminLoginDto;
+import com.example.community.admin.user.dto.AdminLoginDto;
 import com.example.community.config.adminSecurity.auth.AdminDetail;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
