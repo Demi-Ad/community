@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="admin/fragment/adminStaticFragment :: head"/>
+    <title>Spur - A Bootstrap Admin Template</title>
+</head>
+
+<body>
+<div class="dash">
+    <th:block th:replace="/admin/fragment/adminComponent :: sideBar"/>
+
+    <div class="dash-app">
+        <th:block th:replace="/admin/fragment/adminComponent :: toolbar"/>
+
+        <div class="card spur-card">
+            <div class="card-header">
+                <div class="spur-card-icon">
+                    <i class="fas fa-chart-bar"></i>
+                </div>
+                <div class="spur-card-title"> 공지사항 </div>
+            </div>
+            <div class="card-body">
+                <form method="post" th:action th:object="${notice}">
+
+                    <div class="form-group">
+                        <label for="title">제목</label>
+                        <input class="form-control" id="title" placeholder="공지사항 제목" th:field="*{title}" type="text">
+                    </div>
+
+                    <textarea id="editor" name="content" th:field="*{content}"></textarea>
+
+                    <div class="d-flex justify-content-center" style="margin-top: 30px">
+                        <button class="btn btn-primary" type="submit">작성</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+</div>
+<th:block th:replace="admin/fragment/adminStaticFragment :: script"/>
+<script src="https://cdn.ckeditor.com/ckeditor5/34.0.0/classic/ckeditor.js"></script>
+<script th:src="@{/js/ckeditorInit.js}"></script>
+</body>
+
+</html>

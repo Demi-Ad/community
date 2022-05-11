@@ -64,7 +64,6 @@ spring:
         hibernate:
             ddl-auto: create
 
-
         show-sql: true
         open-in-view: off
         properties:

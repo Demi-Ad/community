@@ -38,7 +38,9 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("adminPwd")
                 .loginProcessingUrl("/admin/login")
                 .failureHandler(new AdminFailureHandlerCustom())
-                .defaultSuccessUrl("/admin/dashboard");
+                .defaultSuccessUrl("/admin/dashboard")
+                .and()
+                .csrf().ignoringAntMatchers("/admin/notice/delete/**");
     }
 
 }

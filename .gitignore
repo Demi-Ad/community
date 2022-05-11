@@ -43,3 +43,5 @@ out/
 
 /src/test/resources/mail-properties.yml
 /src/test/resources/salt.yml
+
+plan/

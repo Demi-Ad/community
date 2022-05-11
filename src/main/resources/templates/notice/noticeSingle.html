@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Title</title>
+    <th:block th:replace="fragment/head :: head"/>
+</head>
+<body>
+<div class="container-fluid p-3">
+    <th:block th:replace="fragment/header::header"/>
+
+    <div class="row mt-3">
+        <div class="col-8 offset-2">
+            <!-- Post content-->
+            <article>
+                <!-- Post header-->
+                <header class="mb-4">
+                    <!-- Post title-->
+                    <h1 class="fw-bolder mb-1" th:text="${notice.title}">Welcome to Blog Post!</h1>
+                    <!-- Post meta content-->
+                    <div class="text-muted fst-italic mb-2 mt-3">
+                        <span th:text="${#temporals.format(notice.createAt,'yyyy-MM-dd')}"/>
+                        <span th:text="${notice.adminName}"/>
+                    </div>
+                    <!-- Post categories-->
+                </header>
+                <hr/>
+                <!-- Post content-->
+                <section class="mb-5">
+                    <th:block th:utext="${notice.content}"/>
+                </section>
+            </article>
+            <div class="d-flex justify-content-end">
+                <a class="btn btn-outline-info" th:href="@{/notice}">목록</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

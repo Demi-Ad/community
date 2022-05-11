@@ -26,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final SuccessUrlHandlerCustom successUrlHandlerCustom;
     private final FailureHandlerCustom failureHandlerCustom;
-    private final String[] WHITE_LIST = {"/images/**", "/js/**", "/css/**", "/profile/**", "/favicon.ico"};
+    private final String[] WHITE_LIST = {"/images/**", "/js/**", "/css/**", "/profile/**", "/favicon.ico","/notice/**"};
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {

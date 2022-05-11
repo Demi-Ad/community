@@ -19,6 +19,10 @@ public class AdminDetail implements UserDetails, Serializable {
         this.admin = admin;
     }
 
+    public Admin getAdmin() {
+        return admin;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
