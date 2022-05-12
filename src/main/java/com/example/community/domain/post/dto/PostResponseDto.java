@@ -1,5 +1,6 @@
 package com.example.community.domain.post.dto;
 
+import com.example.community.common.component.Pagination;
 import com.example.community.domain.comment.dto.CommentResponseDto;
 import com.example.community.domain.postFile.dto.PostFileDto;
 import com.example.community.domain.postTag.dto.TagDto;
@@ -27,6 +28,6 @@ public class PostResponseDto {
     private Boolean isCreated;
     private Long likeCount;
     private List<TagDto> tagList;
-    private List<CommentResponseDto> commentResponseDtoList;
+    private Pagination<CommentResponseDto> commentResponseDtoList;
     private List<PostFileDto> uploadFileLink;
 }

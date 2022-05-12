@@ -12,6 +12,8 @@ import com.example.community.domain.comment.repo.CommentRepository;
 import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.post.repo.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,11 +40,8 @@ public class CommentService {
         return commentRepository.save(comment).getId();
     }
 
-    public List<CommentResponseDto> createCommentResponse(Long postId) {
-        return commentRepository.notHaveParentCommentSet(postId)
-                .stream()
-                .map(CommentResponseDto::new)
-                .collect(Collectors.toList());
+    public Page<CommentResponseDto> createCommentResponse(Long postId, Pageable pageable) {
+        return commentRepository.notHaveParentCommentSet(postId,pageable).map(CommentResponseDto::new);
     }
 
     public Long deleteComment(Long commentId) {

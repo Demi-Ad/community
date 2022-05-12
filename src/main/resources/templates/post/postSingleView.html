@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <th:block th:replace="fragment/head::head"/>
+    <style>
+        a.commentBtn {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid p-3">
@@ -71,7 +76,7 @@
 
             <!-- Comments section-->
             <section class="mb-5"
-                     th:if="${post.commentResponseDtoList.size() != 0} or !${#authentication.name.equals('anonymousUser')}">
+                     th:if="${post.commentResponseDtoList.getDataList().size() != 0} or !${#authentication.name.equals('anonymousUser')}">
                 <div class="card bg-light">
                     <div class="card-body">
                         <!-- Comment form-->
@@ -87,7 +92,7 @@
                         </form>
 
                         <!--comment-->
-                        <div class="mb-3" th:each="comment : ${post.commentResponseDtoList}">
+                        <div class="mb-3" th:each="comment : ${post.commentResponseDtoList.dataList}">
                             <div class="d-flex mb-3">
                                 <div class="flex-shrink-0">
                                     <img alt="..." class="rounded-circle profile"
@@ -96,11 +101,11 @@
                                 <div class="ms-3">
                                     <div class="fw-bold mb-1" th:text="${comment.author}">Commenter Name</div>
                                     <p class="comment" th:data-commentId="${comment.commentId}" th:text="${comment.content}"></p>
-                                    <a class="text-info fs-6 addChildComment" sec:authorize="isAuthenticated()"
+                                    <a class="text-info fs-6 addChildComment commentBtn" sec:authorize="isAuthenticated()"
                                        th:value="${comment.commentId}">댓글달기</a>
-                                    <a class="text-danger fs-6 ms-2 delCommentBtn" th:if="${comment.createAuthor}"
+                                    <a class="text-danger fs-6 ms-2 delCommentBtn commentBtn" th:if="${comment.createAuthor}"
                                        th:value="${comment.commentId}">댓글삭제</a>
-                                    <a class="text-primary fs-6 editCommentBtn ms-2" th:if="${comment.createAuthor}"
+                                    <a class="text-primary fs-6 editCommentBtn ms-2 commentBtn" th:if="${comment.createAuthor}"
                                        th:value="${comment.commentId}">댓글 수정</a>
                                 </div>
                             </div>
@@ -114,16 +119,37 @@
                                 <div class="ms-3">
                                     <div class="fw-bold mb-1" th:text="${childComment.author}">Commenter Name</div>
                                     <p class="comment" th:data-commentId="${childComment.commentId}" th:text="${childComment.content}"></p>
-                                    <a class="text-danger fs-6 delCommentBtn" th:if="${childComment.createAuthor}"
+                                    <a class="text-danger fs-6 delCommentBtn commentBtn" th:if="${childComment.createAuthor}"
                                        th:value="${childComment.commentId}">댓글삭제</a>
 
-                                    <a class="text-primary fs-6 editCommentBtn ms-2" th:if="${childComment.createAuthor}"
+                                    <a class="text-primary fs-6 editCommentBtn ms-2 commentBtn" th:if="${childComment.createAuthor}"
                                        th:value="${childComment.commentId}">댓글 수정</a>
 
                                 </div>
                             </div>
                         </div>
 
+                        <nav aria-label="Page navigation" class="d-flex justify-content-center mt-3"
+                             th:with="startPage = ${post.commentResponseDtoList.startPage}, endPage = ${post.commentResponseDtoList.endPage}">
+                            <ul class="pagination">
+                                <li class="page-item" th:classappend="${post.commentResponseDtoList.existPrevPage ? '' : 'disabled'}">
+                                    <a aria-label="Previous" class="page-link" th:href="@{/post/{id}(id=${post.postId}, page=${post.commentResponseDtoList.startPage - 5})}">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+
+                                <li class="page-item" th:classappend="${post.commentResponseDtoList.currentPage == page ? 'active' : ''}"
+                                    th:each="page: ${#numbers.sequence(startPage, endPage)}">
+                                    <a class="page-link" th:href="@{/post/{id}(id=${post.postId},page=${page})}" th:text="${page}"></a>
+                                </li>
+
+                                <li class="page-item" th:classappend="${post.commentResponseDtoList.existNextPage ? '' : 'disabled'}">
+                                    <a aria-label="Next" class="page-link" th:href="@{/post/{id}(id=${post.postId},page=${post.commentResponseDtoList.startPage + 5})}">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
                 </div>
             </section>
@@ -133,19 +159,7 @@
 
 
 <script defer sec:authorize="isAuthenticated()" th:inline="javascript">
-    window.addEventListener("load", _ => {
-        const url = new URL(window.location.href);
-        const commentId = url.searchParams.get("commentId");
-        if (commentId) {
-            const commentList = document.querySelectorAll("p[class='comment']");
-            for (let i = 0; i < commentList.length; i++) {
-                if (commentList[i].dataset.commentid === commentId) {
-                    commentList[i].scrollIntoView()
-                    break
-                }
-            }
-        }
-    })
+
     const csrfName = [[${_csrf.headerName}]]
     const csrfToken = [[${_csrf.token}]]
     const postId = [[${post.postId}]]

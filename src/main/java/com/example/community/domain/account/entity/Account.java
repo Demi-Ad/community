@@ -1,5 +1,6 @@
 package com.example.community.domain.account.entity;
 
+import com.example.community.admin.accountManage.entity.AccountBlock;
 import com.example.community.config.security.Role;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -38,6 +39,9 @@ public class Account {
     private String profileImg;
 
     private String nickname;
+
+    @OneToOne(mappedBy = "blockAccount", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private AccountBlock accountBlock;
 
     @CreatedDate
     private LocalDateTime registeredAt;

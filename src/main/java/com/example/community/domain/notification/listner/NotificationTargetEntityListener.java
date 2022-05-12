@@ -43,14 +43,14 @@ public class NotificationTargetEntityListener {
             if (comment.getParentComment() != null) {
                 notification =  Notification.builder()
                         .eventType(EventType.RE_REPLY)
-                        .uri("/post/" + comment.getPost().getId() + "?" + "commentId=" + comment.getId())
+                        .uri("/post/" + comment.getPost().getId())
                         .fromAccount(fromAccount)
                         .toAccount(comment.getParentComment().getAccount())
                         .build();
             } else {
                 notification =  Notification.builder()
                         .eventType(EventType.COMMENT_EVENT)
-                        .uri("/post/" + comment.getPost().getId() + "?" + "commentId=" + comment.getId())
+                        .uri("/post/" + comment.getPost().getId())
                         .fromAccount(fromAccount)
                         .toAccount(comment.getPost().getAccount())
                         .build();

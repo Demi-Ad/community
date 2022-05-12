@@ -6,6 +6,8 @@ import com.example.community.domain.post.dto.PostResponseDto;
 import com.example.community.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -27,8 +29,8 @@ public class PostController {
 
 
     @GetMapping("/post/{postId}")
-    public String postSingleView(@PathVariable Long postId, Model model) {
-        PostResponseDto post = postService.findPostSingleView(postId);
+    public String postSingleView(@PathVariable Long postId, Model model, @PageableDefault Pageable pageable) {
+        PostResponseDto post = postService.findPostSingleView(postId,pageable);
         model.addAttribute("post", post);
         return "post/postSingleView";
     }

@@ -3,6 +3,7 @@ package com.example.community.config.adminSecurity;
 
 import com.example.community.config.adminSecurity.auth.AdminDetailService;
 import com.example.community.config.adminSecurity.handler.AdminFailureHandlerCustom;
+import com.example.community.config.adminSecurity.handler.AdminSuccessHandlerCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -37,6 +38,7 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("adminId")
                 .passwordParameter("adminPwd")
                 .loginProcessingUrl("/admin/login")
+                .successHandler(new AdminSuccessHandlerCustom())
                 .failureHandler(new AdminFailureHandlerCustom())
                 .defaultSuccessUrl("/admin/dashboard")
                 .and()

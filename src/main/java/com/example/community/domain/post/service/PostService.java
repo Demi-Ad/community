@@ -99,12 +99,12 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostResponseDto findPostSingleView(Long postId) {
+    public PostResponseDto findPostSingleView(Long postId,Pageable pageable) {
 
         Post post = postRepository.findByIdJoinAccount(postId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재 하지 않는 글"));
 
-        return createPostResponseDto(post);
+        return createPostResponseDto(post, pageable);
     }
 
 
@@ -171,7 +171,7 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    private PostResponseDto createPostResponseDto(Post post) {
+    private PostResponseDto createPostResponseDto(Post post,Pageable pageable) {
 
         return PostResponseDto.builder()
                 .postId(post.getId())
@@ -184,7 +184,7 @@ public class PostService {
                 .isCreated(authorizeCheckUtil.postAuthorizedCheck(post.getId()))
                 .likeCount(postLikeService.postLikeCount(post))
                 .uploadFileLink(post.getPostFiles().stream().map(PostFileDto::new).collect(Collectors.toList()))
-                .commentResponseDtoList(commentService.createCommentResponse(post.getId()))
+                .commentResponseDtoList(Pagination.of(commentService.createCommentResponse(post.getId(),pageable)))
                 .build();
 
     }

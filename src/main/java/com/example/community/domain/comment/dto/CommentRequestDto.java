@@ -11,4 +11,5 @@ public class CommentRequestDto {
     private Long postId;
     private String commentContent;
     private Long parentCommentId;
+    private Long pageNum;
 }

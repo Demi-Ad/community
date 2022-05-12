@@ -2,6 +2,8 @@ package com.example.community.domain.comment.repo;
 
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.comment.entity.Comment;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,6 +17,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("select distinct c from Comment c where c.parentComment.id is null and c.post.id= :postId order by c.createdAt asc")
     @EntityGraph(attributePaths = "childrenComment")
     Set<Comment> notHaveParentCommentSet(@Param("postId") Long postId);
+
+    @Query("select distinct c from Comment c where c.parentComment.id is null and c.post.id= :postId order by c.createdAt asc")
+    Page<Comment> notHaveParentCommentSet(@Param("postId") Long postId, Pageable pageable);
 
     List<Comment> findByAccount(Account account);
 

@@ -22,12 +22,9 @@ public class CommentController {
 
     @PostMapping("/comment")
     @PreAuthorize("isAuthenticated()")
-    public String createComment(@ModelAttribute CommentRequestDto commentRequestDto,
-                                RedirectAttributes redirectAttributes) {
-
-        Long commentId = commentService.save(commentRequestDto);
+    public String createComment(@ModelAttribute CommentRequestDto commentRequestDto, RedirectAttributes redirectAttributes) {
+        commentService.save(commentRequestDto);
         redirectAttributes.addAttribute("postId", commentRequestDto.getPostId());
-        redirectAttributes.addAttribute("commentId", commentId);
         return "redirect:/post/{postId}";
     }
 
