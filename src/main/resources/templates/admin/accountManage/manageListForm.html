@@ -33,7 +33,7 @@
                     <tr th:each="account : ${pageList.dataList}">
                         <th scope="row" th:text="${account.id}"></th>
                         <td>
-                            <a th:classappend="${account.isEmailVerified ? '' : 'text-danger'}"
+                            <a th:classappend="${account.isEmailVerified == false || account.isBlocked == true ? 'text-danger' : ''}"
                                th:href="@{/admin/accountManage/{id}(id=${account.id})}"
                                th:text="${account.email}"></a>
                         </td>

@@ -9,15 +9,17 @@ import java.time.LocalDateTime;
 public class AccountBlockDetailDto {
     private boolean isBlock;
     private String blockComment;
+    private LocalDateTime blockedDate;
     private LocalDateTime untilDate;
 
     public AccountBlockDetailDto() {
         this.isBlock = false;
     }
 
-    public AccountBlockDetailDto(String blockComment, LocalDateTime untilDate) {
+    public AccountBlockDetailDto(String blockComment, LocalDateTime blockedDate, LocalDateTime untilDate) {
         this.isBlock = true;
         this.blockComment = blockComment;
+        this.blockedDate = blockedDate;
         this.untilDate = untilDate;
     }
 
@@ -26,6 +28,6 @@ public class AccountBlockDetailDto {
     }
 
     public static AccountBlockDetailDto blocked(AccountBlock accountBlock) {
-        return new AccountBlockDetailDto(accountBlock.getBlockComment(), accountBlock.getBlockUntilDate());
+        return new AccountBlockDetailDto(accountBlock.getBlockComment(), accountBlock.getBlockDate(), accountBlock.getBlockUntilDate());
     }
 }

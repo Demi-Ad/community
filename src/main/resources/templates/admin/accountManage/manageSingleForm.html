@@ -75,6 +75,7 @@
                                                     th:title="${#temporals.format(accountDetail.blockDetail.untilDate,'yyyy-MM-dd HH:mm')}">
                                                     정지 사유 : [[${accountDetail.blockDetail.blockComment}]]
                                                 </h5>
+                                                <p>정지 일자 : <span th:text="${#temporals.format(accountDetail.blockDetail.blockedDate,'yyyy-MM-dd')}"></span></p>
                                             </div>
                                             <div th:if="${!accountDetail.blockDetail.block}">
                                                 <h5>OK</h5>

@@ -1,5 +1,6 @@
 package com.example.community.domain.account.repo;
 
+import com.example.community.admin.accountManage.dto.AccountDto;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.projection.AccountInfoProjection;
 import org.springframework.data.domain.Page;
@@ -24,6 +25,10 @@ public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpec
 
 
     Optional<AccountInfoProjection> searchById(Long id);
+
+    @Query(value = "select new com.example.community.admin.accountManage.dto.AccountDto(a.id,a.email,a.isEmailVerified,(count(ab.id) > 0),a.nickname,a.registeredAt) " +
+            "from Account a left join AccountBlock ab on a.id = ab.blockAccount.id group by a.id, ab.id")
+    Page<AccountDto> listManageAccount(Pageable pageable);
 
 
 }

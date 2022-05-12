@@ -24,7 +24,7 @@ public class AccountManageService {
     private final AccountBlockRepository accountBlockRepository;
 
     public Pagination<AccountDto> accountList(Pageable pageable) {
-        Page<AccountDto> pageList = accountRepository.findAll(pageable).map(AccountDto::new);
+        Page<AccountDto> pageList = accountRepository.listManageAccount(pageable);
         return Pagination.of(pageList);
     }
 
