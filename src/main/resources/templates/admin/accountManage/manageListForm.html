@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="admin/fragment/adminStaticFragment :: head"/>
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <title>Spur - A Bootstrap Admin Template</title>
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+
+<body>
+<div class="dash">
+    <th:block th:replace="/admin/fragment/adminComponent :: sideBar"/>
+
+    <div class="dash-app">
+        <th:block th:replace="/admin/fragment/adminComponent :: toolbar"/>
+        <div class="row mt-3">
+            <div class="col-10 offset-1">
+                <table class="table table-hover p-5">
+                    <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">이메일</th>
+                        <th scope="col">닉네임</th>
+                        <th scope="col">가입일</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="account : ${pageList.dataList}">
+                        <th scope="row" th:text="${account.id}"></th>
+                        <td>
+                            <a th:classappend="${account.isEmailVerified ? '' : 'text-danger'}"
+                               th:href="@{/admin/accountManage/{id}(id=${account.id})}"
+                               th:text="${account.email}"></a>
+                        </td>
+                        <td th:text="${account.nickname}"></td>
+                        <td th:text="${#temporals.format(account.registeredAt, 'yyyy-MM-dd')}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+
+
+
+    </div>
+</div>
+<th:block th:replace="admin/fragment/adminStaticFragment :: script"/>
+</body>
+
+</html>

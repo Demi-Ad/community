@@ -5,12 +5,13 @@ import com.example.community.domain.account.projection.AccountInfoProjection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
-public interface AccountRepository extends JpaRepository<Account, Long> {
+public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpecificationExecutor<Account> {
     boolean existsByEmailEquals(String email);
 
 
@@ -23,5 +24,6 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
 
 
     Optional<AccountInfoProjection> searchById(Long id);
+
 
 }

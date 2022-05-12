@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="admin/fragment/adminStaticFragment :: head"/>
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <title>Spur - A Bootstrap Admin Template</title>
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+
+<body>
+<div class="dash">
+    <th:block th:replace="/admin/fragment/adminComponent :: sideBar"/>
+
+    <div class="dash-app">
+        <th:block th:replace="/admin/fragment/adminComponent :: toolbar"/>
+
+        <div class="row">
+            <div class="col-xl-6">
+                <div class="card spur-card">
+                    <div class="card-header">
+                        <div class="spur-card-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="spur-card-title"> 계정정보 </div>
+                    </div>
+                    <div class="card-body ">
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for="accountEmail">이메일</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="accountEmail" readonly th:value="${accountDetail.email}" type="email">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for="registeredAt">가입일</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="registeredAt" readonly th:value="${#temporals.format(accountDetail.registeredAt,'yyyy-MM-dd')}" type="text">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for="nickName">닉네임</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="nickName" readonly th:value="${accountDetail.nickName}" type="text">
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="stats" th:classappend="${accountDetail.isEmailVerified() ? 'stats-primary' : 'stats-danger'}">
+                                    <h3 class="stats-title"> 이메일 인증 </h3>
+                                    <div class="stats-content">
+                                        <div class="stats-data">
+                                            <h5 th:text="${accountDetail.isEmailVerified() ? 'OK' : 'No'}">OK</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="stats stats-primary" th:classappend="${!accountDetail.blockDetail.block ? 'stats-primary' : 'stats-danger'}">
+                                    <h3 class="stats-title"> 계정 정지</h3>
+                                    <div class="stats-content">
+                                        <div class="stats-data">
+                                            <div th:if="${accountDetail.blockDetail.block}">
+                                                <h5 data-placement="top" data-toggle="tooltip"
+                                                    th:title="${#temporals.format(accountDetail.blockDetail.untilDate,'yyyy-MM-dd HH:mm')}">
+                                                    정지 사유 : [[${accountDetail.blockDetail.blockComment}]]
+                                                </h5>
+                                            </div>
+                                            <div th:if="${!accountDetail.blockDetail.block}">
+                                                <h5>OK</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="card spur-card">
+                    <div class="card-header">
+                        <div class="spur-card-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="spur-card-title"> 계정정지 </div>
+                        <div class="spur-card-menu">
+                            <div class="dropdown" th:if="${accountDetail.blockDetail.block}">
+                                <a aria-expanded="false" aria-haspopup="true" class="spur-card-menu-link" data-toggle="dropdown" href="#" role="button">
+                                </a>
+                                <div aria-labelledby="dropdownMenuLink" class="dropdown-menu dropdown-menu-right" style="position: absolute; transform: translate3d(-173px, 30px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-end">
+                                    <a class="dropdown-item" id="unblockBtn" th:data-id="${block.accountId}">정지해제</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body ">
+                        <form method="post" th:action="@{/admin/accountManage/block}" th:object="${block}">
+                            <div class="form-group mb-2">
+                                <label class="sr-only" for="blockDate">일자</label>
+                                <input class="form-control-plaintext" id="blockDate" name="blockDate" required type="date" value="">
+                            </div>
+
+                            <div class="form-group mb-2">
+                                <label class="sr-only" for="blockTime">시간</label>
+                                <input class="form-control-plaintext" id="blockTime" name="blockTime" type="time" value="">
+                            </div>
+
+
+                            <div class="form-group">
+                                <label for="blockComment">정지사유</label>
+                                <textarea class="form-control" id="blockComment" rows="1" th:field="*{blockComment}"></textarea>
+                            </div>
+                            <div class="d-flex justify-content-end">
+                                <button class="btn btn-danger" type="submit">확인</button>
+                            </div>
+                            <input th:name="${_csrf.headerName}" th:value="${_csrf.token}" type="hidden">
+                            <input th:field="*{accountId}" type="hidden">
+                        </form>
+                    </div>
+                </div>
+                <div class="card spur-card">
+                    <div class="card-header">
+                        <div class="spur-card-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="spur-card-title"> Horizontal Layout </div>
+                    </div>
+                    <div class="card-body ">
+                        <form>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<th:block th:replace="admin/fragment/adminStaticFragment :: script"/>
+<script>
+    document.querySelector("#unblockBtn").addEventListener("click",(e) => {
+        const {id} = e.target.dataset
+        unblock(id)
+    })
+    function unblock(id) {
+        fetch("/admin/accountManage/unblock", {
+            method: "POST",
+            body: new URLSearchParams({id:id}),
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+        }).then(res => res.url).then(url => window.location.href = url)
+    }
+
+
+
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+    const blockDateElem = document.querySelector("#blockDate");
+    let date = new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000).toISOString().split("T")[0]
+    blockDateElem.setAttribute("min", date);
+</script>
+</body>
+
+</html>

@@ -39,4 +39,9 @@ public class AccountBlock {
     public void blockAccount(Account account) {
         this.blockAccount = account;
     }
+
+    public void changeBlock(String blockComment, LocalDateTime blockDate) {
+        this.blockComment = blockComment;
+        this.blockUntilDate = blockDate;
+    }
 }

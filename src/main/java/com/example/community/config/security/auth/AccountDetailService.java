@@ -29,7 +29,7 @@ public class AccountDetailService implements UserDetailsService {
         if (accountBlockRepository.existsByBlockAccount(loginAccount)) {
             AccountBlock accountBlock = accountBlockRepository.findByBlockAccount(loginAccount).orElseThrow();
             LocalDateTime blockUntilDate = accountBlock.getBlockUntilDate();
-            boolean isBlockAfter = blockUntilDate.isAfter(LocalDateTime.now());
+            boolean isBlockAfter = LocalDateTime.now().isAfter(blockUntilDate);
             if (isBlockAfter) {
                 accountBlockRepository.deleteById(accountBlock.getId());
                 return new AccountDetail(loginAccount,false);

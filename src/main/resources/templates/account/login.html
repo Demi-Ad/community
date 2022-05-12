@@ -11,6 +11,7 @@
     <div class="row mt-5">
         <div class="col-lg-10 offset-lg-1">
             <h3 class="mb-3">Login Now</h3>
+            <p th:text="${#request.getAttribute('aa')}"></p>
             <div class="bg-white shadow rounded">
                 <div class="row">
                     <div class="col-md-7 pe-0">
@@ -22,6 +23,11 @@
                                         <th:block th:switch="${#request.getParameter('error')}">
                                             <p class="align-content-center text-danger rounded" th:case="BadCredentialsException">아이디 또는 비밀번호 오류입니다</p>
                                             <p class="align-content-center text-danger rounded" th:case="DisabledException">이메일 인증을 완료해주세요</p>
+                                            <div th:case="LockedException">
+                                                <p class="align-content-center text-danger rounded">계정이 정지 되었습니다</p>
+                                                <p>차단 사유 : <span th:text="${#request.getParameter('comment')}"></span></p>
+                                                <p>해제 일시 : <span th:text="${#request.getParameter('untilTime')}"></span></p>
+                                            </div>
                                         </th:block>
                                     </div>
                                 </th:block>

@@ -16,7 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Component
 @RequiredArgsConstructor
@@ -28,6 +28,7 @@ public class FailureHandlerCustom  implements AuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
         String errormsg;
+
         if (exception instanceof BadCredentialsException || exception instanceof InternalAuthenticationServiceException) {
             errormsg = "BadCredentialsException";
         } else if (exception instanceof DisabledException) {
@@ -39,8 +40,11 @@ public class FailureHandlerCustom  implements AuthenticationFailureHandler {
                     .orElseThrow();
 
             String blockComment = accountBlock.getBlockComment();
-            LocalDateTime blockUntilDate = accountBlock.getBlockUntilDate();
-            response.sendRedirect("/login?error=LockedException&comment=" + blockComment + "&untilTime=" + blockUntilDate);
+
+            String format = accountBlock.getBlockUntilDate()
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+
+            response.sendRedirect("/login?error=LockedException&comment=" + blockComment + "&untilTime=" + format);
             return;
         } else {
             response.sendRedirect("/login");
