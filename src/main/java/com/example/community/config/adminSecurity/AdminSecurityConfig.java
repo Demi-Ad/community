@@ -42,7 +42,7 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(new AdminFailureHandlerCustom())
                 .defaultSuccessUrl("/admin/dashboard")
                 .and()
-                .csrf().ignoringAntMatchers("/admin/notice/delete/**","/admin/accountManage/unblock");
+                .csrf().ignoringAntMatchers("/admin/notice/delete/**","/admin/accountManage/unblock","/admin/guestBook/**");
     }
 
 }

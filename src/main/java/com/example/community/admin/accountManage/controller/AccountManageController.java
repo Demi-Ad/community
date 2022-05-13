@@ -32,8 +32,8 @@ public class AccountManageController {
     }
 
     @GetMapping("/admin/accountManage/{id}")
-    public String accountManageForm(@PathVariable("id") Long accountId, Model model) {
-        AccountManageDto accountManageDto = accountManageService.accountDetailInformation(accountId);
+    public String accountManageForm(@PathVariable("id") Long accountId, Model model, @PageableDefault Pageable pageable) {
+        AccountManageDto accountManageDto = accountManageService.accountDetailInformation(accountId, pageable);
         model.addAttribute("accountDetail",accountManageDto);
         model.addAttribute("block",new AccountBlockRequestDto(accountId));
         return "admin/accountManage/manageSingleForm";

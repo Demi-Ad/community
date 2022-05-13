@@ -59,7 +59,7 @@ public class AccountInfoController {
     }
 
     @PostMapping("/guestBook/delete/{id:^0{0}[1-9]+}")
-    @PreAuthorize("@guestBookService.isOwner(#guestBookId, #accountDetail)")
+    @PreAuthorize("hasRole('ADMIN') || @guestBookService.isOwner(#guestBookId, #accountDetail)")
     public String guestBookDelete(@PathVariable("id") Long guestBookId, @AuthenticationPrincipal AccountDetail accountDetail, RedirectAttributes redirectAttributes) {
         Long ownerId = guestBookService.delete(guestBookId);
         redirectAttributes.addAttribute("ownerId",ownerId);
