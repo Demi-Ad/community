@@ -36,7 +36,7 @@
                     <td th:text="${notice.adminName}"></td>
                     <td th:text="${#temporals.format(notice.createAt,'yyyy-MM-dd')}"></td>
                     <td>
-                        <a class="text-danger notice-del" th:data-notice-id="${notice.id}">삭제</a>
+                        <a class="text-danger notice-del" style="cursor: pointer" th:data-notice-id="${notice.id}">삭제</a>
                     </td>
                 </tr>
                 </tbody>

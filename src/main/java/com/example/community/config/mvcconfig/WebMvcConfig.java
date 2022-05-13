@@ -1,6 +1,7 @@
 package com.example.community.config.mvcconfig;
 
 import com.example.community.admin.accountManage.resolver.AccountBlockArgResolver;
+import com.example.community.admin.postManage.resolver.SearchFieldResolver;
 import com.example.community.domain.post.resolver.PostSearchParamArgResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,6 +42,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new PostSearchParamArgResolver());
         resolvers.add(new AccountBlockArgResolver());
+        resolvers.add(new SearchFieldResolver());
     }
 
 }

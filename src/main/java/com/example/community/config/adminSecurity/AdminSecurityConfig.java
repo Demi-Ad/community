@@ -2,8 +2,6 @@ package com.example.community.config.adminSecurity;
 
 
 import com.example.community.config.adminSecurity.auth.AdminDetailService;
-import com.example.community.config.adminSecurity.handler.AdminFailureHandlerCustom;
-import com.example.community.config.adminSecurity.handler.AdminSuccessHandlerCustom;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -11,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 @RequiredArgsConstructor
@@ -29,6 +28,7 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.antMatcher("/admin/**")
                 .authorizeRequests()
+                .antMatchers("/admin/login/**").permitAll()
                 .anyRequest().hasRole("ADMIN")
                 .and()
                 .formLogin()
@@ -38,11 +38,12 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("adminId")
                 .passwordParameter("adminPwd")
                 .loginProcessingUrl("/admin/login")
-                .successHandler(new AdminSuccessHandlerCustom())
-                .failureHandler(new AdminFailureHandlerCustom())
                 .defaultSuccessUrl("/admin/dashboard")
+                .successHandler(new SimpleUrlAuthenticationSuccessHandler("/admin/dashboard"))
+                .failureHandler((request, response, exception) -> response.sendRedirect("/admin/login?err=" + exception.getClass().getSimpleName()))
+                .permitAll()
                 .and()
-                .csrf().ignoringAntMatchers("/admin/notice/delete/**","/admin/accountManage/unblock","/admin/guestBook/**");
+                .csrf().ignoringAntMatchers("/admin/notice/delete/**","/admin/accountManage/unblock","/admin/guestBook/**","/admin/postDelete/**");
     }
 
 }

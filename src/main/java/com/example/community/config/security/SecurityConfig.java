@@ -37,10 +37,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.antMatcher("/**")
                 .authorizeRequests()
-                .regexMatchers(HttpMethod.GET, "/post/\\d+$", "/info/\\d+$", "/guestBook/\\d+$").permitAll()
+                .regexMatchers(HttpMethod.GET, "/info/\\d+$", "/guestBook/\\d+$").permitAll()
                 .regexMatchers(HttpMethod.POST, "/guestBook/\\d+$").authenticated()
                 .antMatchers("/", "/sign", "/register/**", "/logout", "/login/**", "/image/upload", "/download/**", "/search/**", "/forgotPassword").permitAll()
-                .antMatchers("/post/**").authenticated()
+                .antMatchers("/post/create").authenticated()
+                .antMatchers("/post/**").permitAll()
                 .antMatchers(WHITE_LIST).permitAll()
                 .antMatchers("/notification/**").authenticated()
                 .and()
