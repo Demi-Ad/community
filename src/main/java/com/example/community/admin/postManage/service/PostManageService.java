@@ -24,7 +24,6 @@ public class PostManageService {
 
     public Pagination<PostManageResponseDto> postList(Pageable pageable, SearchParam searchParam) {
         Specification<Post> postSpecification = searchParam.get();
-        log.info("spec = {}",postSpecification);
         Page<PostManageResponseDto> postList;
         if (postSpecification == null) {
             postList = postRepository.findAll(pageable).map(PostManageResponseDto::new);

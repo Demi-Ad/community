@@ -158,7 +158,7 @@
                                     <td th:text="${guestBook.guestNickName}">Mark</td>
                                     <td th:text="${guestBook.content}">Otto</td>
                                     <td th:text="${#temporals.format(guestBook.createdAt,'yyyy-MM-dd')}"></td>
-                                    <td><a class="text-danger guestDelBtn" style="cursor: pointer" th:data-id="${guestBook.sequence}">삭제</a></td>
+                                    <td><a class="text-danger guestDelBtn p-cursor" th:data-id="${guestBook.sequence}">삭제</a></td>
                                 </tr>
                                 </tbody>
                             </table>

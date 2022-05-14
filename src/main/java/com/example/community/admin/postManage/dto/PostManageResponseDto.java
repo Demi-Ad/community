@@ -11,8 +11,6 @@ import java.time.LocalDateTime;
 public class PostManageResponseDto {
     private Long id;
     private String title;
-    private String content;
-    private String accountName;
 
     private String email;
     private LocalDateTime createdAt;
@@ -20,8 +18,6 @@ public class PostManageResponseDto {
     public PostManageResponseDto(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
-        this.content = post.getContent();
-        this.accountName = post.getAccount().getNickname();
         this.email = post.getAccount().getEmail();
         this.createdAt = post.getCreatedAt();
     }

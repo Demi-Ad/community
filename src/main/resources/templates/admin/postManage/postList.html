@@ -4,6 +4,7 @@
 <head>
     <th:block th:replace="admin/fragment/adminStaticFragment :: head"/>
     <link rel="stylesheet" th:href="@{/css/profile.css}">
+
     <title>Spur - A Bootstrap Admin Template</title>
     <style>
         body {
@@ -59,24 +60,30 @@
                         <th scope="col">이메일</th>
                         <th scope="col">작성일</th>
                         <th scope="col">제목</th>
-                        <th scope="col">내용</th>
+                        <th scope="col">댓글</th>
                         <th scope="col">삭제</th>
-
                     </tr>
                     </thead>
                     <tbody>
-                    <tr th:each="post : ${postList.dataList}">
-                        <th th:text="${post.id}"></th>
-                        <th th:text="${post.email}"></th>
-                        <th th:text="${#temporals.format(post.createdAt,'yyyy-MM-dd')}"></th>
-                        <th th:text="${post.title}"></th>
-                        <th>
-                            <a class="d-inline-block text-truncate" style="max-width: 150px;" th:href="@{/post/{id}(id=${post.id})}" th:text="${post.content}"/>
-                        </th>
-                        <th><a class="text-danger" style="cursor: pointer" th:data-id="${post.id}">삭제</a></th>
-                    </tr>
+                    <th:block th:each="post : ${postList.dataList}">
+                        <tr>
+                            <th th:text="${post.id}"></th>
+                            <th th:text="${post.email}"></th>
+                            <th th:text="${#temporals.format(post.createdAt,'yyyy-MM-dd')}"></th>
+                            <th>
+                                <a class="d-inline-block text-truncate" style="max-width: 150px;" th:href="@{/post/{id}(id=${post.id})}" th:text="${post.title}"/>
+                            </th>
+                            <th><a class="text-info p-cursor commentBtn" th:data-id="${post.id}">보기</a></th>
+                            <th><a class="text-danger p-cursor" th:data-id="${post.id}">삭제</a></th>
+                        </tr>
+
+
+                    </th:block>
+
                     </tbody>
+
                 </table>
+
             </div>
 
             <div class="col-3 offset-5 mt-4">
@@ -103,17 +110,48 @@
                 </nav>
             </div>
 
-
         </div>
-
     </div>
 </div>
+
+<div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-xl modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="modal">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>IDX</th>
+                            <td>이메일</td>
+                            <td>내용</td>
+                            <td>삭제</td>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <th:block th:replace="admin/fragment/adminStaticFragment :: script"/>
 <script>
     document.querySelector("#searchReset").addEventListener("click",() => {
         window.location.href = location.pathname
     })
-    document.querySelectorAll("a[data-id]").forEach(elem => {
+    document.querySelectorAll("a[data-id].text-danger").forEach(elem => {
         elem.addEventListener("click",function (e) {
             const {id} =  e.target.dataset
 
@@ -127,6 +165,50 @@
                 .then(url => location.href = url)
                 .catch(reason => alert(reason))
         })
+    })
+
+    function createHtml(json) {
+        const htmlTableRowElementList = []
+        const commentList = [...json.data]
+        for (let comment of commentList) {
+            let htmlTableRowElement = document.createElement("tr");
+            for (let filed in comment) {
+                let htmlTableCellElement = document.createElement("td");
+                htmlTableCellElement.innerText = comment[filed]
+                htmlTableRowElement.append(htmlTableCellElement)
+            }
+
+            let tableCellElement = document.createElement("td");
+            let htmlAnchorElement = document.createElement("a");
+            htmlAnchorElement.className = "text-danger"
+            htmlAnchorElement.innerText = "삭제"
+            tableCellElement.append(htmlAnchorElement)
+            htmlTableRowElement.append(tableCellElement)
+
+            htmlTableRowElementList.push(htmlTableRowElement)
+        }
+        console.log(commentList)
+        return htmlTableRowElementList
+    }
+
+    document.querySelectorAll("a.commentBtn").forEach(elem => {
+        let element = document.querySelector("#tbody");
+
+        elem.addEventListener("click",(e) => {
+            const {id} = elem.dataset
+            console.log(id)
+
+            fetch(`/admin/commentList?postId=${id}`,{
+                method: "GET",
+            }).then(res => res.json())
+                .then(data => createHtml(data))
+                .then(elem => element.append(...elem))
+                .then(() => $("#commentModal").modal("show"))
+        })
+    })
+
+    $('#commentModal').on('hidden.bs.modal', function (e) {
+        $("#tbody").empty()
     })
 </script>
 </body>

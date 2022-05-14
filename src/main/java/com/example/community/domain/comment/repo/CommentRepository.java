@@ -1,5 +1,6 @@
 package com.example.community.domain.comment.repo;
 
+import com.example.community.admin.postManage.dto.CommentManageResponseDto;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.comment.entity.Comment;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,9 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Page<Comment> notHaveParentCommentSet(@Param("postId") Long postId, Pageable pageable);
 
     List<Comment> findByAccount(Account account);
+
+    @Query("select new com.example.community.admin.postManage.dto.CommentManageResponseDto(c) from Comment c where c.post.id =:id")
+    List<CommentManageResponseDto> projectionCommentManageDto(@Param("id") Long id);
 
 
 
