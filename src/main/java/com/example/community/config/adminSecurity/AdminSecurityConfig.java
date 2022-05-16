@@ -43,7 +43,7 @@ public class AdminSecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler((request, response, exception) -> response.sendRedirect("/admin/login?err=" + exception.getClass().getSimpleName()))
                 .permitAll()
                 .and()
-                .csrf().ignoringAntMatchers("/admin/notice/delete/**","/admin/accountManage/unblock","/admin/guestBook/**","/admin/postDelete/**");
+                .csrf().ignoringAntMatchers("/admin/notice/delete/**","/admin/accountManage/unblock","/admin/guestBook/**","/admin/postDelete/**","/admin/commentDelete/**");
     }
 
 }

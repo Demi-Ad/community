@@ -101,7 +101,7 @@
                                 <div class="ms-3">
                                     <div class="fw-bold mb-1" th:text="${comment.author}">Commenter Name</div>
                                     <p class="comment" th:data-commentId="${comment.commentId}" th:text="${comment.content}"></p>
-                                    <a class="text-info fs-6 addChildComment commentBtn" sec:authorize="isAuthenticated()"
+                                    <a class="text-info fs-6 addChildComment commentBtn" sec:authorize="isAuthenticated()" th:if="${!comment.isDeleted()}"
                                        th:value="${comment.commentId}">댓글달기</a>
                                     <a class="text-danger fs-6 ms-2 delCommentBtn commentBtn" th:if="${comment.createAuthor}"
                                        th:value="${comment.commentId}">댓글삭제</a>

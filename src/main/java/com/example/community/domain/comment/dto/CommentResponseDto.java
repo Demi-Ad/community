@@ -25,13 +25,22 @@ public class CommentResponseDto {
     private LocalDateTime createAt;
     private List<CommentResponseDto> childrenCommentList = new ArrayList<>();
     private boolean isCreateAuthor;
+    private boolean isDeleted;
 
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();
-        this.author = comment.getAccount().getNickname();
+
+        if (comment.getAccount() == null) {
+            this.author = "삭제된 글";
+            this.authorProfile = "person.png";
+            this.isDeleted = true;
+        } else {
+            this.author = comment.getAccount().getNickname();
+            this.authorProfile = comment.getAccount().getProfileImg();
+            this.isDeleted = false;
+        }
         this.content = comment.getContent();
         this.createAt = comment.getCreatedAt();
-        this.authorProfile = comment.getAccount().getProfileImg();
         this.isCreateAuthor = checkCommentAuthor(comment);
         comment.getChildrenComment().stream()
                 .map(childComment -> CommentResponseDto.builder()
@@ -67,6 +76,9 @@ public class CommentResponseDto {
     }
 
     private boolean checkCommentAuthor(Comment comment) {
+        if (comment.getAccount() == null)
+            return false;
+
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof AccountDetail) {
             Account account = ((AccountDetail) principal).getAccount();

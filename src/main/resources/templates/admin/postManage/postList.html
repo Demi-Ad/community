@@ -4,7 +4,7 @@
 <head>
     <th:block th:replace="admin/fragment/adminStaticFragment :: head"/>
     <link rel="stylesheet" th:href="@{/css/profile.css}">
-
+    <link rel="stylesheet" th:href="@{/css/admin/customStyle.css}">
     <title>Spur - A Bootstrap Admin Template</title>
     <style>
         body {
@@ -118,7 +118,7 @@
     <div class="modal-xl modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <h5 class="modal-title" id="exampleModalLabel">댓글 목록</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -130,6 +130,7 @@
                             <th>IDX</th>
                             <td>이메일</td>
                             <td>내용</td>
+                            <td>상위 IDX</td>
                             <td>삭제</td>
                         </tr>
                     </thead>
@@ -139,7 +140,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
             </div>
         </div>
     </div>
@@ -170,18 +170,35 @@
     function createHtml(json) {
         const htmlTableRowElementList = []
         const commentList = [...json.data]
+        let commentId = '';
         for (let comment of commentList) {
             let htmlTableRowElement = document.createElement("tr");
             for (let filed in comment) {
                 let htmlTableCellElement = document.createElement("td");
                 htmlTableCellElement.innerText = comment[filed]
                 htmlTableRowElement.append(htmlTableCellElement)
+                if (filed === 'commentId') {
+                    commentId = comment[filed]
+                }
             }
 
             let tableCellElement = document.createElement("td");
             let htmlAnchorElement = document.createElement("a");
-            htmlAnchorElement.className = "text-danger"
+            htmlAnchorElement.dataset.id = commentId
+            htmlAnchorElement.className = "text-danger p-cursor"
             htmlAnchorElement.innerText = "삭제"
+            htmlAnchorElement.addEventListener("click",(e) => {
+                const {id} = e.target.dataset
+                fetch("/admin/commentDelete",{
+                    method: "POST",
+                    body: new URLSearchParams({id})
+                }).then(res => {
+                    if (res.status === 400) {
+                        alert("이미 삭제된 글입니다")
+                    }
+                    $(e.target.parentElement.parentElement).remove()
+                }).catch((reason) => alert(reason))
+            })
             tableCellElement.append(htmlAnchorElement)
             htmlTableRowElement.append(tableCellElement)
 

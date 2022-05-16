@@ -66,6 +66,10 @@ public class Comment {
         this.content = content;
     }
 
+    public void adminDeleteComment() {
+        this.account = null;
+    }
+
     @Override
     public String toString() {
         return getClass().getSimpleName() + "(" +

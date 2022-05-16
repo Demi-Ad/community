@@ -1,12 +1,8 @@
 package com.example.community.admin.postManage.dto;
 
 import com.example.community.domain.comment.entity.Comment;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -15,9 +11,20 @@ public class CommentManageResponseDto {
     private String email;
     private String content;
 
+    private Long parentCommentId;
+
     public CommentManageResponseDto(Comment comment) {
         this.commentId = comment.getId();
-        this.email = comment.getAccount().getEmail();
+        if (comment.getAccount() == null) {
+            this.email = "삭제 된 글";
+        } else {
+            this.email = comment.getAccount().getEmail();
+        }
         this.content = comment.getContent();
+        if (comment.getParentComment() != null) {
+            this.parentCommentId = comment.getParentComment().getId();
+        } else {
+            this.parentCommentId = null;
+        }
     }
 }

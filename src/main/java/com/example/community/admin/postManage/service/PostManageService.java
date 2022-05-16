@@ -3,6 +3,7 @@ package com.example.community.admin.postManage.service;
 import com.example.community.admin.postManage.dto.PostManageResponseDto;
 import com.example.community.admin.postManage.spec.SearchParam;
 import com.example.community.common.component.Pagination;
+import com.example.community.domain.comment.repo.CommentRepository;
 import com.example.community.domain.post.entity.Post;
 import com.example.community.domain.post.repo.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,20 +22,26 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostManageService {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
+    @Transactional(readOnly = true)
     public Pagination<PostManageResponseDto> postList(Pageable pageable, SearchParam searchParam) {
         Specification<Post> postSpecification = searchParam.get();
         Page<PostManageResponseDto> postList;
         if (postSpecification == null) {
             postList = postRepository.findAll(pageable).map(PostManageResponseDto::new);
         } else {
-            postList = postRepository.findAll(postSpecification,pageable).map(PostManageResponseDto::new);
+            postList = postRepository.findAll(postSpecification, pageable).map(PostManageResponseDto::new);
         }
 
         return Pagination.of(postList);
     }
 
     public void deletePost(Long id) {
-        postRepository.deleteById(id);
+        postRepository.findById(id).ifPresent(post -> {
+            commentRepository.deleteChildComment(post);
+            commentRepository.deleteComment(post);
+            postRepository.delete(post);
+        });
     }
 }
