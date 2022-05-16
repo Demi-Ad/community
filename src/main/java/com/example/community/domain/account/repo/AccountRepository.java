@@ -20,7 +20,7 @@ public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpec
 
     Optional<Account> findFirstByEmailEquals(String email);
 
-    @Query("select a from Account a where a.nickname like %:nickname% and a.isEmailVerified = false")
+    @Query("select a from Account a where a.nickname like %:nickname% and a.isEmailVerified = true")
     Page<Account> findByNicknameContaining(@Param("nickname") String nickname, Pageable pageable);
 
 
