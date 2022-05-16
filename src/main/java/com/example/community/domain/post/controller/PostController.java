@@ -42,7 +42,7 @@ public class PostController {
     }
 
     @PostMapping("/post/create")
-    public String createPost(@Valid @ModelAttribute("post") PostRequestDto postRequestDto,
+    public String createPost(@Valid @ModelAttribute(value = "post",name = "post") PostRequestDto postRequestDto,
                              BindingResult bindingResult,
                              @AuthenticationPrincipal AccountDetail accountDetail,
                              RedirectAttributes redirectAttributes) {
@@ -71,8 +71,10 @@ public class PostController {
 
     @PostMapping("/post/{id}/edite")
     @PreAuthorize("@authorizeCheckUtil.postAuthorizedCheck(#postId)")
-    public String editPost(@PathVariable("id") Long postId, @ModelAttribute("post") PostRequestDto postRequestDto) {
-        log.info("dto = {}",postRequestDto);
+    public String editPost(@PathVariable("id") Long postId, @Valid @ModelAttribute("post") PostRequestDto postRequestDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "post/postEditForm";
+        }
         postService.editPost(postRequestDto, postId);
         return "redirect:/post/{id}";
     }

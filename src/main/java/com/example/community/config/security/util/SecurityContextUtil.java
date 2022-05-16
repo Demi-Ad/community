@@ -32,10 +32,9 @@ public class SecurityContextUtil {
         List<SimpleGrantedAuthority> role_anonymous = List.of(new SimpleGrantedAuthority("ROLE_ANONYMOUS"));
         AnonymousAuthenticationToken anonymousAuthenticationToken = new AnonymousAuthenticationToken("2316", "anonymousUser",role_anonymous);
         Authentication authenticate = authenticationManager.authenticate(anonymousAuthenticationToken);
-        SecurityContextImpl securityContext = new SecurityContextImpl(authenticate);
 
         SecurityContextHolder.clearContext();
-        SecurityContextHolder.setContext(securityContext);
+        SecurityContextHolder.getContext().setAuthentication(authenticate);
     }
 
 }
