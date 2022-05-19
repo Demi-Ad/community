@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+
+<body>
+<div class="container-fluid">
+    <form action="" onsubmit="">
+        <input type="text" id="tag">
+        <input type="hidden" id="tagList">
+    </form>
+    <div id="tagArea">
+
+    </div>
+</div>
+</body>
+
+<script>
+    const tagInput = document.querySelector("#tag")
+    const tagList = document.querySelector("#tagList")
+    const tagArea = document.querySelector("#tagArea");
+
+    function createHtml(tagStrList) {
+        while (tagArea.hasChildNodes()) {
+            tagArea.removeChild(tagArea.firstChild)
+        }
+
+        let tagElemList = []
+
+        tagStrList.forEach(tag => {
+            const htmlParagraphElement = document.createElement("p");
+            htmlParagraphElement.innerText = tag
+            htmlParagraphElement.addEventListener("click", () => {
+                tagList.value = tagList.value.split(" ").filter(str => !(str === tag)).join(" ")
+            })
+            tagElemList.push(htmlParagraphElement)
+        })
+
+        return tagElemList
+    }
+
+
+    let observer = new MutationObserver(e => {
+        const split = tagList.value.split(" ");
+        tagArea.append(...createHtml(split))
+    });
+
+    observer.observe(tagList,{
+        attributes: true
+    })
+
+    tagInput.addEventListener("keydown",e => {
+        if (e.code === "Enter") {
+            e.stopPropagation()
+            e.preventDefault()
+            const tag = e.target.value
+            if (tagList.value.split(" ").length >= 5) {
+                alert("5이상")
+                e.target.value = ''
+                return;
+            }
+
+            const tagListValue = tagList.value.split(" ")
+            const isInclude = tagListValue.includes(tag);
+
+            if (isInclude) {
+                alert("이미 존재하는값")
+                return
+            }
+
+            tagList.value === '' ?  tagList.value += `${tag}` : tagList.value += ` ${tag}`
+            tagInput.value = ''
+
+        }
+    })
+
+
+</script>
+</html>

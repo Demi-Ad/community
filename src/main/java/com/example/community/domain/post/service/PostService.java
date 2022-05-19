@@ -34,8 +34,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -56,10 +58,12 @@ public class PostService {
 
     private final PostFileService postFileService;
 
-    private final PostTagRepository postTagRepository;
 
     public Long save(PostRequestDto postRequestDto, Account account) {
-        List<String> tagStrList = List.of(postRequestDto.getTagJoiningStr().split(","));
+        List<String> tagStrList = Stream.of(postRequestDto.getTagJoiningStr().split(" "))
+                .map(s -> "#"+s)
+                .collect(Collectors.toList());
+
         List<Tag> tagList = tagService.saveElseFind(tagStrList);
         Post post = new Post(postRequestDto.getTitle(), postRequestDto.getContent());
         post.postedAccount(account);
@@ -73,7 +77,11 @@ public class PostService {
     public void editPost(PostRequestDto postRequestDto, Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(ExceptionSupplier::supply400);
         post.getPostTagList().clear();
-        List<Tag> tagList = tagService.saveElseFind(List.of(postRequestDto.getTagJoiningStr().split(",")));
+        List<Tag> tagList = tagService.saveElseFind(
+                Arrays.stream(postRequestDto.getTagJoiningStr()
+                        .split(" ")).map(s -> "#"+s)
+                        .collect(Collectors.toList()));
+
         postSetTag(tagList, post);
         post.edit(postRequestDto.getTitle(), postRequestDto.getContent());
         postRepository.save(post);
@@ -86,7 +94,7 @@ public class PostService {
         String content = post.getContent();
         String tagListStr = post.getPostTagList()
                 .stream()
-                .map(postTag -> postTag.getTag().getItem()).collect(Collectors.joining(","));
+                .map(postTag -> postTag.getTag().getItem()).collect(Collectors.joining(" "));
 
         return new PostRequestDto(title, content, tagListStr);
     }

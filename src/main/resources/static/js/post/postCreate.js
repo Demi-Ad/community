@@ -1,76 +1,78 @@
-let tag = []
+const tagInput = document.querySelector("#tagInput")
+const tagList = document.querySelector("#tagList")
+const tagArea = document.querySelector("#tagShow")
 
-window.addEventListener("load",function () {
-    document.getElementById("form").addEventListener("submit",function (e) {
-        e.preventDefault()
-        const form = document.getElementById("form")
-        const formData = new FormData(form)
-        const tagList = []
-
-        document.querySelectorAll(".tag").forEach(elem => {
-            tagList.push(elem.innerText)
-        })
-
-        const tagStr = tagList.join(",")
-
-        formData.append("tagJoiningStr",tagStr)
-        fetch("",{
-            method: "POST",
-            body: formData
-        }).then(res => {
-            if (res.ok) {
-                window.location.href = res.url
-            } else {
-                alert("작성중에 오류가 발생했습니다")
-            }
-        }).catch(reason => {
-            console.log(reason)
-        })
-    })
+window.addEventListener("load",() => {1
+    if (tagList.value !== '') {
+        tagList.value = tagList.value.split(" ").map(value => value.slice(1,value.length)).join(" ")
+    }
 })
 
 
-document.getElementById("tagInput").addEventListener("keypress", function (key) {
-    if (key.key === "Enter") {
-        const tagInput = document.getElementById("tagInput")
+function createHtml(tagStrList) {
+    while (tagArea.hasChildNodes()) {
+        tagArea.removeChild(tagArea.firstChild)
+    }
 
-        if (tagInput.value === "")
-            return
+    if (tagStrList.length === 1 && tagStrList[0] === '')
+        return
 
-        const tagList = document.getElementById("tagShow")
+    let tagElemList = []
 
-        if (tagList.childNodes.length >= 6) {
-            alert("태그는 5개까지 가능합니다")
-            return;
-        }
+    tagStrList.forEach(tag => {
 
-        const tagItem = tagInput.value;
-        if (tag.includes(tagItem)) {
-            alert("중복된 태그")
-            tagInput.value = ""
-            return;
-        }
-        tag.push(tagItem)
         const spanOuter = document.createElement("span")
         const spanInner = document.createElement("span")
 
-        spanInner.innerText = "#" + tagItem;
+        spanInner.innerText = "#" + tag
         spanInner.className = "fs-5 tag"
         const spanInnerDeleteBtn = document.createElement("span")
         spanInnerDeleteBtn.innerHTML = "<i class=\"bi bi-x\"></i>"
         spanInnerDeleteBtn.className = "ms-2 text-black fs-5"
-
-        spanInnerDeleteBtn.addEventListener("click",function () {
-            tagList.removeChild(spanOuter)
-            tag = [...tag.filter(value => value !== tagItem)]
+        spanInnerDeleteBtn.addEventListener("click",() => {
+            tagList.value = tagList.value.split(" ").filter(str => !(str === tag)).join(" ")
         })
+
         spanOuter.appendChild(spanInner)
         spanOuter.appendChild(spanInnerDeleteBtn)
         spanOuter.className = "me-2 bg-info rounded-3 text-white bg-opacity-50 me-1 ps-2 pe-2"
-        tagList.appendChild(spanOuter)
 
-        tagInput.value = ""
+        tagElemList.push(spanOuter)
+    })
 
-        tagInput.focus()
+    return tagElemList
+}
+
+
+let observer = new MutationObserver(e => {
+    const split = tagList.value.split(" ");
+    tagArea.append(...createHtml(split))
+});
+
+observer.observe(tagList,{
+    attributes: true
+})
+
+tagInput.addEventListener("keydown",e => {
+    if (e.code === "Enter") {
+        e.stopPropagation()
+        e.preventDefault()
+        const tag = e.target.value
+        if (tagList.value.split(" ").length >= 5) {
+            alert("5이상")
+            e.target.value = ''
+            return;
+        }
+
+        const tagListValue = tagList.value.split(" ")
+        const isInclude = tagListValue.includes(tag);
+
+        if (isInclude) {
+            alert("이미 존재하는값")
+            return
+        }
+
+        tagList.value === '' ?  tagList.value += `${tag}` : tagList.value += ` ${tag}`
+        tagInput.value = ''
     }
 })
