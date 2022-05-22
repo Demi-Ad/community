@@ -29,8 +29,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
@@ -60,9 +62,12 @@ public class PostService {
 
 
     public Long save(PostRequestDto postRequestDto, Account account) {
-        List<String> tagStrList = Stream.of(postRequestDto.getTagJoiningStr().split(" "))
-                .map(s -> "#"+s)
-                .collect(Collectors.toList());
+        List<String> tagStrList = new ArrayList<>();
+        if (StringUtils.hasText(postRequestDto.getTagJoiningStr())) {
+            Stream.of(postRequestDto.getTagJoiningStr().split(" "))
+                    .map(s -> "#"+s)
+                    .forEach(tagStrList::add);
+        }
 
         List<Tag> tagList = tagService.saveElseFind(tagStrList);
         Post post = new Post(postRequestDto.getTitle(), postRequestDto.getContent());

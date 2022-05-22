@@ -16,6 +16,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.format.DateTimeFormatter;
 
 @Component
@@ -39,12 +41,12 @@ public class FailureHandlerCustom  implements AuthenticationFailureHandler {
                     .flatMap(accountBlockRepository::findByBlockAccount)
                     .orElseThrow();
 
-            String blockComment = accountBlock.getBlockComment();
-
             String format = accountBlock.getBlockUntilDate()
                     .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
-            response.sendRedirect("/login?error=LockedException&comment=" + blockComment + "&untilTime=" + format);
+            String encodeBlockComment = URLEncoder.encode(accountBlock.getBlockComment(), StandardCharsets.UTF_8);
+
+            response.sendRedirect("/login?error=LockedException&comment=" + encodeBlockComment + "&untilTime=" + format);
             return;
         } else {
             response.sendRedirect("/login");

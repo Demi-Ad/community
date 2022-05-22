@@ -1,5 +1,7 @@
 package com.example.community.domain.post.controller;
 
+import com.example.community.admin.forbiddenWord.service.ForbiddenWordSpecification;
+import com.example.community.admin.forbiddenWord.validator.ForbiddenWordCheckValidator;
 import com.example.community.config.security.auth.AccountDetail;
 import com.example.community.domain.post.dto.PostRequestDto;
 import com.example.community.domain.post.dto.PostResponseDto;
@@ -26,7 +28,7 @@ import javax.validation.Valid;
 @Slf4j
 public class PostController {
     private final PostService postService;
-
+    private final ForbiddenWordCheckValidator forbiddenWordCheckValidator;
 
     @GetMapping("/post/{postId}")
     public String postSingleView(@PathVariable Long postId, Model model, @PageableDefault Pageable pageable) {
@@ -46,9 +48,11 @@ public class PostController {
                              BindingResult bindingResult,
                              @AuthenticationPrincipal AccountDetail accountDetail,
                              RedirectAttributes redirectAttributes) {
+        forbiddenWordCheckValidator.validate(postRequestDto.getContent(), ForbiddenWordSpecification.POST,bindingResult);
         if (bindingResult.hasErrors()) {
             return "post/postCreateForm";
         }
+
         Long postId = postService.save(postRequestDto, accountDetail.getAccount());
         redirectAttributes.addAttribute("id", postId);
         return "redirect:/post/{id}";

@@ -58,8 +58,12 @@ tagInput.addEventListener("keydown",e => {
         e.stopPropagation()
         e.preventDefault()
         const tag = e.target.value
+        if (tag === '') {
+            alert("공백은 불가능")
+            return;
+        }
         if (tagList.value.split(" ").length >= 5) {
-            alert("5이상")
+            alert("태그는 5개 까지 입니다")
             e.target.value = ''
             return;
         }

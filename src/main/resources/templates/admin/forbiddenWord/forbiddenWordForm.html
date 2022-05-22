@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <th:block th:replace="admin/fragment/adminStaticFragment :: head"/>
+    <link rel="stylesheet" th:href="@{/css/profile.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/customStyle.css}">
+    <title>Spur - A Bootstrap Admin Template</title>
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+    </style>
+</head>
+
+<body>
+<div class="dash">
+    <th:block th:replace="/admin/fragment/adminComponent :: sideBar"/>
+
+    <div class="dash-app">
+        <th:block th:replace="/admin/fragment/adminComponent :: toolbar"/>
+        <div class="row mt-3">
+            <div class="col-6">
+                <div class="card spur-card">
+                    <div class="card-header">
+                        <div class="spur-card-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="spur-card-title"> 금지어 추가</div>
+                    </div>
+                    <div class="card-body ">
+                        <form class="form-inline" th:action="@{/admin/forbiddenWord/add}" method="post"
+                              th:object="${forbiddenWordForm}">
+                            <div class="form-group mb-2">
+                                <label for="forbiddenWordInput" class="sr-only">금지어</label>
+                                <input type="text" th:field="*{forbiddenWord}" class="form-control-plaintext"
+                                       id="forbiddenWordInput" placeholder="금지어를 입력해주세요">
+                            </div>
+                            <div class="custom-control custom-checkbox ml-3">
+                                <input type="checkbox" th:field="*{postForbidden}" class="custom-control-input"
+                                       id="forbiddenWordPost">
+                                <label class="custom-control-label" for="forbiddenWordPost">게시글</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox ml-3">
+                                <input type="checkbox" th:field="*{commentForbidden}" class="custom-control-input"
+                                       id="forbiddenComment">
+                                <label class="custom-control-label" for="forbiddenComment">댓글</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox ml-3">
+                                <input type="checkbox" th:field="*{guestBookForbidden}" class="custom-control-input"
+                                       id="forbiddenWordGuestBook">
+                                <label class="custom-control-label" for="forbiddenWordGuestBook">방명록</label>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary mb-2 ml-3">등록</button>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-6">
+                <div class="card spur-card">
+                    <div class="card-header">
+                        <div class="spur-card-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="spur-card-title"> 금지어 조회</div>
+                    </div>
+                    <div class="card-body ">
+                        <form class="form-inline" method="get" th:object="${forbiddenWordSearch}">
+                            <div class="form-group mb-2">
+                                <label for="staticEmail2" class="sr-only">금지어</label>
+                                <input type="text" th:field="*{forbiddenText}" class="form-control-plaintext" id="staticEmail2"
+                                       placeholder="금지어를 입력해주세요">
+                            </div>
+                            <div class="custom-control custom-checkbox ml-3">
+                                <input type="checkbox" th:field="*{postForbidden}" class="custom-control-input" id="customCheck1">
+                                <label class="custom-control-label" for="customCheck1">게시글</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox ml-3">
+                                <input type="checkbox" th:field="*{commentForbidden}" class="custom-control-input" id="customCheck2">
+                                <label class="custom-control-label" for="customCheck2">댓글</label>
+                            </div>
+
+                            <div class="custom-control custom-checkbox ml-3">
+                                <input type="checkbox" th:field="*{guestBookForbidden}" class="custom-control-input" id="customCheck3">
+                                <label class="custom-control-label" for="customCheck3">방명록</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary mb-2 ml-3">조회</button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-12">
+                <table class="table table-hover p-5" th:if="${forbiddenWordList.dataList.size() != 0}">
+                    <thead>
+                    <tr>
+                        <th scope="col">IDX</th>
+                        <th scope="col">금지어</th>
+                        <th scope="col">게시글</th>
+                        <th scope="col">댓글</th>
+                        <th scope="col">방명록</th>
+                        <th scope="col">수정</th>
+                        <th scope="col">삭제</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!--/*@thymesVar id="forbiddenWord" type="com.example.community.admin.forbiddenWord.dto.ForbiddenWordDto"*/-->
+                    <th:block th:each="forbiddenWord : ${forbiddenWordList.dataList}">
+                        <tr>
+                            <td th:text="${forbiddenWord.id}"></td>
+                            <td th:text="${forbiddenWord.forbiddenWord}"></td>
+                            <td th:text="${@booleanTextUtil.convert(forbiddenWord.isPostForbidden())}"></td>
+                            <td th:text="${@booleanTextUtil.convert(forbiddenWord.isCommentForbidden())}"></td>
+                            <td th:text="${@booleanTextUtil.convert(forbiddenWord.isGuestBookForbidden())}"></td>
+                            <td>수정</td>
+                            <td>삭제</td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+
+                <h3 th:if="${forbiddenWordList.dataList.size() == 0}">금지어가 없습니다</h3>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<th:block th:replace="admin/fragment/adminStaticFragment :: script"/>
+<script>
+    document.querySelector("#forbiddenWordInput").addEventListener("keydown", evt => {
+        if ((evt.keyCode || evt.which) === 13) {
+            evt.preventDefault();
+        }
+    });
+    window.addEventListener("load",e => {
+        const url = new URL(window.location.href);
+        const err = url.searchParams.get("err")
+        if (err !== null) {
+            const decode = decodeURI(err);
+            alert(decode.replaceAll("+"," "))
+        }
+    })
+</script>
+</body>
+
+</html>
