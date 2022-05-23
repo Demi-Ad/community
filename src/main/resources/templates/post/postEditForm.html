@@ -35,6 +35,7 @@
                     <button class="btn btn-outline-primary" type="submit">작성완료</button>
                 </div>
                 <input th:name="${_csrf.headerName}" th:value="${_csrf.token}" type="hidden">
+                <p th:errors="*{global}" th:if="${#fields.hasGlobalErrors()}"></p>
             </form>
         </div>
     </div>

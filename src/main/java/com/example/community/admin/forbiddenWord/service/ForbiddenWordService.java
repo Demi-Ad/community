@@ -3,12 +3,9 @@ package com.example.community.admin.forbiddenWord.service;
 import com.example.community.admin.forbiddenWord.dto.ForbiddenWordDto;
 import com.example.community.admin.forbiddenWord.entity.ForbiddenWord;
 import com.example.community.admin.forbiddenWord.repo.ForbiddenWordRepository;
-import com.example.community.common.component.Pagination;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,11 +30,12 @@ public class ForbiddenWordService {
     }
 
     @Transactional(readOnly = true)
-    public Pagination<ForbiddenWordDto> forbiddenWordList(Pageable pageable, Specification<ForbiddenWord> specification) {
+    public List<ForbiddenWordDto> forbiddenWordList(Specification<ForbiddenWord> specification) {
 
-        Page<ForbiddenWordDto> page = forbiddenWordRepository.findAll(specification, pageable)
-                .map(ForbiddenWord::toDto);
-        return Pagination.of(page);
+        return forbiddenWordRepository.findAll(specification)
+                .stream()
+                .map(ForbiddenWord::toDto)
+                .collect(Collectors.toList());
     }
 
 

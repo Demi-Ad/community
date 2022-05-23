@@ -76,6 +76,7 @@ public class PostController {
     @PostMapping("/post/{id}/edite")
     @PreAuthorize("@authorizeCheckUtil.postAuthorizedCheck(#postId)")
     public String editPost(@PathVariable("id") Long postId, @Valid @ModelAttribute("post") PostRequestDto postRequestDto, BindingResult bindingResult) {
+        forbiddenWordCheckValidator.validate(postRequestDto.getContent(), ForbiddenWordSpecification.POST, bindingResult);
         if (bindingResult.hasErrors()) {
             return "post/postEditForm";
         }

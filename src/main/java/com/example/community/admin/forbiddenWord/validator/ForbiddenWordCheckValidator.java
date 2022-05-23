@@ -6,14 +6,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -21,7 +17,7 @@ import java.util.stream.Collectors;
 public class ForbiddenWordCheckValidator {
 
     private final ForbiddenWordService forbiddenWordService;
-
+    public final String ERROR_NAME = "forbiddenWordFind";
 
     public void validate(String validateStr, ForbiddenWordSpecification forbiddenWordSpecification, Errors errors) {
         List<String> forbiddenWordList = forbiddenWordService.getForbiddenWord(forbiddenWordSpecification);
@@ -35,7 +31,7 @@ public class ForbiddenWordCheckValidator {
         });
 
         if (checkedForbiddenWord.size() != 0) {
-            errors.reject("forbiddenWordFind",String.join(", ", checkedForbiddenWord) + "는 금지어 입니다");
+            errors.reject(ERROR_NAME,String.join(", ", checkedForbiddenWord) + "는 금지어 입니다");
         }
     }
 }

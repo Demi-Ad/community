@@ -99,7 +99,7 @@
             </div>
 
             <div class="col-12">
-                <table class="table table-hover p-5" th:if="${forbiddenWordList.dataList.size() != 0}">
+                <table class="table table-hover p-5" th:if="${forbiddenWordList.size() != 0}">
                     <thead>
                     <tr>
                         <th scope="col">IDX</th>
@@ -107,29 +107,28 @@
                         <th scope="col">게시글</th>
                         <th scope="col">댓글</th>
                         <th scope="col">방명록</th>
-                        <th scope="col">수정</th>
                         <th scope="col">삭제</th>
                     </tr>
                     </thead>
                     <tbody>
                     <!--/*@thymesVar id="forbiddenWord" type="com.example.community.admin.forbiddenWord.dto.ForbiddenWordDto"*/-->
-                    <th:block th:each="forbiddenWord : ${forbiddenWordList.dataList}">
+                    <th:block th:each="forbiddenWord : ${forbiddenWordList}">
                         <tr>
                             <td th:text="${forbiddenWord.id}"></td>
                             <td th:text="${forbiddenWord.forbiddenWord}"></td>
                             <td th:text="${@booleanTextUtil.convert(forbiddenWord.isPostForbidden())}"></td>
                             <td th:text="${@booleanTextUtil.convert(forbiddenWord.isCommentForbidden())}"></td>
                             <td th:text="${@booleanTextUtil.convert(forbiddenWord.isGuestBookForbidden())}"></td>
-                            <td>수정</td>
-                            <td>삭제</td>
+                            <td><a class="text-danger p-cursor" th:data-id="${forbiddenWord.id}">삭제</a></td>
                         </tr>
                     </th:block>
                     </tbody>
                 </table>
 
-                <h3 th:if="${forbiddenWordList.dataList.size() == 0}">금지어가 없습니다</h3>
+                <h3 th:if="${forbiddenWordList.size() == 0}">금지어가 없습니다</h3>
             </div>
         </div>
+
     </div>
 
 
@@ -149,6 +148,17 @@
             alert(decode.replaceAll("+"," "))
         }
     })
+
+    document.querySelectorAll("a[data-id]")
+        .forEach(elem => elem.addEventListener("click", () => {
+        const {id} = elem.dataset;
+        fetch("/admin/forbiddenWord/delete",{
+            method : "POST",
+            body: new URLSearchParams({id})
+        }).then(res => {
+            window.location.href = res.url;
+        })
+    }))
 </script>
 </body>
 

@@ -1,5 +1,7 @@
 package com.example.community.domain.comment.controller;
 
+import com.example.community.admin.forbiddenWord.service.ForbiddenWordSpecification;
+import com.example.community.admin.forbiddenWord.validator.ForbiddenWordCheckValidator;
 import com.example.community.domain.comment.dto.CommentEditRequestDto;
 import com.example.community.domain.comment.dto.CommentEditResponseDto;
 import com.example.community.domain.comment.dto.CommentRequestDto;
@@ -8,23 +10,40 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 public class CommentController {
     private final CommentService commentService;
-
+    private final ForbiddenWordCheckValidator validator;
 
     @PostMapping("/comment")
     @PreAuthorize("isAuthenticated()")
-    public String createComment(@ModelAttribute CommentRequestDto commentRequestDto, RedirectAttributes redirectAttributes) {
-        commentService.save(commentRequestDto);
+    public String createComment(@ModelAttribute CommentRequestDto commentRequestDto, Errors errors, RedirectAttributes redirectAttributes) {
+        validator.validate(commentRequestDto.getCommentContent(), ForbiddenWordSpecification.COMMENT, errors);
         redirectAttributes.addAttribute("postId", commentRequestDto.getPostId());
+        if (errors.hasErrors()) {
+            String forbiddenWord = "";
+
+            if (errors.getGlobalError() != null) {
+                forbiddenWord = errors.getGlobalError().getDefaultMessage();
+            }
+
+            String encodeErr = URLEncoder.encode(Objects.requireNonNull(forbiddenWord), StandardCharsets.UTF_8);
+
+            return "redirect:/post/{postId}?err=" + encodeErr;
+        }
+        commentService.save(commentRequestDto);
         return "redirect:/post/{postId}";
     }
 

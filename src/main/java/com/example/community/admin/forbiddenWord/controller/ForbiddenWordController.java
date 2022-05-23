@@ -4,11 +4,8 @@ import com.example.community.admin.forbiddenWord.dto.ForbiddenWordDto;
 import com.example.community.admin.forbiddenWord.dto.ForbiddenWordSearchDto;
 import com.example.community.admin.forbiddenWord.service.ForbiddenWordService;
 import com.example.community.admin.forbiddenWord.validator.DuplicateForbiddenWordValidator;
-import com.example.community.common.component.Pagination;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -19,6 +16,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,10 +27,9 @@ public class ForbiddenWordController {
     private final DuplicateForbiddenWordValidator validator;
     @GetMapping("/admin/forbiddenWord")
     public String forbiddenWordForm(Model model,
-                                    @PageableDefault Pageable pageable,
                                     @ModelAttribute("forbiddenWordSearch") ForbiddenWordSearchDto forbiddenWordSearchDto) {
         log.info("SEARCH = {}",forbiddenWordSearchDto);
-        Pagination<ForbiddenWordDto> pagination = forbiddenWordService.forbiddenWordList(pageable,forbiddenWordSearchDto.createSpecification());
+        List<ForbiddenWordDto> pagination = forbiddenWordService.forbiddenWordList(forbiddenWordSearchDto.createSpecification());
 
         model.addAttribute("forbiddenWordList",pagination);
         model.addAttribute("forbiddenWordForm", new ForbiddenWordDto());
@@ -50,6 +47,13 @@ public class ForbiddenWordController {
         }
 
         forbiddenWordService.save(forbiddenWordDto);
+        return "redirect:/admin/forbiddenWord";
+    }
+
+    @PostMapping("/admin/forbiddenWord/delete")
+    public String forbiddenWordDelete(@ModelAttribute("id") Long id) {
+        forbiddenWordService.delete(id);
+
         return "redirect:/admin/forbiddenWord";
     }
 }
