@@ -27,6 +27,16 @@
                             <i class="fas fa-chart-bar"></i>
                         </div>
                         <div class="spur-card-title"> 금지어 추가</div>
+                        <div class="spur-card-menu">
+                            <div class="dropdown">
+                                <a aria-expanded="false" aria-haspopup="true" class="spur-card-menu-link" data-toggle="dropdown" href="#" role="button">
+                                </a>
+                                <div aria-labelledby="dropdownMenuLink" class="dropdown-menu dropdown-menu-right"
+                                     style="position: absolute; transform: translate3d(-173px, 30px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-end">
+                                    <a class="dropdown-item">CSV 업로드</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="card-body ">
                         <form class="form-inline" th:action="@{/admin/forbiddenWord/add}" method="post"
@@ -69,7 +79,19 @@
                             <i class="fas fa-chart-bar"></i>
                         </div>
                         <div class="spur-card-title"> 금지어 조회</div>
+                        <div class="spur-card-menu">
+                            <div class="dropdown">
+                                <a aria-expanded="false" aria-haspopup="true" class="spur-card-menu-link" data-toggle="dropdown" href="#" role="button">
+                                </a>
+                                <div aria-labelledby="dropdownMenuLink" class="dropdown-menu dropdown-menu-right"
+                                     style="position: absolute; transform: translate3d(-173px, 30px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-end">
+                                    <a class="dropdown-item" th:href="@{/admin/forbiddenWord/csvDownload}">CSV 다운로드</a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+
                     <div class="card-body ">
                         <form class="form-inline" method="get" th:object="${forbiddenWordSearch}">
                             <div class="form-group mb-2">
