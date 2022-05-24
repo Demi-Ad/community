@@ -1,15 +1,15 @@
 package com.example.community.admin.forbiddenWord.entity;
 
 import com.example.community.admin.forbiddenWord.dto.ForbiddenWordDto;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class ForbiddenWord {
 
     @Id
@@ -41,6 +41,13 @@ public class ForbiddenWord {
                 .isCommentForbidden(isCommentForbidden)
                 .isGuestBookForbidden(isGuestBookForbidden)
                 .build();
+    }
+
+    public void change(ForbiddenWord forbiddenWord) {
+        this.forbiddenText = forbiddenWord.getForbiddenText();
+        this.isPostForbidden = forbiddenWord.getIsPostForbidden();
+        this.isCommentForbidden = forbiddenWord.getIsCommentForbidden();
+        this.isGuestBookForbidden = forbiddenWord.getIsGuestBookForbidden();
     }
 
 

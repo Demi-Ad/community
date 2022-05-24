@@ -33,7 +33,11 @@
                                 </a>
                                 <div aria-labelledby="dropdownMenuLink" class="dropdown-menu dropdown-menu-right"
                                      style="position: absolute; transform: translate3d(-173px, 30px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-end">
-                                    <a class="dropdown-item">CSV 업로드</a>
+                                    <a class="dropdown-item" id="csvUpload">CSV 업로드</a>
+                                    <form style="display: none" th:action="@{/admin/forbiddenWord/csvUpload}" enctype="multipart/form-data" method="post">
+                                        <input type="file" accept="text/csv" name="csv">
+                                        <input type="text" th:name="${_csrf.headerName}" th:value="${_csrf.token}">
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -181,6 +185,18 @@
             window.location.href = res.url;
         })
     }))
+
+    document.querySelector("#csvUpload").addEventListener("click",() => {
+        const csvInput = document.querySelector("input[name='csv']");
+        csvInput.addEventListener("change",evt => {
+            const file = evt.target.files[0];
+            if (file !== null) {
+                evt.target.parentElement.submit();
+            }
+        })
+        csvInput.click()
+    })
+
 </script>
 </body>
 

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
@@ -53,6 +54,17 @@ public class ForbiddenWordController {
         }
 
         forbiddenWordService.save(forbiddenWordDto);
+        return "redirect:/admin/forbiddenWord";
+    }
+
+    @PostMapping("/csvUpload")
+    public String csvUpload (MultipartFile csv) {
+        try {
+            forbiddenWordCsvService.csvToDatabase(csv);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return "redirect:/admin/forbiddenWord";
     }
 
