@@ -21,7 +21,7 @@ public class PostFile {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id",foreignKey = @ForeignKey(name = "post_fk"))
     private Post post;
 
     private String fileOriginName;

@@ -29,7 +29,7 @@ public class Account {
 
     private String password;
 
-    @Column(name = "email_vertified")
+    @Column(name = "email_verified")
     private Boolean isEmailVerified;
 
     @Enumerated(value = EnumType.STRING)

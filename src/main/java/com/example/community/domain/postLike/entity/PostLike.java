@@ -25,11 +25,11 @@ public class PostLike {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
+    @JoinColumn(name = "post_id",foreignKey = @ForeignKey(name = "post_fk"))
     private Post post;
 
     @ManyToOne
-    @JoinColumn(name = "account_id")
+    @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "account_fk"))
     private Account account;
 
     @CreatedDate

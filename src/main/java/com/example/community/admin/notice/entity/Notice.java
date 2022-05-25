@@ -23,7 +23,7 @@ public class Notice extends BaseTimeEntity {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_id")
+    @JoinColumn(name = "admin_id",foreignKey = @ForeignKey(name = "admin_fk"))
     private Admin admin;
 
     public Notice(String title, String content) {

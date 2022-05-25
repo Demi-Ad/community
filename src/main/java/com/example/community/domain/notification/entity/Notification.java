@@ -23,11 +23,11 @@ public class Notification {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "from_account_id")
+    @JoinColumn(name = "from_account_id",foreignKey = @ForeignKey(name = "publisher_fk"))
     private Account fromAccount;
 
     @ManyToOne
-    @JoinColumn(name = "to_account_id")
+    @JoinColumn(name = "to_account_id",foreignKey = @ForeignKey(name = "subscriber_fk"))
     private Account toAccount;
 
     @Enumerated(value = EnumType.STRING)

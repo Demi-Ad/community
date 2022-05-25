@@ -24,11 +24,11 @@ public class GuestBook {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "owner_id")
+    @JoinColumn(name = "owner_id",foreignKey = @ForeignKey(name = "owner_fk"))
     private Account owner;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "guest_id")
+    @JoinColumn(name = "guest_id",foreignKey = @ForeignKey(name = "guest_fk"))
     private Account guest;
 
     private String content;
