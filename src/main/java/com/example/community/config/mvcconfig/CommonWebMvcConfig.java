@@ -18,21 +18,18 @@ import java.util.List;
  * NginX 연동시 해당 코드 비활성화 필요
  */
 @Configuration
-@Profile({"local","h2"})
-public class WebMvcConfig implements WebMvcConfigurer {
+public class CommonWebMvcConfig implements WebMvcConfigurer {
 
-    private final String profileLocation;
-    private final String postImgLocation;
-    @Autowired
-    public WebMvcConfig(@Value("${static.profile.resource-location}") String profileLocation, @Value("${static.postImg.resource-location}") String postImgLocation) {
-        this.profileLocation = profileLocation;
-        this.postImgLocation = postImgLocation;
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/image/upload").allowedOrigins("*");
     }
 
     @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/profile/**").addResourceLocations(profileLocation);
-        registry.addResourceHandler("/img/**").addResourceLocations(postImgLocation);
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(new PostSearchParamArgResolver());
+        resolvers.add(new AccountBlockArgResolver());
+        resolvers.add(new SearchFieldResolver());
     }
 
 }

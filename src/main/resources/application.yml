@@ -33,8 +33,8 @@ spring:
                 default_batch_fetch_size: 1000
 static:
     profile:
-        resource-location: file:///D:/test/
-        save-path: D:\\test\\
+        resource-location: file:///D:/profile/
+        save-path: D:\\profile\\
     postImg:
         resource-location: file:///D:/img/
         save-path: D:\\img\\
@@ -48,7 +48,7 @@ server:
             charset: UTF-8
             enabled: true
             force: true
-    port: 8081
+    port: 80
 
 ---
 spring:
@@ -79,13 +79,11 @@ spring:
         port: 6379
 static:
     profile:
-        resource-location: file:///profile
-        save-path: /profile
+        save-path: /images/profile/
     postImg:
-        resource-location: file:///images
-        save-path: /images
+        save-path: /images/img/
     upload:
-        save-path: /upload
+        save-path: /upload/
 
 
 server:
@@ -94,7 +92,7 @@ server:
             charset: UTF-8
             enabled: true
             force: true
-    port: 8080
+    port: 80
 
 ---
 spring:
@@ -129,11 +127,11 @@ spring:
                 default_batch_fetch_size: 1000
 
 server:
-    port: 8081
+    port: 80
 static:
     profile:
-        resource-location: file:///D:/test/
-        save-path: D:\\test\\
+        resource-location: file:///D:/profile/
+        save-path: D:\\profile\\
     postImg:
         resource-location: file:///D:/img/
         save-path: D:\\img\\
