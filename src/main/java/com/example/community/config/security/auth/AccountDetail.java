@@ -36,7 +36,7 @@ public class AccountDetail implements UserDetails, Serializable {
 
     @Override
     public String getUsername() {
-        return account.getPassword();
+        return account.getNickname();
     }
 
     @Override

@@ -8,7 +8,6 @@
 
 <body>
     <div class="form-screen">
-        <i class="fas fa-bolt"></i> <span>Spur</span>
         <div class="card account-dialog">
             <div class="card-header bg-primary text-white"> Please sign in </div>
             <div class="card-body">
@@ -28,6 +27,25 @@
         </div>
     </div>
     <th:block th:replace="admin/fragment/adminStaticFragment :: script"/>
+    <script>
+        window.addEventListener("load", () => {
+
+            const replace = (element) => (err) =>  {
+                if (err) {
+                    element.innerText = err;
+                    const filter = [...element.classList].filter(value => !(value === 'bg-primary'));
+                    filter.push("bg-danger")
+                    element.className = filter.join(" ")
+                    return element;
+                }
+            }
+            const element = document.querySelector("div.card-header")
+            const err = new URL(window.location).searchParams.get("err");
+
+            replace(element)(err);
+
+        })
+    </script>
 </body>
 
 </html>

@@ -30,7 +30,6 @@ public class AccountForgotPasswordService {
         String generatePassword = tempPasswordGenerate();
         account.changePassword(passwordEncoder.encode(generatePassword));
         MailDto mailDto = new MailDto(email,"임시비밀번호 발급 안내","임시비밀번호 = [" + generatePassword + "]");
-        // TODO: 이메일 발송
         log.info("change password = {}",generatePassword);
     }
 

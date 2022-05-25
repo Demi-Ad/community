@@ -33,20 +33,7 @@ public class AccountSecessionService {
     private final PostLikeRepository postLikeRepository;
 
     private final SecurityContextUtil securityContextUtil;
-    /*
-     * 삭제 로직
-     * account -> postList (find)
-     * account -> commentList (find)
-     * account -> postLike (find)
-     * account -> ownerGuestBook (find)
-     * account -> guestBook (find)
-     *
-     * commentList -> delete
-     * postList -> delete
-     * ownerGuestBook -> delete
-     * guestBook -> delete
-     * postLike -> null or delete
-     */
+
     public void secession() {
 
         Account account = securityContextUtil.currentAccount();

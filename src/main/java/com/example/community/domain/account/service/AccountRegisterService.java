@@ -34,7 +34,6 @@ public class AccountRegisterService {
 
     public void accountRegister(RegisterDto registerDto) {
         String encodedPassword = passwordEncoder.encode(registerDto.getPassword());
-        log.info(registerDto.toString());
 
         registerDto.setPassword(encodedPassword);
         String profilePath = accountProfileImageService.profileImageSave(registerDto.getProfileImg());

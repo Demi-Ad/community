@@ -45,3 +45,4 @@ out/
 /src/test/resources/salt.yml
 
 plan/
+logs/

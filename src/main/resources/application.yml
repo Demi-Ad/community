@@ -69,11 +69,11 @@ spring:
         hibernate:
             ddl-auto: create
 
-        show-sql: true
+#        show-sql: true
         open-in-view: off
         properties:
             hibernate:
-                format_sql: true
+#                format_sql: true
                 default_batch_fetch_size: 1000
 
 server:
