@@ -8,10 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -33,7 +31,7 @@ public class RegisterController {
     }
 
     @PostMapping
-    public String register(@ModelAttribute("account") @Valid RegisterDto registerDto, BindingResult bindingResult, HttpSession session) {
+    public String register(@ModelAttribute("account") @Valid RegisterDto registerDto, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
 
         validator.validate(registerDto, bindingResult);
 
@@ -41,20 +39,17 @@ public class RegisterController {
             return "account/register";
         }
         accountRegisterService.accountRegister(registerDto);
-        session.setAttribute("confirm",registerDto);
-
+        redirectAttributes.addAttribute("nickname",registerDto.getNickname());
+        redirectAttributes.addAttribute("email",registerDto.getEmail());
         return "redirect:/register/guide";
     }
 
     @GetMapping("/guide")
-    public String guideForm(HttpSession session, Model model) {
-        RegisterDto dto = (RegisterDto) session.getAttribute("confirm");
+    public String guideForm(HttpSession session, Model model, @RequestParam("nickname") String nickname, @RequestParam("email") String email) {
 
-        if (dto == null) {
-            return "error/4xx";
-        }
+        model.addAttribute("nickname",nickname);
+        model.addAttribute("email",email);
 
-        model.addAttribute("confirm",dto);
         return "account/registered";
     }
 }

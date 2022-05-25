@@ -6,6 +6,9 @@ spring:
 
 ---
 spring:
+    autoconfigure:
+        exclude:
+            - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
     config:
         activate:
             on-profile: local
@@ -71,6 +74,9 @@ spring:
         hibernate:
             ddl-auto: none
         generate-ddl: false
+    redis:
+        host: cache
+        port: 6379
 static:
     profile:
         resource-location: file:///profile
@@ -90,18 +96,11 @@ server:
             force: true
     port: 8080
 
-
-
-redis:
-    session:
-        host: localhost
-        port: 6369
-    cache:
-        host: localhost
-        port: 6370
-
 ---
 spring:
+    autoconfigure:
+        exclude:
+            - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
     data:
         web:
             pageable:
@@ -116,8 +115,8 @@ spring:
         import: mail-properties.yml, salt.yml
     datasource:
         driver-class-name: org.h2.Driver
-        url: jdbc:h2:tcp://localhost:9092/~/h2db/testdb
-        username: SA
+#        url: jdbc:h2:tcp://localhost:9092/~/h2db/testdb
+#        username: SA
     jpa:
         hibernate:
             ddl-auto: create
