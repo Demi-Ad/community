@@ -18,24 +18,24 @@
             <!-- Post content-->
             <article>
                 <!-- Post header-->
-                <header class="mb-4">
+                <header class="mb-5">
                     <!-- Post title-->
-                    <h1 class="fw-bolder mb-1" th:text="${post.postTitle}">Welcome to Blog Post!</h1>
+                    <div class="mb-3">
+                        <a class="badge bg-secondary text-decoration-none link-light me-2" th:each="tag:${post.tagList}"
+                           th:href="@{/search(param = ${'tag'}, keyword=${tag.item.replace('#','')})}"
+                           th:text="${tag.item}"></a>
+                    </div>
+                    <div class="d-flex">
+                        <h1 class="fw-bolder mb-1" th:text="${post.postTitle}"></h1>
+                        <span class="ms-3 align-self-center" th:text="${#temporals.format(post.createdBy,'yyyy-MM-dd HH:mm')}"/>
+                    </div>
                     <!-- Post meta content-->
-                    <div class="text-muted fst-italic mb-2 mt-3">
-                        <img alt="" class="profile-post rounded-circle profile" th:src="${'/profile/' + post.profilePath}">
-                        Posted on
-                        <span th:text="${#temporals.format(post.createdBy,'yyyy-MM-dd HH:mm')}"/> by
-                        <span th:text="${post.author}"/>
+                    <div class="text-muted mb-2 mt-3">
+                        <img alt="" class="profile-post rounded-circle" th:src="${'/profile/' + post.profilePath}">
+                        <a class="fs-4 text-decoration-none text-primary ms-3" th:href="@{/info/{id}(id=${post.authorId})}" th:text="${post.author}"></a>
 
                     </div>
                     <!-- Post categories-->
-                    <div class="mt-3">
-                        <a th:each="tag:${post.tagList}" class="badge bg-secondary text-decoration-none link-light me-2"
-                           th:href="@{/search(param = ${'tag'}, keyword=${tag.item.replace('#','')})}"
-                           th:text="${tag.item}">Web
-                            Design</a>
-                    </div>
                 </header>
 
                 <!-- Post content-->
@@ -75,16 +75,19 @@
             </div>
 
             <!-- Comments section-->
-            <section class="mb-5"
-                     th:if="${post.commentResponseDtoList.getDataList().size() != 0} or !${#authentication.name.equals('anonymousUser')}">
+            <section class="mb-5 mt-3">
                 <div class="card bg-light">
+                    <div class="card-header">
+                        <h5>Comment</h5>
+                    </div>
                     <div class="card-body">
                         <!-- Comment form-->
-                        <form class="mb-3" id="commentForm" method="post" sec:authorize="hasRole('USER')"
-                              th:action="@{/comment}">
+                        <form class="mb-3" id="commentForm" method="post" th:action="@{/comment}">
                             <textarea class="form-control" name="commentContent"
-                                      placeholder="댓글을 작성해주세요" rows="2"></textarea>
-                            <div class="d-flex justify-content-end mt-3">
+                                      rows="2"
+                                      th:disabled="${#authentication.name.equals('anonymousUser')}"
+                                      th:placeholder="${#authentication.name.equals('anonymousUser')} ? '로그인이 필요합니다' : '댓글을 작성해주세요'"></textarea>
+                            <div class="d-flex justify-content-end mt-3" sec:authorize="hasRole('USER')">
                                 <button class="btn btn-outline-primary" type="submit">댓글작성</button>
                             </div>
                             <input th:name="${_csrf.headerName}" th:value="${_csrf.token}" type="hidden">
@@ -92,14 +95,17 @@
                         </form>
 
                         <!--comment-->
-                        <div class="mb-3" th:each="comment : ${post.commentResponseDtoList.dataList}">
+                        <div class="mb-5" th:each="comment : ${post.commentResponseDtoList.dataList}">
                             <div class="d-flex mb-3">
                                 <div class="flex-shrink-0">
                                     <img alt="..." class="rounded-circle profile"
                                          th:src="@{/profile/{imgPath}(imgPath=${comment.authorProfile})}">
                                 </div>
                                 <div class="ms-3">
-                                    <div class="fw-bold mb-1" th:text="${comment.author}">Commenter Name</div>
+                                    <div class="fw-bold mb-1">
+                                        <a class="text-success text-decoration-none fs-5" th:href="@{/info/{id}(id=${comment.authorId})}" th:text="${comment.author}"></a>
+                                        <a class="p-3 text-decoration-none text-muted" th:text="${#temporals.format(comment.createAt, 'yyyy-MM-dd HH:mm')}"></a>
+                                    </div>
                                     <p class="comment" th:data-commentId="${comment.commentId}" th:text="${comment.content}"></p>
                                     <a class="text-info fs-6 addChildComment commentBtn" sec:authorize="isAuthenticated()" th:if="${!comment.isDeleted()}"
                                        th:value="${comment.commentId}">댓글달기</a>
@@ -110,14 +116,17 @@
                                 </div>
                             </div>
                             <!-- Child comment-->
-                            <div class="d-flex mt-4 ms-3" th:each="childComment : ${comment.childrenCommentList}">
+                            <div class="d-flex mt-5 ms-3" th:each="childComment : ${comment.childrenCommentList}">
                                 <div class="flex-shrink-0">
                                     <i class="bi bi-arrow-return-right me-3"></i>
                                     <img alt="..." class="rounded-circle profile"
                                          th:src="@{/profile/{imgPath}(imgPath=${childComment.authorProfile})}">
                                 </div>
                                 <div class="ms-3">
-                                    <div class="fw-bold mb-1" th:text="${childComment.author}">Commenter Name</div>
+                                    <div class="fw-bold mb-1">
+                                        <a class="text-success text-decoration-none fs-5" th:href="@{/info/{id}(id=${childComment.authorId})}" th:text="${childComment.author}"></a>
+                                        <a class="p-3 text-decoration-none text-muted" th:text="${#temporals.format(childComment.createAt, 'yyyy-MM-dd HH:mm')}"></a>
+                                    </div>
                                     <p class="comment" th:data-commentId="${childComment.commentId}" th:text="${childComment.content}"></p>
                                     <a class="text-danger fs-6 delCommentBtn commentBtn" th:if="${childComment.createAuthor}"
                                        th:value="${childComment.commentId}">댓글삭제</a>

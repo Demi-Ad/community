@@ -19,7 +19,6 @@ import com.example.community.domain.postLike.vo.LikeVo;
 import com.example.community.domain.postTag.dto.TagDto;
 import com.example.community.domain.postTag.entity.PostTag;
 import com.example.community.domain.postTag.entity.Tag;
-import com.example.community.domain.postTag.repo.PostTagRepository;
 import com.example.community.domain.postTag.repo.TagRepository;
 import com.example.community.domain.postTag.service.TagService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -65,7 +63,7 @@ public class PostService {
         List<String> tagStrList = new ArrayList<>();
         if (StringUtils.hasText(postRequestDto.getTagJoiningStr())) {
             Stream.of(postRequestDto.getTagJoiningStr().split(" "))
-                    .map(s -> "#"+s)
+                    .map(s -> "#" + s)
                     .forEach(tagStrList::add);
         }
 
@@ -82,10 +80,15 @@ public class PostService {
     public void editPost(PostRequestDto postRequestDto, Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(ExceptionSupplier::supply400);
         post.getPostTagList().clear();
-        List<Tag> tagList = tagService.saveElseFind(
-                Arrays.stream(postRequestDto.getTagJoiningStr()
-                        .split(" ")).map(s -> "#"+s)
-                        .collect(Collectors.toList()));
+        List<Tag> tagList = new ArrayList<>();
+        if (StringUtils.hasText(postRequestDto.getTagJoiningStr())) {
+            List<String> tagStrList = Arrays.stream(postRequestDto.getTagJoiningStr()
+                            .split(" "))
+                    .map(s -> "#" + s)
+                    .collect(Collectors.toList());
+            List<Tag> tags = tagService.saveElseFind(tagStrList);
+            tagList.addAll(tags);
+        }
 
         postSetTag(tagList, post);
         post.edit(postRequestDto.getTitle(), postRequestDto.getContent());
@@ -112,7 +115,7 @@ public class PostService {
     }
 
     @Transactional(readOnly = true)
-    public PostResponseDto findPostSingleView(Long postId,Pageable pageable) {
+    public PostResponseDto findPostSingleView(Long postId, Pageable pageable) {
 
         Post post = postRepository.findByIdJoinAccount(postId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "존재 하지 않는 글"));
@@ -125,7 +128,7 @@ public class PostService {
     public Pagination<PostResponseDto> listPost(Pageable pageable) {
         Page<Post> postPage = postRepository.pagingJoinAccount(pageable);
 
-        return Pagination.of(postPage,this::createPostResponseDto);
+        return Pagination.of(postPage, this::createPostResponseDto);
     }
 
     @Transactional(readOnly = true)
@@ -155,11 +158,11 @@ public class PostService {
         switch (postSearchParam.getParam()) {
             case TAG:
                 return tagRepository.findByItemContains(postSearchParam.getKeyword(), pageRequest)
-                        .map(tag -> new SearchPreviewDto("/images/hash.svg",tag.getItem(), postSearchParam.toUri(tag.getItem())))
+                        .map(tag -> new SearchPreviewDto("/images/hash.svg", tag.getItem(), postSearchParam.toUri(tag.getItem())))
                         .toList();
             case TITLE:
                 return postRepository.findByTitleContains(postSearchParam.getKeyword(), pageRequest)
-                        .map(post -> new SearchPreviewDto("/images/search.svg",post.getTitle(),"/post/" + post.getId()))
+                        .map(post -> new SearchPreviewDto("/images/search.svg", post.getTitle(), "/post/" + post.getId()))
                         .toList();
             case AUTHOR:
                 return accountRepository.findByNicknameContaining(postSearchParam.getKeyword(), pageRequest)
@@ -184,10 +187,11 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    private PostResponseDto createPostResponseDto(Post post,Pageable pageable) {
+    private PostResponseDto createPostResponseDto(Post post, Pageable pageable) {
 
         return PostResponseDto.builder()
                 .postId(post.getId())
+                .authorId(post.getAccount().getId())
                 .postTitle(post.getTitle())
                 .postContent(post.getContent())
                 .author(post.getAccount().getNickname())
@@ -197,10 +201,11 @@ public class PostService {
                 .isCreated(authorizeCheckUtil.postAuthorizedCheck(post.getId()))
                 .likeCount(postLikeService.postLikeCount(post))
                 .uploadFileLink(post.getPostFiles().stream().map(PostFileDto::new).collect(Collectors.toList()))
-                .commentResponseDtoList(Pagination.of(commentService.createCommentResponse(post.getId(),pageable)))
+                .commentResponseDtoList(Pagination.of(commentService.createCommentResponse(post.getId(), pageable)))
                 .build();
 
     }
+
     private List<PostResponseDto> createPostResponseDto(List<Post> postList) {
         List<Long> postIdList = postList.stream()
                 .map(Post::getId)

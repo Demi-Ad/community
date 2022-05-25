@@ -19,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 public class CommentResponseDto {
     private Long commentId;
+    private Long authorId;
     private String author;
     private String authorProfile;
     private String content;
@@ -29,7 +30,7 @@ public class CommentResponseDto {
 
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();
-
+        this.authorId = comment.getAccount().getId();
         if (comment.getAccount() == null) {
             this.author = "삭제된 글";
             this.authorProfile = "person.png";
