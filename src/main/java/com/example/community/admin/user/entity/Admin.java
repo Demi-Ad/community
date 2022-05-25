@@ -20,7 +20,7 @@ public class Admin {
 
     @Id
     @GeneratedValue
-    private Long seq;
+    private Long adminSeq;
 
     private String adminId;
 

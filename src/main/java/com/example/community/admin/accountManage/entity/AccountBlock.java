@@ -21,7 +21,7 @@ public class AccountBlock {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "account_kf"))
+    @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "block_account_fk"))
     private Account blockAccount;
 
     private String blockComment;

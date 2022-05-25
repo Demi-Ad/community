@@ -23,11 +23,11 @@ public class PostTag extends BaseTimeEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tag_id",foreignKey = @ForeignKey(name = "tag_fk"))
+    @JoinColumn(name = "tag_id",foreignKey = @ForeignKey(name = "pt_tag_fk"))
     private Tag tag;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id",foreignKey = @ForeignKey(name = "post_fk"))
+    @JoinColumn(name = "post_id",foreignKey = @ForeignKey(name = "pt_post_fk"))
     private Post post;
 
 

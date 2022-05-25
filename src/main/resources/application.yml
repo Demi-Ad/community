@@ -1,6 +1,6 @@
 spring:
     profiles:
-        active: local
+        active: docker
 
 
 
@@ -46,6 +46,59 @@ server:
             enabled: true
             force: true
     port: 8081
+
+---
+spring:
+    config:
+        activate:
+            on-profile: docker
+        import: mail-properties.yml, salt.yml
+    data:
+        web:
+            pageable:
+                one-indexed-parameters: true
+    datasource:
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        username: demi
+        password: password
+        url: jdbc:mysql://mysqlDB:3306/community
+    jpa:
+        open-in-view: off
+        properties:
+            hibernate:
+
+                default_batch_fetch_size: 1000
+        hibernate:
+            ddl-auto: none
+        generate-ddl: false
+static:
+    profile:
+        resource-location: file:///profile
+        save-path: /profile
+    postImg:
+        resource-location: file:///images
+        save-path: /images
+    upload:
+        save-path: /upload
+
+
+server:
+    servlet:
+        encoding:
+            charset: UTF-8
+            enabled: true
+            force: true
+    port: 8080
+
+
+
+redis:
+    session:
+        host: localhost
+        port: 6369
+    cache:
+        host: localhost
+        port: 6370
 
 ---
 spring:

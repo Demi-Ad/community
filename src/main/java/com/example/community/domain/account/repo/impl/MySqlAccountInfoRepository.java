@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Profile("local")
+@Profile({"local","docker"})
 @Repository("accountInfoRepository")
 public class MySqlAccountInfoRepository implements AccountInfoRepository {
 

@@ -31,10 +31,10 @@ public class Comment {
     @OneToMany(mappedBy = "parentComment", orphanRemoval = true, cascade = CascadeType.ALL)
     private final Set<Comment> childrenComment = new HashSet<>();
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "account_fk"))
+    @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "comment_account_fk"))
     private Account account;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id",foreignKey = @ForeignKey(name = "post_fk"))
+    @JoinColumn(name = "post_id",foreignKey = @ForeignKey(name = "comment_post_fk"))
     private Post post;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id",foreignKey = @ForeignKey(name = "parent_comment_kf"))
