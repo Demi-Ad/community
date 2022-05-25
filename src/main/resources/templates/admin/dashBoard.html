@@ -3,7 +3,10 @@
 
 <head>
     <th:block th:replace="admin/fragment/adminStaticFragment :: head"/>
-    <title>Spur - A Bootstrap Admin Template</title>
+    <meta th:name="newPost" th:value="${count.newPost}">
+    <meta th:name="newComment" th:value="${count.newComment}">
+    <meta th:name="newAccount" th:value="${count.newAccount}">
+
 </head>
 
 <body>
@@ -57,13 +60,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xl-6">
+                        <div class="col-6">
                             <div class="card spur-card">
                                 <div class="card-header">
                                     <div class="spur-card-icon">
                                         <i class="fas fa-chart-bar"></i>
                                     </div>
-                                    <div class="spur-card-title"> 금주 로그인 회원 </div>
+                                    <div class="spur-card-title"> 금일 회원 활동 </div>
                                     <div class="spur-card-menu">
                                         <div class="dropdown show">
                                             <a aria-expanded="false" aria-haspopup="true" class="spur-card-menu-link" data-toggle="dropdown" href="#" role="button">
@@ -80,13 +83,18 @@
                                     <canvas id="spurChartjsBar"></canvas>
                                     <script>
                                         var ctx = document.getElementById("spurChartjsBar").getContext('2d');
+                                        const newPost = document.querySelector("meta[name='newPost']").getAttribute("value");
+                                        const newComment = document.querySelector("meta[name='newComment']").getAttribute("value");
+                                        const newAccount = document.querySelector("meta[name='newAccount']").getAttribute("value");
+
+
                                         var myChart = new Chart(ctx, {
                                             type: 'bar',
                                             data: {
-                                                labels: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                                                labels: ["신규 게시글","신규 댓글","신규 회원"],
                                                 datasets: [{
                                                     label: 'Blue',
-                                                    data: [12, 19, 3, 5, 2],
+                                                    data: [ newPost,newComment,newAccount ],
                                                     backgroundColor: window.chartColors.primary,
                                                     borderColor: 'transparent'
                                                 }]
@@ -105,44 +113,6 @@
                                             }
                                         });
                                     </script>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-6">
-                            <div class="card spur-card">
-                                <div class="card-header">
-                                    <div class="spur-card-icon">
-                                        <i class="fas fa-bell"></i>
-                                    </div>
-                                    <div class="spur-card-title"> 건의 / 신고 </div>
-                                </div>
-                                <div class="card-body ">
-                                    <div class="notifications">
-                                        <a class="notification" href="#">
-                                            <div class="notification-icon">
-                                                <i class="fas fa-inbox"></i>
-                                            </div>
-                                            <div class="notification-text">New comment</div>
-                                            <span class="notification-time">21 days ago</span>
-                                        </a>
-                                        <a class="notification" href="#">
-                                            <div class="notification-icon">
-                                                <i class="fas fa-inbox"></i>
-                                            </div>
-                                            <div class="notification-text">New comment</div>
-                                            <span class="notification-time">21 days ago</span>
-                                        </a>
-                                        <a class="notification" href="#">
-                                            <div class="notification-icon">
-                                                <i class="fas fa-inbox"></i>
-                                            </div>
-                                            <div class="notification-text">New comment</div>
-                                            <span class="notification-time">21 days ago</span>
-                                        </a>
-                                        <div class="notifications-show-all">
-                                            <a href="#">Show all</a>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                         </div>

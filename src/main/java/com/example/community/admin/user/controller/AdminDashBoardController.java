@@ -1,6 +1,7 @@
 package com.example.community.admin.user.controller;
 
 import com.example.community.admin.user.service.DashBoardService;
+import com.example.community.admin.user.service.TodayDashBoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,11 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 public class AdminDashBoardController {
 
     private final DashBoardService dashBoardService;
+    private final TodayDashBoardService todayDashBoardService;
 
     @GetMapping("/dashboard")
     public String dashboard(Model model, HttpServletResponse response) {
-        response.setHeader("FETCH_API","A");
         model.addAttribute("dashboard",dashBoardService.createDashBoard());
+        model.addAttribute("count",todayDashBoardService.calcTodayCount());
         return "admin/dashBoard";
     }
 }
