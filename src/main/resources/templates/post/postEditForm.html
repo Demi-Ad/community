@@ -15,8 +15,13 @@
                     <input class="form-control" id="floatingInput" name="title" placeholder="title" th:field="*{title}"
                            type="text">
                     <label for="floatingInput">제목</label>
+                    <p class="text-danger" th:if="${#fields.hasErrors('title')}">제목은 2글자 이상입니다</p>
+
                 </div>
                 <textarea id="editor" name="content" th:field="*{content}"></textarea>
+
+                <p class="text-danger" th:if="${#fields.hasErrors('content')}">본문은 비어 있을 수 없습니다</p>
+                <p class="text-danger" th:errors="*{global}" th:if="${#fields.hasGlobalErrors()}"></p>
 
                 <div class="mt-5">
                     <div class="d-flex justify-content-start">
@@ -34,11 +39,10 @@
                     <button class="btn btn-outline-primary" type="submit">작성완료</button>
                 </div>
                 <input th:name="${_csrf.headerName}" th:value="${_csrf.token}" type="hidden">
-                <p th:errors="*{global}" th:if="${#fields.hasGlobalErrors()}"></p>
             </form>
         </div>
     </div>
 </div>
-<th:block th:replace="/fragment/post/editScrpitFragment :: scrpit(${post})"/>
+<th:block th:replace="/fragment/post/editScrpitFragment :: scrpit()"/>
 </body>
 </html>

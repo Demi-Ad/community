@@ -20,17 +20,12 @@ public class AccountForgotPasswordService {
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public boolean isExistsAccount(String email) {
-        return accountRepository.existsByEmailEquals(email);
-    }
-
-
     public void changePassword(String email) {
         Account account = accountRepository.findByEmail(email).orElseThrow();
         String generatePassword = tempPasswordGenerate();
         account.changePassword(passwordEncoder.encode(generatePassword));
         MailDto mailDto = new MailDto(email,"임시비밀번호 발급 안내","임시비밀번호 = [" + generatePassword + "]");
-        log.info("change password = {}",generatePassword);
+        log.info("Account NickName = {} TempPassword = {}",account.getEmail(), generatePassword);
     }
 
     private String tempPasswordGenerate() {

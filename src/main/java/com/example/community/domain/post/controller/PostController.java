@@ -2,6 +2,7 @@ package com.example.community.domain.post.controller;
 
 import com.example.community.admin.forbiddenWord.service.ForbiddenWordSpecification;
 import com.example.community.admin.forbiddenWord.validator.ForbiddenWordCheckValidator;
+import com.example.community.common.util.ValidateFailLogger;
 import com.example.community.config.security.auth.AccountDetail;
 import com.example.community.domain.post.dto.PostRequestDto;
 import com.example.community.domain.post.dto.PostResponseDto;
@@ -29,6 +30,7 @@ import javax.validation.Valid;
 public class PostController {
     private final PostService postService;
     private final ForbiddenWordCheckValidator forbiddenWordCheckValidator;
+    private final ValidateFailLogger validateFailLogger;
 
     @GetMapping("/post/{postId}")
     public String postSingleView(@PathVariable Long postId, Model model, @PageableDefault Pageable pageable) {
@@ -50,6 +52,7 @@ public class PostController {
                              RedirectAttributes redirectAttributes) {
         forbiddenWordCheckValidator.validate(postRequestDto.getContent(), ForbiddenWordSpecification.POST,bindingResult);
         if (bindingResult.hasErrors()) {
+            validateFailLogger.convert(bindingResult);
             return "post/postCreateForm";
         }
 
@@ -78,6 +81,7 @@ public class PostController {
     public String editPost(@PathVariable("id") Long postId, @Valid @ModelAttribute("post") PostRequestDto postRequestDto, BindingResult bindingResult) {
         forbiddenWordCheckValidator.validate(postRequestDto.getContent(), ForbiddenWordSpecification.POST, bindingResult);
         if (bindingResult.hasErrors()) {
+            validateFailLogger.convert(bindingResult);
             return "post/postEditForm";
         }
         postService.editPost(postRequestDto, postId);

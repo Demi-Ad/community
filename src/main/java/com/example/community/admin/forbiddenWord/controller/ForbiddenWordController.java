@@ -35,7 +35,6 @@ public class ForbiddenWordController {
     @GetMapping()
     public String forbiddenWordForm(Model model,
                                     @ModelAttribute("forbiddenWordSearch") ForbiddenWordSearchDto forbiddenWordSearchDto) {
-        log.info("SEARCH = {}",forbiddenWordSearchDto);
         List<ForbiddenWordDto> pagination = forbiddenWordService.forbiddenWordList(forbiddenWordSearchDto.createSpecification());
 
         model.addAttribute("forbiddenWordList",pagination);
@@ -78,7 +77,7 @@ public class ForbiddenWordController {
     @GetMapping("/csvDownload")
     @ResponseBody
     public ResponseEntity<byte[]> downloadCsv() {
-        byte[] csvFile = null;
+        byte[] csvFile;
         HttpHeaders header = new HttpHeaders();
 
         try {

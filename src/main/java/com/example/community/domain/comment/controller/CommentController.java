@@ -2,6 +2,7 @@ package com.example.community.domain.comment.controller;
 
 import com.example.community.admin.forbiddenWord.service.ForbiddenWordSpecification;
 import com.example.community.admin.forbiddenWord.validator.ForbiddenWordCheckValidator;
+import com.example.community.common.util.ValidateFailLogger;
 import com.example.community.domain.comment.dto.CommentEditRequestDto;
 import com.example.community.domain.comment.dto.CommentEditResponseDto;
 import com.example.community.domain.comment.dto.CommentRequestDto;
@@ -26,6 +27,7 @@ import java.util.Objects;
 public class CommentController {
     private final CommentService commentService;
     private final ForbiddenWordCheckValidator validator;
+    private final ValidateFailLogger logger;
 
     @PostMapping("/comment")
     @PreAuthorize("isAuthenticated()")
@@ -40,7 +42,7 @@ public class CommentController {
             }
 
             String encodeErr = URLEncoder.encode(Objects.requireNonNull(forbiddenWord), StandardCharsets.UTF_8);
-
+            logger.convert(errors);
             return "redirect:/post/{postId}?err=" + encodeErr;
         }
         commentService.save(commentRequestDto);

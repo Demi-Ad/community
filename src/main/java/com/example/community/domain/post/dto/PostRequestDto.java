@@ -14,7 +14,6 @@ import java.util.List;
 @NoArgsConstructor
 public class PostRequestDto {
     @Size(min = 2,message = "제목은 2글자 이상입니다")
-    @NotEmpty(message = "제목은 비어있을 수 없습니다")
     private String title;
     @NotEmpty(message = "본문은 비어있을 수 없습니다")
     private String content;
@@ -26,4 +25,6 @@ public class PostRequestDto {
         this.content = content;
         this.tagJoiningStr = tagJoiningStr;
     }
+
+
 }

@@ -15,8 +15,12 @@
                     <input class="form-control" id="title" name="title" placeholder="title" th:field="*{title}"
                            type="text">
                     <label for="title">제목</label>
+                    <p class="text-danger" th:if="${#fields.hasErrors('title')}">제목은 2글자 이상입니다</p>
                 </div>
                 <textarea id="editor" name="content" th:field="*{content}"></textarea>
+
+                <p class="text-danger" th:if="${#fields.hasErrors('content')}">본문은 비어 있을 수 없습니다</p>
+                <p class="text-danger" th:errors="*{global}" th:if="${#fields.hasGlobalErrors()}"></p>
 
                 <div class="mt-3">
                     <label class="form-label" for="formFileMultiple">파일 첨부</label>
@@ -40,7 +44,6 @@
                 </div>
                 <input th:name="${_csrf.headerName}" th:value="${_csrf.token}" type="hidden">
 
-                <p th:if="${#fields.hasGlobalErrors()}" th:errors="*{global}"></p>
             </form>
         </div>
     </div>

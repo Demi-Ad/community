@@ -34,6 +34,7 @@ public class ForgotPasswordController {
             return "account/forgotPasswordAfter";
         }
         catch (NoSuchElementException e){
+            log.warn("존재하지 않는 계정 조회");
             model.addAttribute("err",true);
             return "account/forgotPassword";
         }

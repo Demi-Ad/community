@@ -3,6 +3,7 @@ package com.example.community.domain.account.controller;
 import com.example.community.admin.forbiddenWord.service.ForbiddenWordSpecification;
 import com.example.community.admin.forbiddenWord.validator.ForbiddenWordCheckValidator;
 import com.example.community.common.component.Pagination;
+import com.example.community.common.util.ValidateFailLogger;
 import com.example.community.config.security.auth.AccountDetail;
 import com.example.community.domain.account.dto.AccountInfoBasicDto;
 import com.example.community.domain.account.dto.AccountInfoDetailDto;
@@ -36,6 +37,7 @@ public class AccountInfoController {
     private final GuestBookService guestBookService;
 
     private final ForbiddenWordCheckValidator validator;
+    private final ValidateFailLogger logger;
 
     @GetMapping("/info/{id:^0{0}[1-9]+}")
     public String accountInfoForm(@PathVariable("id") Long userId, Model model) {
@@ -63,6 +65,7 @@ public class AccountInfoController {
                                 @AuthenticationPrincipal AccountDetail accountDetail) {
         validator.validate(content, ForbiddenWordSpecification.GUEST_BOOK, errors);
         if (errors.hasErrors()) {
+            logger.convert(errors);
             String encodeDefaultMessage = "";
             if (errors.getGlobalError() != null) {
                 encodeDefaultMessage = URLEncoder.encode(errors.getGlobalError().getDefaultMessage(), StandardCharsets.UTF_8);
