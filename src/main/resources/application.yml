@@ -92,7 +92,7 @@ server:
             charset: UTF-8
             enabled: true
             force: true
-    port: 80
+    port: 8080
 
 ---
 spring:
