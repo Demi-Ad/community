@@ -1,74 +1,71 @@
 package com.example.community.common.lisnter;
 
-import com.example.community.admin.user.entity.Admin;
-import com.example.community.admin.user.repo.AdminRepository;
-import com.example.community.config.security.Role;
-import com.example.community.domain.account.entity.Account;
-import com.example.community.domain.account.repo.AccountRepository;
-import com.example.community.domain.post.entity.Post;
-import com.example.community.domain.post.repo.PostRepository;
-import com.example.community.domain.postTag.entity.PostTag;
-import com.example.community.domain.postTag.entity.Tag;
-import com.example.community.domain.postTag.repo.TagRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.annotation.Profile;
-import org.springframework.context.event.ContextRefreshedEvent;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
+import org.springframework.core.io.ResourceLoader;
+import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @Component
-@RequiredArgsConstructor
-@Transactional
-@Profile({"local","h2"})
+@Slf4j
 public class ApplicationStartListener implements ApplicationListener<ContextRefreshedEvent> {
 
-    private final AccountRepository accountRepository;
-    private final AdminRepository adminRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final String profileSavePath;
+    private final String imageSavePath;
+    private final String uploadFileSavePath;
 
-    private final PostRepository postRepository;
+    private final ResourceLoader resourceLoader;
 
-
-    private final TagRepository tagRepository;
+    public ApplicationStartListener(@Value("${static.profile.save-path}") String profileSavePath,
+                                    @Value("${static.postImg.save-path}") String imageSavePath,
+                                    @Value("${static.upload.save-path}") String uploadFileSavePath,
+                                    ResourceLoader resourceLoader) {
+        this.profileSavePath = profileSavePath;
+        this.imageSavePath = imageSavePath;
+        this.uploadFileSavePath = uploadFileSavePath;
+        this.resourceLoader = resourceLoader;
+    }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        Account account = Account.builder().email("votm777@naver.com")
-                .password(passwordEncoder.encode("aaaa"))
-                .nickname("aaaa")
-                .profileImg("person.png")
-                .build();
+        log.info("Start!");
+        File profileSaveFolder = new File(profileSavePath);
+        File imageSaveFolder = new File(imageSavePath);
+        File uploadFileSaveFolder = new File(uploadFileSavePath);
+        if (!profileSaveFolder.exists() || !profileSaveFolder.isDirectory()) {
+            profileSaveFolder.mkdir();
+            log.info("profile Folder init");
 
-        account.emailVerification();
-        accountRepository.save(account);
+            try {
+                InputStream inputStream = resourceLoader.getResource("classpath:static/temp/person.png").getInputStream();
+                Path path = Paths.get(profileSavePath, "person.png");
+                Files.copy(inputStream, path);
+                log.info("File copy");
 
-        Tag tag = new Tag("#TEST_TAG");
-        tagRepository.save(tag);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
-        IntStream.rangeClosed(1,100)
-                .mapToObj(i -> new Post("TEST" + i, "TEST" + i))
-                .collect(Collectors.toList())
-                .forEach(post -> {
-                    PostTag postTag = new PostTag();
-                    post.addPostTag(postTag);
-                    postTag.setTag(tag);
-                    post.postedAccount(account);
-                    tagRepository.save(tag);
-                    postRepository.save(post);
-                });
+        if (!imageSaveFolder.exists() || !imageSaveFolder.isDirectory()) {
+            log.info("image Folder init");
+            imageSaveFolder.mkdir();
+        }
 
-        Admin admin = Admin.builder()
-                .adminId("admin")
-                .password(passwordEncoder.encode("admin"))
-                .adminName("전체관리자")
-                .role(Role.ROLE_ADMIN)
-                .build();
+        if (!uploadFileSaveFolder.exists() || !uploadFileSaveFolder.isDirectory()) {
+            log.info("upload Folder init");
+            uploadFileSaveFolder.mkdir();
+        }
 
-        adminRepository.save(admin);
+
     }
 }

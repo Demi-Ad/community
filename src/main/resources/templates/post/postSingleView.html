@@ -43,8 +43,9 @@
                 </section>
             </article>
 
-            <div class="d-flex justify-content-center mb-3">
-                <form method="post" th:action="@{/post/{id}/like(id=${post.postId})}">
+            <div class="d-flex justify-content-between mb-3">
+                <div></div>
+                <form method="post"  th:action="@{/post/{id}/like(id=${post.postId})}">
                     <button class="btn btn-outline-danger" th:disabled="${@securityContextUtil.currentAccount() == null}" type="submit">
                         <span class="me-3" th:text="${post.likeCount}"/>
                         <i class="bi bi-heart" th:if="${post.likeCount} == 0"></i>
@@ -52,6 +53,7 @@
                     </button>
                     <input th:name="${_csrf.headerName}" th:value="${_csrf.token}" type="hidden">
                 </form>
+                <button class="btn btn-outline-secondary" id="listBtn">목록</button>
             </div>
 
             <div class="row">
@@ -304,6 +306,11 @@
             }
 
         })
+    })
+</script>
+<script>
+    document.querySelector("#listBtn").addEventListener("click", () => {
+        history.back()
     })
 </script>
 <script th:src="@{/js/forbiddenWordAlert.js}"></script>

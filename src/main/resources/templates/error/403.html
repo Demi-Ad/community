@@ -1,10 +1,23 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <th:block th:replace="fragment/head :: head"/>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>404</title>
 </head>
 <body>
-<h1>403</h1>
+<div class="container-fluid p-3">
+    <th:block th:replace="fragment/header::header"/>
+
+    <div class="col-12">
+        <div class="p-5 mb-4 bg-light rounded-3">
+            <div class="container-fluid py-5">
+                <h1 class="display-5 fw-bold text-danger">403 ERROR</h1>
+                <p class="col-md-8 fs-4">요청 하신 페이지는 접근권한이 존재하지 않습니다.</p>
+                <a class="btn btn-outline-secondary btn-lg" th:href="@{/}">홈으로</a>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
