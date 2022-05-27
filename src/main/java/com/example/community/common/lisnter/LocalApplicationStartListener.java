@@ -62,11 +62,12 @@ public class LocalApplicationStartListener implements ApplicationListener<Contex
                     postRepository.save(post);
                 });
 
+
         Admin admin = Admin.builder()
+                .adminSeq(1L)
                 .adminId("admin")
                 .password(passwordEncoder.encode("admin"))
                 .adminName("전체관리자")
-                .role(Role.ROLE_ADMIN)
                 .build();
 
         adminRepository.save(admin);

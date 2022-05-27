@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 public class Admin {
 
     @Id
-    @GeneratedValue
+    @Column(name = "admin_seq")
     private Long adminSeq;
 
     private String adminId;
@@ -34,11 +34,14 @@ public class Admin {
     @CreatedDate
     private LocalDateTime createDate;
 
+
     @Builder
-    public Admin(String adminId, String password, String adminName, Role role) {
+    public Admin(Long adminSeq, String adminId, String password, String adminName) {
+        this.adminSeq = adminSeq;
         this.adminId = adminId;
         this.password = password;
         this.adminName = adminName;
-        this.role = role;
+        this.role = Role.ROLE_ADMIN;
+        this.createDate = LocalDateTime.now();
     }
 }
