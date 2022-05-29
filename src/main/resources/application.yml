@@ -6,9 +6,6 @@ spring:
 
 ---
 spring:
-    autoconfigure:
-        exclude:
-            - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
     config:
         activate:
             on-profile: local
@@ -55,7 +52,7 @@ spring:
     config:
         activate:
             on-profile: docker
-        import: mail-properties.yml, salt.yml
+        import: salt.yml
     data:
         web:
             pageable:
@@ -74,9 +71,6 @@ spring:
         hibernate:
             ddl-auto: none
         generate-ddl: false
-    redis:
-        host: cache
-        port: 6379
 static:
     profile:
         save-path: /images/profile/
@@ -107,7 +101,7 @@ spring:
     config:
         activate:
             on-profile: h2
-        import: mail-properties.yml, salt.yml
+        import: salt.yml
     datasource:
         driver-class-name: org.h2.Driver
 #        url: jdbc:h2:tcp://localhost:9092/~/h2db/testdb

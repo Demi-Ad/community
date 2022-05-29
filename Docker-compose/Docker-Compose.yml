@@ -1,0 +1,47 @@
+version: "3"
+services:
+    web:
+        image: nginx
+        ports:
+            - "80:80"
+        volumes:
+            - "./nginx/conf.d:/etc/nginx/conf.d"
+            - "./images:/images"
+        depends_on:
+            - was
+        networks:
+            - backend
+
+    was:
+        image: votm777/community:1.0
+        ports:
+            - "8080"
+        volumes:
+            - "./images:/images"
+            - "./upload:/upload"
+            - "./logs:/logs"
+        depends_on:
+            - database
+        restart:
+            on-failure
+        networks:
+            - backend
+
+    database:
+        image: mysql
+        container_name: mysqlDB
+        ports:
+            - "3306:3306"
+        volumes:
+            - "./sql/:/docker-entrypoint-initdb.d/"
+        environment:
+            MYSQL_USER: demi
+            MYSQL_DATABASE: community
+            MYSQL_PASSWORD: password
+            MYSQL_ROOT_PASSWORD: password
+        networks:
+            - backend
+
+networks:
+    backend:
+        driver: bridge
