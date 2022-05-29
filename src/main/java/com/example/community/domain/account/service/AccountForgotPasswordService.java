@@ -1,9 +1,7 @@
 package com.example.community.domain.account.service;
 
-import com.example.community.common.mailing.dto.MailDto;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -13,19 +11,23 @@ import java.util.Random;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 @Slf4j
 public class AccountForgotPasswordService {
 
     private final AccountRepository accountRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public void changePassword(String email) {
+
+    public AccountForgotPasswordService(AccountRepository accountRepository, PasswordEncoder passwordEncoder) {
+        this.accountRepository = accountRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    public String changePassword(String email) {
         Account account = accountRepository.findByEmail(email).orElseThrow();
         String generatePassword = tempPasswordGenerate();
         account.changePassword(passwordEncoder.encode(generatePassword));
-        MailDto mailDto = new MailDto(email,"임시비밀번호 발급 안내","임시비밀번호 = [" + generatePassword + "]");
-        log.info("Account NickName = {} TempPassword = {}",account.getEmail(), generatePassword);
+        return generatePassword;
     }
 
     private String tempPasswordGenerate() {

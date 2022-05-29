@@ -17,6 +17,7 @@ public class ForbiddenWord {
     @Column(name = "forbidden_word_id")
     private Long id;
 
+    @Column(nullable = false)
     private String forbiddenText;
 
     private Boolean isPostForbidden;

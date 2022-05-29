@@ -12,7 +12,7 @@ spring:
     config:
         activate:
             on-profile: local
-        import: mail-properties.yml, salt.yml
+        import: salt.yml
     data:
         web:
             pageable:
@@ -96,9 +96,6 @@ server:
 
 ---
 spring:
-    autoconfigure:
-        exclude:
-            - org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration
     data:
         web:
             pageable:

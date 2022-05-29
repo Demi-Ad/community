@@ -1,7 +1,6 @@
 package com.example.community.admin.forbiddenWord.validator;
 
 import com.example.community.admin.forbiddenWord.dto.ForbiddenWordDto;
-import com.example.community.admin.forbiddenWord.entity.ForbiddenWord;
 import com.example.community.admin.forbiddenWord.repo.ForbiddenWordRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

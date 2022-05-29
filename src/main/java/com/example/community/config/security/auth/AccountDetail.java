@@ -56,6 +56,6 @@ public class AccountDetail implements UserDetails, Serializable {
 
     @Override
     public boolean isEnabled() {
-        return account.getIsEmailVerified();
+        return true;
     }
 }

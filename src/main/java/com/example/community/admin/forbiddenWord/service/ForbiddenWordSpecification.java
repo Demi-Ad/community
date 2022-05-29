@@ -3,8 +3,6 @@ package com.example.community.admin.forbiddenWord.service;
 import com.example.community.admin.forbiddenWord.entity.ForbiddenWord;
 import org.springframework.data.jpa.domain.Specification;
 
-import javax.persistence.criteria.Predicate;
-
 public enum ForbiddenWordSpecification {
     POST("isPostForbidden"), COMMENT("isCommentForbidden"), GUEST_BOOK("isGuestBookForbidden");
 

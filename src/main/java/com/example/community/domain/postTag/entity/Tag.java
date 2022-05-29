@@ -19,7 +19,7 @@ public class Tag {
     @Column(name = "tag_id")
     private Long id;
 
-    @Column(name = "tag_item")
+    @Column(name = "tag_item",nullable = false)
     private String item;
 
     public Tag(String item) {

@@ -15,17 +15,15 @@ public class AccountManageDto {
     private String nickName;
     private LocalDateTime registeredAt;
 
-    private boolean isEmailVerified;
     private AccountBlockDetailDto blockDetail;
 
     private Pagination<GuestBookResponseDto> guestBookPageList;
 
     @Builder
-    public AccountManageDto(String email, String nickName, LocalDateTime registeredAt, boolean isEmailVerified, AccountBlockDetailDto accountBlockDetailDto, Pagination<GuestBookResponseDto> guestBookPageList ) {
+    public AccountManageDto(String email, String nickName, LocalDateTime registeredAt, AccountBlockDetailDto accountBlockDetailDto, Pagination<GuestBookResponseDto> guestBookPageList ) {
         this.email = email;
         this.nickName = nickName;
         this.registeredAt = registeredAt;
-        this.isEmailVerified = isEmailVerified;
         this.blockDetail = accountBlockDetailDto;
         this.guestBookPageList = guestBookPageList;
     }

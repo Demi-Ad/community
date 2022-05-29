@@ -20,13 +20,13 @@ public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpec
 
     Optional<Account> findFirstByEmailEquals(String email);
 
-    @Query("select a from Account a where a.nickname like %:nickname% and a.isEmailVerified = true")
+    @Query("select a from Account a where a.nickname like %:nickname%")
     Page<Account> findByNicknameContaining(@Param("nickname") String nickname, Pageable pageable);
 
 
     Optional<AccountInfoProjection> searchById(Long id);
 
-    @Query(value = "select new com.example.community.admin.accountManage.dto.AccountDto(a.id,a.email,a.isEmailVerified,(count(ab.id) > 0),a.nickname,a.registeredAt) " +
+    @Query(value = "select new com.example.community.admin.accountManage.dto.AccountDto(a.id,a.email,(count(ab.id) > 0),a.nickname,a.registeredAt) " +
             "from Account a left join AccountBlock ab on a.id = ab.blockAccount.id group by a.id, ab.id")
     Page<AccountDto> listManageAccount(Pageable pageable);
 

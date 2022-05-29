@@ -21,13 +21,17 @@ public class AccountBlock {
     private Long id;
 
     @OneToOne
-    @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "block_account_fk"))
+    @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "block_account_fk"),nullable = false)
     private Account blockAccount;
+
+    @Column(nullable = false)
 
     private String blockComment;
 
     @CreatedDate
     private LocalDateTime blockDate;
+
+    @Column(nullable = false)
 
     private LocalDateTime blockUntilDate;
 

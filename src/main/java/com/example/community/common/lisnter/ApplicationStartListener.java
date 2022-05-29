@@ -3,8 +3,6 @@ package com.example.community.common.lisnter;
 
 import com.example.community.admin.user.entity.Admin;
 import com.example.community.admin.user.repo.AdminRepository;
-import com.example.community.common.util.BeanUtils;
-import com.example.community.config.security.Role;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationListener;

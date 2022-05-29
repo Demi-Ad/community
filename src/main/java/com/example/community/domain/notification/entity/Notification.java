@@ -23,21 +23,24 @@ public class Notification {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "from_account_id",foreignKey = @ForeignKey(name = "publisher_fk"))
+    @JoinColumn(name = "from_account_id",foreignKey = @ForeignKey(name = "publisher_fk"),nullable = false)
     private Account fromAccount;
 
     @ManyToOne
-    @JoinColumn(name = "to_account_id",foreignKey = @ForeignKey(name = "subscriber_fk"))
+    @JoinColumn(name = "to_account_id",foreignKey = @ForeignKey(name = "subscriber_fk"),nullable = false)
     private Account toAccount;
 
     @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
     private EventType eventType;
 
+    @Column(nullable = false)
     private String uri;
 
     @CreatedDate
     private LocalDateTime createdAt;
 
+    @Column(nullable = false)
     private String content;
 
     @Builder

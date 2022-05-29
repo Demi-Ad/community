@@ -38,7 +38,6 @@ public class AccountManageService {
         AccountManageDto.AccountManageDtoBuilder builder = AccountManageDto.builder()
                 .email(account.getEmail())
                 .nickName(account.getNickname())
-                .isEmailVerified(account.getIsEmailVerified())
                 .registeredAt(account.getRegisteredAt());
 
         if (accountBlockRepository.existsByBlockAccount(account)) {

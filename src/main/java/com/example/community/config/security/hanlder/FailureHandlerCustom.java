@@ -5,7 +5,6 @@ import com.example.community.admin.accountManage.repo.AccountBlockRepository;
 import com.example.community.domain.account.repo.AccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.LockedException;
 import org.springframework.security.core.AuthenticationException;
@@ -33,8 +32,6 @@ public class FailureHandlerCustom  implements AuthenticationFailureHandler {
 
         if (exception instanceof BadCredentialsException || exception instanceof InternalAuthenticationServiceException) {
             errormsg = "BadCredentialsException";
-        } else if (exception instanceof DisabledException) {
-            errormsg = "DisabledException";
         } else if(exception instanceof LockedException) {
             String email = request.getParameter("id");
             AccountBlock accountBlock = accountRepository.findFirstByEmailEquals(email)

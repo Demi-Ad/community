@@ -27,19 +27,21 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
     private Long id;
+    @Column(nullable = false)
     private String content;
     @OneToMany(mappedBy = "parentComment", orphanRemoval = true, cascade = CascadeType.ALL)
     private final Set<Comment> childrenComment = new HashSet<>();
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "comment_account_fk"))
+    @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "comment_account_fk"), nullable = false)
     private Account account;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id",foreignKey = @ForeignKey(name = "comment_post_fk"))
+    @JoinColumn(name = "post_id",foreignKey = @ForeignKey(name = "comment_post_fk"), nullable = false)
     private Post post;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_id",foreignKey = @ForeignKey(name = "parent_comment_kf"))
     private Comment parentComment;
     @CreatedDate
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
     public Comment(String content, Account account, Post post) {

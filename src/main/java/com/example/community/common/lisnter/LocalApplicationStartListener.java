@@ -2,7 +2,6 @@ package com.example.community.common.lisnter;
 
 import com.example.community.admin.user.entity.Admin;
 import com.example.community.admin.user.repo.AdminRepository;
-import com.example.community.config.security.Role;
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.account.repo.AccountRepository;
 import com.example.community.domain.post.entity.Post;
@@ -44,7 +43,6 @@ public class LocalApplicationStartListener implements ApplicationListener<Contex
                 .profileImg("person.png")
                 .build();
 
-        account.emailVerification();
         accountRepository.save(account);
 
         Tag tag = new Tag("#TEST_TAG");

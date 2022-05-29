@@ -18,12 +18,15 @@ public class Notice extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
+
     private String title;
+    @Column(nullable = false)
 
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "admin_id",foreignKey = @ForeignKey(name = "admin_fk"))
+    @JoinColumn(name = "admin_id",foreignKey = @ForeignKey(name = "admin_fk"),nullable = false)
     private Admin admin;
 
     public Notice(String title, String content) {

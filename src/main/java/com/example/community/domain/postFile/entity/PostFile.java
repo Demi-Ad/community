@@ -21,11 +21,14 @@ public class PostFile {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id",foreignKey = @ForeignKey(name = "post_fk"))
+    @JoinColumn(name = "post_id",foreignKey = @ForeignKey(name = "post_fk"),nullable = false)
     private Post post;
 
+    @Column(nullable = false)
     private String fileOriginName;
+    @Column(nullable = false)
     private String fileConvertName;
+    @Column(nullable = false)
     private String fileExtension;
 
 

@@ -29,8 +29,8 @@ public class ForgotPasswordController {
     @PostMapping
     public String passwordChangeUrl(@ModelAttribute(name = "email") String email, Model model) {
         try {
-            accountForgotPasswordService.changePassword(email);
-            model.addAttribute("result",email);
+            String changePassword = accountForgotPasswordService.changePassword(email);
+            model.addAttribute("result",changePassword);
             return "account/forgotPasswordAfter";
         }
         catch (NoSuchElementException e){

@@ -26,28 +26,31 @@ public class Account implements Serializable {
     @Column(name = "account_id")
     private Long id;
 
+    @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String password;
 
-    @Column(name = "email_verified")
-    private Boolean isEmailVerified;
+
 
     @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
     private Role role;
 
     private String profileImg;
 
+    @Column(nullable = false)
     private String nickname;
 
     @CreatedDate
+    @Column(nullable = false)
     private LocalDateTime registeredAt;
 
     @Builder
     public Account(String email, String password, String profileImg,String nickname) {
         this.email = email;
         this.password = password;
-        this.isEmailVerified = false;
         this.role = Role.ROLE_USER;
         this.nickname = nickname;
         this.profileImg = profileImg;
@@ -65,9 +68,6 @@ public class Account implements Serializable {
         this.nickname = nickname;
     }
 
-    public void emailVerification() {
-        this.isEmailVerified = true;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -87,7 +87,6 @@ public class Account implements Serializable {
         return getClass().getSimpleName() + "(" +
                 "id = " + id + ", " +
                 "email = " + email + ", " +
-                "lock = " + isEmailVerified + ", " +
                 "role = " + role + ", " +
                 "nickname = " + nickname + ", " +
                 "registeredAt = " + registeredAt + ")";

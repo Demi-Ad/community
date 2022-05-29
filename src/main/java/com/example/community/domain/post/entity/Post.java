@@ -27,7 +27,7 @@ public class Post extends BaseTimeEntity {
     @Column(name = "post_id")
     private Long id;
 
-    @Column(name = "post_title")
+    @Column(name = "post_title",nullable = false)
     private String title;
 
     @Column(name = "post_content")
@@ -36,7 +36,7 @@ public class Post extends BaseTimeEntity {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "post_account_fk"))
+    @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "post_account_fk"),nullable = false)
     private Account account;
 
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL,orphanRemoval = true)

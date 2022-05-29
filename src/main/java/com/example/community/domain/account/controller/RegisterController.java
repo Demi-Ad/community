@@ -45,7 +45,7 @@ public class RegisterController {
     }
 
     @GetMapping("/guide")
-    public String guideForm(HttpSession session, Model model, @RequestParam("nickname") String nickname, @RequestParam("email") String email) {
+    public String guideForm(Model model, @RequestParam("nickname") String nickname, @RequestParam("email") String email) {
 
         model.addAttribute("nickname",nickname);
         model.addAttribute("email",email);

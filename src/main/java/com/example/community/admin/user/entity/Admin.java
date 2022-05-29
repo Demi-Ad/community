@@ -22,9 +22,13 @@ public class Admin {
     @Column(name = "admin_seq")
     private Long adminSeq;
 
+    @Column(nullable = false)
+
     private String adminId;
+    @Column(nullable = false)
 
     private String password;
+    @Column(nullable = false)
 
     private String adminName;
 

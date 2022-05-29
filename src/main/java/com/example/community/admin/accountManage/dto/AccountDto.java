@@ -14,7 +14,6 @@ import java.time.LocalDateTime;
 public class AccountDto implements Serializable {
     private Long id;
     private String email;
-    private Boolean isEmailVerified;
 
     private Boolean isBlocked;
     private String nickname;
@@ -24,15 +23,13 @@ public class AccountDto implements Serializable {
         this.id = account.getId();
         this.email = account.getEmail();
         this.isBlocked = isBlocked;
-        this.isEmailVerified = account.getIsEmailVerified();
         this.nickname = account.getNickname();
         this.registeredAt = account.getRegisteredAt();
     }
 
-    public AccountDto(Long id, String email, Boolean isEmailVerified, Boolean isBlocked, String nickname, LocalDateTime registeredAt) {
+    public AccountDto(Long id, String email, Boolean isBlocked, String nickname, LocalDateTime registeredAt) {
         this.id = id;
         this.email = email;
-        this.isEmailVerified = isEmailVerified;
         this.isBlocked = isBlocked;
         this.nickname = nickname;
         this.registeredAt = registeredAt;
