@@ -21,6 +21,7 @@ public class GuestBook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "guest_book_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)

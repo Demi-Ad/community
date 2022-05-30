@@ -25,7 +25,7 @@ public class H2AccountInfoRepository implements AccountInfoRepository {
         String sql = "select a.nickname as nickname , a.email as email, a.profile_img as profile, " +
                 "(select count(p.post_id) from Post p where p.account_id = :userId) as postWriteCount, " +
                 "(select count(c.comment_id) from Comment c where c.account_id = :userId) as commentWriteCount, " +
-                "(select count(g.id) from guest_book g where g.guest_id = :userId) as guestBookWriteCount " +
+                "(select count(g.guest_book_id) from guest_book g where g.guest_id = :userId) as guestBookWriteCount " +
                 "from Account a where a.account_id = :userId";
 
         MapSqlParameterSource mapSqlParameterSource = new MapSqlParameterSource();
