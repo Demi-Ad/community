@@ -47,3 +47,4 @@ out/
 plan/
 logs/
 /docker/
+/Docker-compose/images/profile/person.png

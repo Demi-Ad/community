@@ -15,7 +15,7 @@ configurations {
 }
 
 bootJar {
-    destinationDir new File("./docker")
+    destinationDir new File("./jar")
 }
 
 repositories {
