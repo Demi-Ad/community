@@ -18,6 +18,7 @@ public class AccountBlock {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "account_block_id")
     private Long id;
 
     @OneToOne

@@ -109,7 +109,7 @@ public class PostService {
 
 
     public void deletePost(Long postId) {
-        Post post = postRepository.findByIdJoinAccount(postId).orElseThrow(ExceptionSupplier::supply400);
+        Post post = postRepository.findById(postId).orElseThrow(ExceptionSupplier::supply400);
         postRepository.delete(post);
 
     }

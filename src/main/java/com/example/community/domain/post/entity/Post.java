@@ -2,8 +2,10 @@ package com.example.community.domain.post.entity;
 
 import com.example.community.domain.account.entity.Account;
 import com.example.community.domain.baseentity.BaseTimeEntity;
+import com.example.community.domain.comment.entity.Comment;
 import com.example.community.domain.post.entitylisnter.PostEntityListener;
 import com.example.community.domain.postFile.entity.PostFile;
+import com.example.community.domain.postLike.entity.PostLike;
 import com.example.community.domain.postTag.entity.PostTag;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -44,6 +46,12 @@ public class Post extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     private final List<PostFile> postFiles = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    private final List<Comment> commentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post", orphanRemoval = true)
+    private final List<PostLike> postLikeList = new ArrayList<>();
 
     public Post(String title, String content) {
         this.title = title;

@@ -21,8 +21,6 @@ import java.util.Set;
 @Table(name = "comment")
 public class Comment {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
@@ -32,13 +30,13 @@ public class Comment {
     @OneToMany(mappedBy = "parentComment", orphanRemoval = true, cascade = CascadeType.ALL)
     private final Set<Comment> childrenComment = new HashSet<>();
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "comment_account_fk"), nullable = false)
+    @JoinColumn(name = "account_id",foreignKey = @ForeignKey(name = "comment_account_fk"))
     private Account account;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id",foreignKey = @ForeignKey(name = "comment_post_fk"), nullable = false)
     private Post post;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "parent_id",foreignKey = @ForeignKey(name = "parent_comment_kf"))
+    @JoinColumn(name = "parent_id",foreignKey = @ForeignKey(name = "parent_comment_fk"))
     private Comment parentComment;
     @CreatedDate
     @Column(nullable = false)

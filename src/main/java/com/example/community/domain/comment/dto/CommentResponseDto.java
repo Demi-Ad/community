@@ -30,7 +30,6 @@ public class CommentResponseDto {
 
     public CommentResponseDto(Comment comment) {
         this.commentId = comment.getId();
-        this.authorId = comment.getAccount().getId();
         if (comment.getAccount() == null) {
             this.author = "삭제된 글";
             this.authorProfile = "person.png";
@@ -39,6 +38,7 @@ public class CommentResponseDto {
             this.author = comment.getAccount().getNickname();
             this.authorProfile = comment.getAccount().getProfileImg();
             this.isDeleted = false;
+            this.authorId = comment.getAccount().getId();
         }
         this.content = comment.getContent();
         this.createAt = comment.getCreatedAt();

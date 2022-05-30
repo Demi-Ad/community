@@ -12,7 +12,7 @@ create table account
 
 create table account_block
 (
-    id               bigint auto_increment
+    account_block_id bigint auto_increment
         primary key,
     block_comment    varchar(255) not null,
     block_date       datetime(6)  null,
@@ -45,12 +45,12 @@ create table forbidden_word
 
 create table guest_book
 (
-    id         bigint auto_increment
+    guest_book_id bigint auto_increment
         primary key,
-    content    varchar(255) not null,
-    created_at datetime(6)  null,
-    guest_id   bigint       not null,
-    owner_id   bigint       not null,
+    content       varchar(255) not null,
+    created_at    datetime(6)  null,
+    guest_id      bigint       not null,
+    owner_id      bigint       not null,
     constraint guest_fk
         foreign key (guest_id) references account (account_id),
     constraint owner_fk
@@ -59,11 +59,10 @@ create table guest_book
 
 create table notice
 (
-    id         bigint auto_increment
+    notice_id  bigint auto_increment
         primary key,
-    created_at datetime(6)  null,
-    updated_at datetime(6)  null,
     content    varchar(255) not null,
+    created_at datetime(6)  null,
     title      varchar(255) not null,
     admin_id   bigint       not null,
     constraint admin_fk
@@ -72,7 +71,7 @@ create table notice
 
 create table notification
 (
-    id              bigint auto_increment
+    notification_id bigint auto_increment
         primary key,
     content         varchar(255) not null,
     created_at      datetime(6)  null,
