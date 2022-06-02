@@ -9,7 +9,6 @@ import lombok.ToString;
 @ToString
 public class AccountInfoDetailDto {
     private String nickname;
-    private String email;
     private String profile;
 
     private int postWriteCount;
@@ -19,7 +18,6 @@ public class AccountInfoDetailDto {
 
     public AccountInfoDetailDto(String nickname, String email, String profile, int postWriteCount, int commentWriteCount, int guestBookWriteCount) {
         this.nickname = nickname;
-        this.email = email;
         setProfile(profile);
         this.postWriteCount = postWriteCount;
         this.commentWriteCount = commentWriteCount;

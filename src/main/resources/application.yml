@@ -1,6 +1,24 @@
 spring:
+    servlet:
+        multipart:
+            max-file-size: 20MB
+            max-request-size: 50MB
     profiles:
         active: docker
+    data:
+        web:
+            pageable:
+                one-indexed-parameters: true
+    config:
+        import: salt.yml
+
+server:
+    servlet:
+        encoding:
+            charset: UTF-8
+            enabled: true
+            force: true
+    port: 80
 
 
 
@@ -9,11 +27,7 @@ spring:
     config:
         activate:
             on-profile: local
-        import: salt.yml
-    data:
-        web:
-            pageable:
-                one-indexed-parameters: true
+
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         username: demi
@@ -39,24 +53,11 @@ static:
         save-path: D:\\upload\\
 
 
-server:
-    servlet:
-        encoding:
-            charset: UTF-8
-            enabled: true
-            force: true
-    port: 80
-
 ---
 spring:
     config:
         activate:
             on-profile: docker
-        import: salt.yml
-    data:
-        web:
-            pageable:
-                one-indexed-parameters: true
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         username: demi
@@ -66,7 +67,6 @@ spring:
         open-in-view: off
         properties:
             hibernate:
-
                 default_batch_fetch_size: 1000
         hibernate:
             ddl-auto: none
@@ -78,22 +78,8 @@ static:
         save-path: /images/img/
     upload:
         save-path: /upload/
-
-
-server:
-    servlet:
-        encoding:
-            charset: UTF-8
-            enabled: true
-            force: true
-    port: 8080
-
 ---
 spring:
-    data:
-        web:
-            pageable:
-                one-indexed-parameters: true
     h2:
         console:
             enabled: true
@@ -101,7 +87,6 @@ spring:
     config:
         activate:
             on-profile: h2
-        import: salt.yml
     datasource:
         driver-class-name: org.h2.Driver
 #        url: jdbc:h2:tcp://localhost:9092/~/h2db/testdb
@@ -109,7 +94,6 @@ spring:
     jpa:
         hibernate:
             ddl-auto: create
-
 #        show-sql: true
         open-in-view: off
         properties:
@@ -117,8 +101,6 @@ spring:
 #                format_sql: true
                 default_batch_fetch_size: 1000
 
-server:
-    port: 80
 static:
     profile:
         resource-location: file:///D:/profile/

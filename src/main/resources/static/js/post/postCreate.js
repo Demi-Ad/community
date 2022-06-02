@@ -80,3 +80,16 @@ tagInput.addEventListener("keydown",e => {
         tagInput.value = ''
     }
 })
+
+
+document.querySelector("#formFileMultiple").addEventListener("change", e => {
+    const maxUploadSize = 20 * 1024 * 1024
+    let allFileSize = 0;
+    Object.keys(e.target.files).forEach(index => {
+        allFileSize += e.target.files[index].size
+    })
+    if (maxUploadSize < allFileSize) {
+        alert("파일은 총 20MB까지 업로드 가능합니다")
+        e.target.value = ''
+    }
+})

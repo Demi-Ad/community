@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-    <div class="card" th:fragment="userCard(profile,nickname,email)">
+    <div class="card" th:fragment="userCard(profile,nickname)">
         <div class="card-body">
             <div class="d-flex justify-content-center">
                 <img alt="..." class="rounded-circle" style="width: 150px;height: 150px" th:src="@{${profile}}">
@@ -14,7 +14,6 @@
                 <!-- Title -->
                 <p class="d-block h5 mb-0 mt-3" th:text="${nickname}">Julienne Moore</p>
                 <!-- Subtitle -->
-                <span class="d-block text-sm text-muted mt-3" th:text="${email}">julianne.moore@company.com</span>
             </div>
         </div>
     </div>
