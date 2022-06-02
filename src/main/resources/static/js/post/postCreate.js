@@ -2,7 +2,7 @@ const tagInput = document.querySelector("#tagInput")
 const tagList = document.querySelector("#tagList")
 const tagArea = document.querySelector("#tagShow")
 
-window.addEventListener("load",() => {1
+window.addEventListener("load",() => {
     if (tagList.value !== '') {
         tagList.value = tagList.value.split(" ").map(value => value.slice(1,value.length)).join(" ")
     }
@@ -58,21 +58,23 @@ tagInput.addEventListener("keydown",e => {
         e.stopPropagation()
         e.preventDefault()
         const tag = e.target.value
-        if (tag === '') {
-            alert("공백은 불가능")
-            return;
+        if (/\s/g.test(tag) === true) {
+            alert("공백은 입력 할 수 없습니다")
+            e.target.value = ''
+            return
         }
         if (tagList.value.split(" ").length >= 5) {
             alert("태그는 5개 까지 입니다")
             e.target.value = ''
-            return;
+            return
         }
 
         const tagListValue = tagList.value.split(" ")
         const isInclude = tagListValue.includes(tag);
 
         if (isInclude) {
-            alert("이미 존재하는값")
+            alert("해당태그는 이미 존재 합니다")
+            e.target.value = ''
             return
         }
 
